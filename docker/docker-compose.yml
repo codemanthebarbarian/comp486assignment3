@@ -1,0 +1,25 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  db: 
+    image: comp486psql
+    build: psql
+    container_name: comp486psql
+    environment:
+      POSTGRES_USER: $USER
+      POSTGRES_PASSWORD: $USER
+      POSTGRES_DB: comp486
+    ports:
+      - "5432:5432"
+
+  apache_with_php:
+    image: thecodingmachine/php:7.3-v3-apache
+    build: php
+    container_name: comp486assn2
+    environment:
+      PHP_EXTENSION_XDEBUG: 1
+    volumes:
+      - ~/Dev/comp486assignment2/:/var/www/html/
+    ports:
+      - "8888:80"

@@ -1,0 +1,60 @@
+#/bin/bash
+
+set -e
+
+source ./lib
+
+FILE=~/.pgpass
+ENTRYUSER="localhost:5432:*:$USER:$USER"
+
+if [ -f "$FILE" ]; then
+  echo -e "${GREEN}.pgpass file found${RESET}"
+  cmd="$(cat $FILE | grep -F $ENTRYDBINSTALL | wc -l)"
+  if [ $cmd == "0" ] ; then
+    echo -e "${YELLOW}Updating .pgpass file.${RESET}"
+    echo "$ENTRYDBINSTALL" >> $FILE
+  fi
+  cmd="$(cat $FILE | grep -F $ENTRYUSER | wc -l)"
+  if [ $cmd == "0" ] ; then
+    echo -e "${YELLOW}Updating .pgpass file.${RESET}"
+    echo "$ENTRYUSER" >> $FILE
+  fi
+else
+  echo -e "${YELLOW}Adding .pgpass file with sever entry.${RESET}"
+  touch $FILE
+  echo "$ENTRYINTALL" >> $FILE
+  echo "$ENTRYUSER" >> $FILEl
+  chmod 600 $FILE
+fi
+
+echo -e "${GREEN}Starting container instance${RESET}"
+docker-compose -f $DOCKER_YAML up -d
+
+cmd="$(psql -h $DB_HOST -p $DB_PORT -U $USER -l | grep comp486 | wc -l)"
+if [ $cmd == "0" ] ; then
+  echo -e "${YELLOW}Creating comp486...${RESET}"
+  createdb -h $DB_HOST -p $DB_PORT -U $USER -O $DB_INSTALL comp486
+fi
+
+echo -e "${GREEN}Recreating the database${RESET}"
+pg_restore -h $DB_HOST -p $DB_PORT -U $USER --create -d comp486 ../backup/engine/comp486.sql || true
+echo -e "${GREEN}Databases created${RESET}"
+
+echo -e "${GREEN}Restoring data${RESET}"
+FILE=../backup/engine/*.dump
+if test -e `echo $FILE | cut -d' ' -f1` ; then
+  echo -e "${BLUE}Backup files found${RESET}"
+  for i in `ls -v $FILE`; do
+    [ -f "$i" ] || continue
+    echo -e "${BLUE}Restoring backup $i ${RESET}"
+    psql -p $DB_PORT -h $DB_HOST -U $USER -d comp486psql -1 -f $i > "$i.log" || true
+  done
+  echo -e "${GREEN}Finished restoring backups${REST}"
+else
+  echo -e "${RED}No backup files exist${RESET}"
+fi
+
+echo -e "${GREEN}Shutting down container instance${RESET}"
+docker-compose -f $DOCKER_YAML down
+
+echo -e "${BOLD}${GREEN}Done${RESET}"

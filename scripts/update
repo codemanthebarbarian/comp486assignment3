@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set +e
+
+source ./lib
+
+
+echo -e "${GREEN}No Updates to apply..${RESET}"

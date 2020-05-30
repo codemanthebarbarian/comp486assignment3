@@ -1,0 +1,37 @@
+
+#!/bin/bash
+
+# script/server: Launch the application and any extra processes locally.
+#                The only process to launch is the container hosting the
+#                timeline reporting postgresql instance.
+
+set +e
+
+source ./lib
+
+echo -e "${YELLOW}Checking for updates...${RESET}"
+./update
+
+function ctrl_c() {
+  echo ""
+  echo -e "${YELLOW}Shutting down server${RESET}"
+  docker-compose -f $DOCKER_YAML down
+  exit 0
+}
+
+cmd="$(docker ps -a | grep '^.*\bcomp486psql\b.*\bUp\b.*$' | wc -l)"
+if [ $cmd == "0" ] ; then
+  echo -e "${YELLOW}Starting the postgres database container${RESET}"
+  echo -e "${YELLOW}${UNDERLINE}Press CTRL+C to shutdown server${RESET}"
+  docker-compose -f $DOCKER_YAML up
+else
+  echo -e "${YELLOW}Server is already started. Shutdown on exit ${BLUE}[y/N]${RESET}"
+  read -t 30 input
+  if [ $? -gt 123 ] ||  [ $input == "N" ] || [ $input == "n" ] ; then
+    echo -e "${GREEN}Leaving server up.${RESET}"
+  else
+    echo -e "${YELLOW}${UNDERLINE}Press CRTL+C to shutdown server${RESET}"
+    trap ctrl_c INT
+    read -r -d '' _ < /dev/tty # sit and wait for the CTRL+C signal
+  fi
+fi

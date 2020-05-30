@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set +e
+
+# import global variables
+source ./lib
+
+cmd="$(groups | grep docker | wc -l)"
+if [ $cmd == "0" ] ; then
+  echo -e "${RED}Current user is not a member of the docker group${RESET}"
+  exit 1
+fi
+
+cmd="$(docker images | grep comp486psql | wc -l)"
+if [ $cmd == "0" ] ; then
+  echo -e "${RED}Image comp486psql does not exist${RESET}"
+  echo -e "${YELLOW}Creating local images${RESET}"
+  docker-compose -f $DOCKER_YAML build --force-rm
+  echo -e "${GREEN}Docker containers created.${RESET}"
+else
+  echo -e "${YELLOW}Container images exist, would you like to re-create them? ${BLUE}[Y/n]${RESET}"
+  read -t 10 input
+  if [ $? -gt 123 ] || [ $input == "Y" ] || [ $input == "y" ] ; then
+    echo -e "${YELLOW}Deleting local images...${RESET}"
+    docker image rm comp486psql
+    echo -e "${YELLOW}Re-creating local images...${RESET}"
+    #pushd ~/Dev/playground/engine_dev/docker
+    docker-compose -f $DOCKER_YAML build --force-rm
+    #popd
+    echo -e "${GREEN}Local images re-created.${RESET}"
+  else
+    echo -e "${GREEN}Keeping existing images.${RESET}"
+  fi
+fi

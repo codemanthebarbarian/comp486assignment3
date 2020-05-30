@@ -1,0 +1,48 @@
+{
+    "trigger": "entrance",
+    "title": "Admissions",
+    "stages": [
+        {
+            "name": "intro",
+            "endState": "complete",
+            "script": [
+                {
+                    "character": "Cashier",
+                    "line": "\"Welcome to the carnival. Entrance fee is $15.00 per person. How many?\"",
+                    "responses": [
+                        {
+                            "response": "Give the the cashier $15.00",
+                            "next": 2
+                        },
+                        {
+                            "response": "\"Just one.\"",
+                            "next": 1
+                        },
+                        {
+                            "response": "\"Just me, but I'm meeting some friends here.\"",
+                            "next": 2
+                        }
+                    ]
+                },
+                {
+                    "character": "Cashier",
+                    "line": "\"Hmmm... Okay, that's $15.00.\""
+                },
+                {
+                    "character": "Cashier",
+                    "line": "\"Whatever, that'll be $15.00.\""
+                },
+                {
+                    "isRandom": true,
+                    "character": "Cashier",
+                    "lines": [
+                        { "line": "\"Thank you.\"" },
+                        { "line": "\"Have fun.\""},
+                        { "line": "The cashier take your money." }
+                    ]
+                }
+            ]
+        }
+    ]
+
+}
