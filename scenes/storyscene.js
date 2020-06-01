@@ -1,7 +1,16 @@
 
 class StoryScene extends Phaser.Scene {
 
-    constructor(cfg) {
+    constructor() {
+        let cfg = {
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 0 },
+                    debug: false
+                }
+            }
+        }
         super(cfg);
     }
 
@@ -23,7 +32,31 @@ class StoryScene extends Phaser.Scene {
         let exit = function() {
             this.scene.stop();
             this.scene.wake('carnival', { exit: this.stage });
-        }
+        };
+        let submitResponse = function() { // commit the currently selected response
+            this.graphics.clear();
+            if(!this.storyLine.responses) this.exit();
+            if(this.currentResponse < 0) return;
+            this.loadLine(this.storyLine.responses[this.currentResponse].next);
+        };
+        let onPointerDown = function(pointer) {
+            //let pointer1 = this.input.pointer1;
+            //if(pointer1.isDown) { //dealing with touch
+            let coord = pointer.position;
+            this.currentResponse = -1;
+            let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
+            if(txt && txt[0] && txt[0].gameObject.text) this.currentResponse = txt[0].gameObject.name;
+                //if(!this.touchPointer) this.touchPointer = this.add.circle(coord.x, coord.y, 5);
+                //else this.touchPointer.setPosition(coord.x, coord.y);
+                //this.responses.forEach(r => {
+                //    if(!r.text) return;
+                //    if(this.physics.overlap(this.touchPointer, r)) this.currentResponse = r.name;
+                //})
+            //} else { //mouse
+
+            //}
+            submitResponse.bind(this)();
+        };
         let selectPrevious = function() { //select the next response
             if(!this.storyLine.responses) return;
             --this.currentResponse;
@@ -39,8 +72,8 @@ class StoryScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-ESC', exit,this);
         this.input.keyboard.on('keydown-DOWN', selectNext, this);
         this.input.keyboard.on('keydown-UP', selectPrevious, this);
-        this.input.keyboard.on('keydown-ENTER', this.submitResponse, this);
-        this.input.on('pointerdown', this.submitResponse, this);
+        this.input.keyboard.on('keydown-ENTER', submitResponse, this);
+        this.input.on('pointerdown', onPointerDown, this);
     }
 
     highlight(){
@@ -48,13 +81,6 @@ class StoryScene extends Phaser.Scene {
         if(this.currentResponse < 0) return;
         this.graphics.lineStyle(1, 0xff0000, 1);
         this.graphics.strokeRectShape(this.responses[this.currentResponse].getBounds());
-    }
-
-    submitResponse() { // commit the currently selected response
-        this.graphics.clear();
-        if(!this.storyLine.responses) this.exit();
-        if(this.currentResponse < 0) return;
-        this.loadLine(this.storyLine.responses[this.currentResponse].next);
     }
 
     exit(){
@@ -126,6 +152,7 @@ class StoryScene extends Phaser.Scene {
                 }
             }).setName(idx).setInteractive();
             this.responses.push(txt);
+            this.physics.add.existing(txt);
             this.input.on('pointerover', onMouseOver, this);
         };
         this.responses.forEach(clear);

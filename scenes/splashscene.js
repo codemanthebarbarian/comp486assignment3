@@ -10,15 +10,16 @@ class SplashScene extends Phaser.Scene {
     }
 
     create() {
-        let text1 = this.add.text(100, 100, 'Phaser Text with Tint');
+        let text1 = this.add.text(100, 100, 'The Carnival');
 
         text1.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
 
-        this.input.on('pointerdown', function (pointer) {
-
+        let exit = function() {
             this.scene.stop();
             this.scene.start('carnival');
+        };
 
-        }, this);
+        this.input.keyboard.on('keydown-ENTER', exit, this);
+        this.input.on('pointerdown', exit, this);
     }
 }
