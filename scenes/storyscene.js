@@ -90,10 +90,6 @@ class StoryScene extends Phaser.Scene {
         this.scene.wake('carnival', { exit: this.stage });
     }
 
-    update() {
-        if(this.input.pointer1.isDown) this.exit();
-    }
-
     loadStage() {
         this.responses = [];
         let item = this.registry.get(this.story.trigger);
