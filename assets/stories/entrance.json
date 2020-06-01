@@ -12,7 +12,7 @@
                     "responses": [
                         {
                             "response": "Give the the cashier $15.00",
-                            "next": 2
+                            "next": 3
                         },
                         {
                             "response": "\"Just one.\"",
@@ -39,6 +39,45 @@
                         { "line": "\"Thank you.\"" },
                         { "line": "\"Have fun.\""},
                         { "line": "The cashier take your money." }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "complete",
+            "endState": "complete",
+            "script": [
+                {
+                    "character": "Cashier",
+                    "line": "\"Do you need a stamp?\"",
+                    "responses": [
+                        {
+                            "response": "Yes Please",
+                            "next": 1
+                        },
+                        {
+                            "response": "\"No.\"",
+                            "next": 2
+                        }
+                    ]
+                },
+                {
+                    "isRandom": true,
+                    "character": "Cashier",
+                    "lines": [
+                        { "line": "\"Here you go.\"" },
+                        { "line": "\"Hope to see you again soon.\""},
+                        { "line": "The cashier stamps your hand." }
+                    ]
+                },
+                {
+                    "isRandom": true,
+                    "character": "Cashier",
+                    "endState": "intro",
+                    "lines": [
+                        { "line": "\"Here you go.\"" },
+                        { "line": "\"Hope to see you again soon.\""},
+                        { "line": "The cashier stamps your hand." }
                     ]
                 }
             ]
