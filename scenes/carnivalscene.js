@@ -234,13 +234,14 @@ class CarnivalScene extends Phaser.Scene {
     }
 
     buildStages() {
-        this.buildStory('entrance', 'entrance', 'entrance');
-        this.buildStage('bumpercars',
-            () => {
-                if(this.player.data.values.bumpercars === 'enter') return;
-                this.player.setData('bumpercars', 'enter');
-                this.scene.switch('bumpercars');
-            });
+        this.buildStory('entrance', 'entrance', 'entrance', 'entrance');
+        this.buildStory('bumpercars', 'bumpercarsstory', 'bumpercarsstory', 'bumpercars');
+        // this.buildStage('bumpercars',
+        //     () => {
+        //         if(this.player.data.values.bumpercars === 'enter') return;
+        //         this.player.setData('bumpercars', 'enter');
+        //         this.scene.switch('bumpercars');
+        //     });
         this.buildStage('shootinggallery',
             () => {
                 if(this.player.getData('zoneoverlap')) return;
@@ -255,7 +256,7 @@ class CarnivalScene extends Phaser.Scene {
         let obj = this.mapObjects.objects.find(o => o.name === zone, this);
         let zn = this.add.zone(obj.x, obj.y, obj.width, obj.height);
         zn.name = zone;
-        let sn = this.scene.add(key, StoryScene, false, { story: stage})
+        let sn = this.scene.add(key, StoryScene, false, { story: file})
         this.physics.world.enable(zn);
         zn.body.debugBodyColor = 0xffff00;
         this.physics.add.overlap(this.player, zn, () => {
@@ -264,9 +265,9 @@ class CarnivalScene extends Phaser.Scene {
             //if(this.player.data.values.entrance) return;
             this.player.body.setVelocityY(0);
             this.player.body.setVelocityX(0);
-            this.player.setData('entrance', 'complete');
+            //this.player.setData(stage, 'complete');
             this.scene.sleep();
-            this.scene.run(key); //, { stage: 'entrance'});
+            this.scene.run(stage); //, { stage: 'entrance'});
         }, null, this);
     }
 

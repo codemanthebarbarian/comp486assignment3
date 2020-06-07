@@ -12,6 +12,11 @@ let config = {
             debug: true
         }
     },
+    plugins: {
+        global: [
+            { key: 'InventoryRepo', plugin: InventoryRepo, start: false, mapping: 'inventory' }
+        ]
+    },
     scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars ]
 };
 

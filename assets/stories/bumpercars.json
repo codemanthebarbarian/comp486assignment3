@@ -9,30 +9,34 @@
                 {
                     "character": "Carny",
                     "line": "\"5 tickets.\"",
-                    "condition": { "item": "tickets", "amount": 5 },
-                    "positive":  [
-                        {
-                            "response": "Give 5 tickets.",
-                            "next": 1
-                        },
-                        {
-                            "response": "\"Here you go.\"",
-                            "next": 1
-                        }
-                    ],
-                    "negative": [
-                        {
-                            "response": "Leave the line",
-                            "next": 2
-                        },
-                        {
-                            "response": "\"Sorry, I don't have enough tickets.\"",
-                            "next": 2
-                        }
-                    ]
+                    "requires": { "tickets": 5 },
+                    "responses": {
+                        "yes": [
+                            {
+                                "response": "Give 5 tickets.",
+                                "next": 1
+                            },
+                            {
+                                "response": "\"Here you go.\"",
+                                "next": 1
+                            }
+                        ],
+                        "no": [
+                            {
+                                "response": "Leave the line",
+                                "next": 2
+                            },
+                            {
+                                "response": "\"Sorry, I don't have enough tickets.\"",
+                                "next": 2
+                            }
+                        ]
+                    }
                 },
                 {
+                    "isRandom": true,
                     "character": "Carny",
+                    "scene": "bumpercars",
                     "lines": [
                         { "line": "Takes your tickets." },
                         { "line": "\"Have fun.\"" },
@@ -40,6 +44,7 @@
                     ]
                 },
                 {
+                    "isRandom": true,
                     "character": "Carny",
                     "lines": [
                         { "line": "The ride attendant rolls his eyes." },

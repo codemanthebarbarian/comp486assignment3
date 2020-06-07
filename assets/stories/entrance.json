@@ -9,20 +9,29 @@
                 {
                     "character": "Cashier",
                     "line": "\"Welcome to the carnival. Entrance fee is $15.00 per person. How many?\"",
-                    "responses": [
-                        {
-                            "response": "Give the the cashier $15.00",
-                            "next": 3
-                        },
-                        {
-                            "response": "\"Just one.\"",
-                            "next": 1
-                        },
-                        {
-                            "response": "\"Just me, but I'm meeting some friends here.\"",
-                            "next": 2
-                        }
-                    ]
+                    "requires": { "cash":  15.00 },
+                    "responses": {
+                        "yes": [
+                            {
+                                "response": "Give the the cashier $15.00",
+                                "next": 3
+                            },
+                            {
+                                "response": "\"Just one.\"",
+                                "next": 1
+                            },
+                            {
+                                "response": "\"Just me, but I'm meeting some friends here.\"",
+                                "next": 2
+                            }
+                        ],
+                        "no":[
+                            {
+                                "response": "Oh, it looks like I don't have enough.",
+                                "next": 4
+                            }
+                        ]
+                    }
                 },
                 {
                     "character": "Cashier",
@@ -39,6 +48,14 @@
                         { "line": "\"Thank you.\"" },
                         { "line": "\"Have fun.\""},
                         { "line": "The cashier take your money." }
+                    ]
+                },
+                {
+                    "isRandom": true,
+                    "character": "Cashier",
+                    "lines": [
+                        { "line": "\"OK, you seem like a good kid. Go on in.\"" },
+                        { "line": "(Whispers) \"Go on in, but keep this a secret.\""}
                     ]
                 }
             ]
@@ -64,6 +81,10 @@
                 {
                     "isRandom": true,
                     "character": "Cashier",
+                    "endState": "intro",
+                    "award": {
+                        "items": ["Entry Stamp"]
+                    },
                     "lines": [
                         { "line": "\"Here you go.\"" },
                         { "line": "\"Hope to see you again soon.\""},
@@ -75,9 +96,8 @@
                     "character": "Cashier",
                     "endState": "intro",
                     "lines": [
-                        { "line": "\"Here you go.\"" },
                         { "line": "\"Hope to see you again soon.\""},
-                        { "line": "The cashier stamps your hand." }
+                        { "line": "\"Have a great day.\"" }
                     ]
                 }
             ]

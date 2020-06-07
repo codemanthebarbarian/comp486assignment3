@@ -64,30 +64,30 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":656.666666666667,
-                 "y":1227.33333333333
+                 "x":656,
+                 "y":1227
                 }, 
                 {
-                 "height":22.3333333333333,
+                 "height":16,
                  "id":4,
                  "name":"shootinggallery",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":65.3333333333333,
-                 "x":416,
-                 "y":190.333333333333
+                 "width":64,
+                 "x":436,
+                 "y":190
                 }, 
                 {
-                 "height":62.3333333333334,
+                 "height":32,
                  "id":5,
                  "name":"bumpercars",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":37,
-                 "x":1470.66666666667,
-                 "y":927.666666666667
+                 "width":64,
+                 "x":1490,
+                 "y":927
                 }, 
                 {
                  "height":0,
@@ -98,22 +98,22 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1488.66666666667,
-                 "y":1198.33333333333
+                 "x":1488,
+                 "y":1198
                 }, 
                 {
-                 "height":35.3333333333334,
+                 "height":32,
                  "id":8,
                  "name":"beergarden",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":31,
-                 "x":961.333333333333,
-                 "y":330.666666666667
+                 "width":45,
+                 "x":961,
+                 "y":330
                 }, 
                 {
-                 "height":27.3333333333333,
+                 "height":16,
                  "id":9,
                  "name":"pettingzoo",
                  "rotation":0,
@@ -124,14 +124,14 @@
                  "y":318
                 }, 
                 {
-                 "height":36,
+                 "height":32,
                  "id":10,
                  "name":"archeryrange",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":31.3333333333333,
-                 "x":64.3333333333333,
+                 "width":332,
+                 "x":64,
                  "y":286
                 }, 
                 {
@@ -155,7 +155,7 @@
                  "visible":true,
                  "width":0,
                  "x":81,
-                 "y":371.666666666667
+                 "y":371
                 }],
          "opacity":1,
          "type":"objectgroup",

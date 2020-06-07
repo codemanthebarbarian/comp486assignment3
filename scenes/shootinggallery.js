@@ -42,26 +42,65 @@ class ShootingGallery extends Phaser.Scene {
         this.drawLast();
         this.drawMid();
         this.drawFront();
-        this.crosshair = this.add.sprite(game.canvas.clientWidth / 2, game.canvas.clientHeight / 2, 'hud', 'crosshair_red_small.png').setDepth(5);
-        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.input.on('pointermove', function (pointer) {
-            this.crosshair.x = pointer.x;
-            this.crosshair.y = pointer.y;
-        }, this);
-        this.input.on('pointerdown', this.shoot, this);
+        this.crosshair = this.matter.add.image(game.canvas.clientWidth / 2, game.canvas.clientHeight / 2, 'hud', 'crosshair_red_small.png')
+            .setDepth(6).setCollisionGroup(this.nonColliding);
+
         let text1 = this.add.text(game.canvas.clientWidth / 2, 10, 'This is the Shooting Gallery scene');
         this.score = this.add.text(10,10, "Hits: " + this.hits);
+        this.txtExit = this.add.text(game.canvas.clientWidth - 20, 10, 'Exit').setOrigin(1);
+        this.matter.add.gameObject(this.txtExit).setDepth(6).setCollisionGroup(this.nonColliding)
         text1.setOrigin(0.5); //centre the text
         text1.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
         this.score.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
+        this.initializeInput();
+    }
+
+    initializeInput(){
+
+        let speed = 5;
+
+        let exit = function() {
+            this.scene.stop();
+            this.scene.wake('carnival');
+        };
+
+        let moveUp = function() { this.crosshair.setVelocityY(-speed); };
+        let moveDown = function() { this.crosshair.setVelocityY(speed); };
+        let moveLeft = function() { this.crosshair.setVelocityX(-speed); };
+        let moveRight = function() { this.crosshair.setVelocityX(speed); };
+        let stopX = function() { this.crosshair.setVelocityX(0); };
+        let stopY = function() { this.crosshair.setVelocityY(0); };
+
+        let initializeKeyboard = function() {
+            this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT', 'SPACE', 'ESC');
+            this.input.keyboard.on('keydown-ESC', exit, this);
+            this.input.keyboard.on('keydown-RIGHT', moveRight, this);
+            this.input.keyboard.on('keyup-RIGHT', stopX, this);
+            this.input.keyboard.on('keydown-LEFT', moveLeft, this);
+            this.input.keyboard.on('keyup-LEFT', stopX, this);
+            this.input.keyboard.on('keydown-UP', moveUp, this);
+            this.input.keyboard.on('keyup-UP', stopY, this);
+            this.input.keyboard.on('keydown-DOWN', moveDown, this);
+            this.input.keyboard.on('keyup-DOWN', stopY, this);
+            this.input.keyboard.on('keydown-SPACE', this.shoot, this);
+        };
+
+        let initializeTouch = function() {
+            this.input.addPointer(1); // need two touch inputs: move and fire
+            this.input.on('pointermove', function (pointer) {
+                this.crosshair.x = pointer.x;
+                this.crosshair.y = pointer.y;
+            }, this);
+            this.input.on('pointerdown', this.shoot, this);
+            this.txtExit.on('exit', exit, this);
+        }
+
+        initializeKeyboard.bind(this)();
+        initializeTouch.bind(this)();
     }
 
     update(){
         this.score.text = "Hits: " + this.hits;
-        if(this.spaceKey.isDown) {
-            this.scene.stop();
-            this.scene.wake('carnival');
-        }
         this.crosshair.x += Phaser.Math.Between(-2, 2);
         this.crosshair.y += Phaser.Math.Between(-2, 2);
     }
@@ -72,7 +111,9 @@ class ShootingGallery extends Phaser.Scene {
         let y = this.crosshair.y;
         let shot = this.matter.add.image(x,y,'objects', 'shot_blue_small.png', { shape: this.objectShapes.shot_blue_small })
             .setCollisionGroup(this.nonColliding);
-        if(this.matter.overlap(shot, this.shieldFront)){
+        if(this.matter.overlap(shot, this.txtExit)){
+            this.txtExit.emit('exit');
+        } else if(this.matter.overlap(shot, this.shieldFront)){
             shot.depth(6);
         } else if(this.matter.overlap(shot, this.targetsFront)){
             ++this.hits;
@@ -90,14 +131,6 @@ class ShootingGallery extends Phaser.Scene {
             ++this.hits;
             this.hit.play();
         }
-
-        /*
-        this.physics.overlap(shot, this.ducksBack, function() {
-            ++this.hits;
-            this.hit.play();
-        }, function(s, d) {
-
-        }, this);*/
     }
 
     drawLast(){
@@ -113,8 +146,6 @@ class ShootingGallery extends Phaser.Scene {
         }
         graphics.lineStyle(1, 0xffffff, 1);
         path.draw(graphics);
-        //this.ducks = this.physics.add.group();
-        //follower(path, x, y, texture [, frame])
         this.resizeShape(this.objectShapes.duck_target_yellow, 0.5);
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 150, 'objects', 'duck_target_yellow.png' ).setScale(0.5).setDepth(1);
@@ -122,7 +153,6 @@ class ShootingGallery extends Phaser.Scene {
                 this.matter.add.gameObject(follower, { shape: this.objectShapes.duck_target_yellow })
                     .setCollisionGroup(this.nonColliding)
             );
-            //startFollow( [config] [, startAt])
             follower.startFollow(
                 {
                     duration: 10000,
@@ -156,7 +186,6 @@ class ShootingGallery extends Phaser.Scene {
         }
         graphics.lineStyle(1, 0xffffff, 1);
         path.draw(graphics).setDepth(3);
-        //this.ducks = this.physics.add.group();
         this.resizeShape(this.objectShapes.duck_target_white_flip, 0.5);
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 300, 'objects', 'duck_target_white.png').setFlipX(true).setScale(0.5).setDepth(3);
@@ -164,7 +193,6 @@ class ShootingGallery extends Phaser.Scene {
                 this.matter.add.gameObject(follower, { shape: this.objectShapes.duck_target_white_flip })
                     .setCollisionGroup(this.nonColliding)
             );
-            //startFollow( [config] [, startAt])
             follower.startFollow(
                 {
                     duration: 10000,
@@ -215,10 +243,17 @@ class ShootingGallery extends Phaser.Scene {
         }
     }
 
+    /**
+     * This resizes the shape for the hit target. It checks to see if something has been resized as
+     * it will shrink it on multiple loads.
+     * @param shape the shape to resize
+     * @param scale how much to resize it
+     */
     resizeShape(shape, scale){
+        if(shape.isResized) return;
+        shape.isResized = true;
         let newData = [];
         let data = shape.fixtures;
-
         for(let i = 0; i < data.length; i++) {
             let vertices = [];
             for(let j = 0; j < data[i].vertices.length; ++j) {
@@ -234,10 +269,5 @@ class ShootingGallery extends Phaser.Scene {
             newData.push({ vertices : vertices });
         }
         shape.fixtures = newData;
-        //return shape;
-        //var item = {};
-        //item[shapeKey] = newData;
-        //game.load.physics(newPhysicsKey, '', item);
-
     }
 }
