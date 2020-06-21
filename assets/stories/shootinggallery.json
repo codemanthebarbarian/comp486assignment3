@@ -1,0 +1,513 @@
+{
+  "trigger": "shootinggallery",
+  "title": "Shooting Gallery",
+  "stages": [
+    {
+      "name": "DEFAULT",
+      "endState": "",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Carny",
+          "line": "\"So, what'd think.\"",
+          "responses": [
+            {
+              "response": "\"Think about what?\"",
+              "next": 1
+            },
+            {
+              "response": "\"Cool, looks like fun.\"",
+              "next": 2
+            },
+            {
+              "response": "\"I'd like to give it a try.\"",
+              "next": 3
+            },
+            {
+              "response": "\"Maybe later.\"",
+              "next": 10
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Carny",
+          "line": "\"Do you think you have what it takes? It's not as easy as it looks.\"",
+          "responses": [
+            {
+              "response": "\"Well, I think I might be up to it.\"",
+              "next": 3
+            },
+            {
+              "response": "\"Can you tell me more about it?\"",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Carny",
+          "line": "\"It is fun, but it's a lot tougher than it looks.\"",
+          "responses": [
+            {
+              "response": "\"Can you tell me more about it?\"",
+              "next": 4
+            },
+            {
+              "response": "\"Sure I will give it a try.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Carny",
+          "line": "\"Ok, that will be 10 tickets for 25 shots.\"",
+          "requires": { "tickets": 10 },
+          "responses": {
+            "yes": [
+              {
+                "response": "\"Yeah, I have 10 tickets.\"",
+                "next": 5
+              },
+              {
+                "response": "\"I don't know, 10 ticket sounds like a lot,\"",
+                "next": 6
+              }
+            ],
+            "no": [
+              {
+                "response": "\"I don't have 5 tickets.\"",
+                "next": 6
+              }
+            ]
+          }
+        },
+        {
+          "idx": 4,
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"10 tickets gets you 25 shots. See how many targets you can hit with.\""
+            },
+            {
+              "line": "\"You get 25 shots and just hit as many targets as you can, for the low cost of 10 tickets.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Ok, let's do it\"",
+              "next": 5
+            },
+            {
+              "response": "\"10 tickets, seems a bit much.\"",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 5,
+          "character": "Carny",
+          "scene": "shootinggallery",
+          "line": "\"All right, let's see how you do.\""
+        },
+        {
+          "idx": 6,
+          "character": "Carny",
+          "line": ["\"Well, actually, there might be something you could do for me.\"",
+            "\"Ya think you might be interested.\""
+          ],
+          "responses": [
+            {
+              "response": "\"Sure, can you tell me a little about it?\"",
+              "next": 8
+            },
+            {
+              "response": "\"Maybe some other time.\"",
+              "next": 7
+            }
+          ]
+        },
+        {
+          "idx": 7,
+          "endState": "",
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"Alright, you can get more tickets at the booth if you need them.\""
+            },
+            {
+              "line": "\"If you change your mind, you know where to find me\""
+            },
+            {
+              "line": "\"Maybe some other time then.\""
+            }
+          ]
+        },
+        {
+          "idx": 8,
+          "character": "Carny",
+          "line": [
+            "\"Sure.",
+            "That guy over there at the petting zoo.",
+            "Well a duck has gone missing. And just because we have ducks in the shooting gallery, he thinks I've somthin to do with it.",
+            "If you could find that duck, get it back to the petting zoo, that should get that guy off my back.",
+            "You think you want to help me out?\""
+          ],
+          "responses": [
+            {
+              "response": "\"So, what exactly do I get out of it.\"",
+              "next": 9
+            },
+            {
+              "response": "\"No, not at this time.\"",
+              "next": 7
+            }
+          ]
+        },
+        {
+          "idx": 9,
+          "character": "Carny",
+          "line": "\"Well, you do this for me and I'll give you 10 bucks. With that you can buy yourself a bunch of tickets to use wherever you want.\"",
+          "responses": [
+            {
+              "response": "\"Sweet, you have a deal.\"",
+              "next": 12
+            },
+            {
+              "response": "\"I don't think so.\"",
+              "next": 10
+            }
+          ]
+        },
+        {
+          "idx": 10,
+          "character": "Carny",
+          "line": "\"Ok kid, I didn't want to negotiate, but 15 bucks.\"",
+          "responses": [
+            {
+              "response": "\"Sounds good to me.\"",
+              "next": 13
+            },
+            {
+              "response": "\"How about 20?\"",
+              "next": 11
+            },
+            {
+              "response": "\"No, I think I'll pass\"",
+              "next": 7
+            }
+          ]
+        },
+        {
+          "idx": 11,
+          "character": "Carny",
+          "line": "\"How about 5?\"",
+          "responses": [
+            {
+              "response": "\"I think 20 is better.\"",
+              "next": 7
+            },
+            {
+              "response": "\"Alright 15 it is.\"",
+              "next": 13
+            },
+            {
+              "response": "\"I'll have to think about it.\"",
+              "next": 7
+            }
+          ]
+        },
+        {
+          "idx": 12,
+          "endState": "DUCK10",
+          "character": "Carny",
+          "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
+        },
+        {
+          "idx": 12,
+          "endState": "DUCK15",
+          "character": "Carny",
+          "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
+        }
+      ]
+    },
+    {
+      "name": "DUCK10",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Carny",
+          "requires": {
+            "items": ["Apology"]
+          },
+          "lines": [
+            {
+              "line": "\"Hey, nice to see you again. Any News?\""
+            },
+            {
+              "line": "\"So, how are making out?\""
+            },
+            {
+              "line": "\"How's it going?\""
+            }
+          ],
+          "responses": {
+            "yes" : [
+              {
+                "response": "\"I have a surprise for you.\"",
+                "next": 5
+              },
+              {
+                "response": "\"Funny you should ask.\"",
+                "next": 5
+              }
+            ],
+            "no": [
+              {
+                "response": "\"I'm still looking.\"",
+                "next": 1
+              },
+              {
+                "response": "\"Just wanted to stop by and do a little shooting.\"",
+                "next": 2
+              }
+            ]
+          }
+        },
+        {
+          "idx": 1,
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"Well I hope you find it soon. I'd like to get this guy off my back.\""
+            },
+            {
+              "line": "\"Good to hear. Hopefully it's not too much longer.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Me too, just wanted to do a some shooting",
+              "next": 2
+            },
+            {
+              "response": "\"I'm going to keep looking.\"",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "requires": { "tickets": 10 },
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"So you managed to get some tickets?\""
+            },
+            {
+              "line": "\"Isn't there a duck you need to find?\""
+            }
+          ],
+          "responses": {
+            "yes": [
+              {
+                "response": "\"I do have tickets, but don't worry, I'm still going to look.\"",
+                "next": 3
+              }
+            ],
+            "no": [
+              {
+                "response": "\"No, I don't have the tickets, guess I better find that duck.\"",
+                "next": 4
+              }
+            ]
+          }
+        },
+        {
+          "idx": 3,
+          "character": "Carny",
+          "scene": "shootinggallery",
+          "line": "\"All right, let's see how you do.\""
+        },
+        {
+          "idx": 4,
+          "character": "Carny",
+          "line": "\"Alright, good luck.\""
+        },
+        {
+          "idx": 5,
+          "award": { "cash":  10.00 },
+          "character": "Carny",
+          "line": "\"Well that's great news. And I guess I own you $10.\""
+        }
+      ]
+    },
+    {
+      "name": "DUCK15",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Carny",
+          "requires": {
+            "items": ["Apology"]
+          },
+          "lines": [
+            {
+              "line": "\"Hey, nice to see you again. Any News?\""
+            },
+            {
+              "line": "\"So, how are making out?\""
+            },
+            {
+              "line": "\"How's it going?\""
+            }
+          ],
+          "responses": {
+            "yes" : [
+              {
+                "response": "\"I have a surprise for you.\"",
+                "next": 5
+              },
+              {
+                "response": "\"Funny you should ask.\"",
+                "next": 5
+              }
+            ],
+            "no": [
+              {
+                "response": "\"I'm still looking.\"",
+                "next": 1
+              },
+              {
+                "response": "\"Just wanted to stop by and do a little shooting.\"",
+                "next": 2
+              }
+            ]
+          }
+        },
+        {
+          "idx": 1,
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"Well I hope you find it soon. I'd like to get this guy off my back.\""
+            },
+            {
+              "line": "\"Good to hear. Hopefully it's not too much longer.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Me too, just wanted to do a some shooting",
+              "next": 2
+            },
+            {
+              "response": "\"I'm going to keep looking.\"",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "requires": { "tickets": 10 },
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"So you managed to get some tickets?\""
+            },
+            {
+              "line": "\"Isn't there a duck you need to find?\""
+            }
+          ],
+          "responses": {
+            "yes": [
+              {
+                "response": "\"I do have tickets, but don't worry, I'm still going to look.\"",
+                "next": 3
+              }
+            ],
+            "no": [
+              {
+                "response": "\"No, I don't have the tickets, guess I better find that duck.\"",
+                "next": 4
+              }
+            ]
+          }
+        },
+        {
+          "idx": 3,
+          "character": "Carny",
+          "scene": "shootinggallery",
+          "line": "\"All right, let's see how you do.\""
+        },
+        {
+          "idx": 4,
+          "character": "Carny",
+          "line": "\"Alright, good luck.\""
+        },
+        {
+          "idx": 5,
+          "award": { "cash":  15.00 },
+          "character": "Carny",
+          "line": "\"Well that's great news. And I guess I own you $15.\""
+        }
+      ]
+    },
+    {
+      "name": "COMPLETE",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Carny",
+          "lines": [
+            {
+              "line": "\"Nice to see you again, here to do a little shooting.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Yes, have to hone my skills.\"",
+              "next": 4
+            },
+            {
+              "response": "\"Just stopped by to say hi.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Carny",
+          "line": "\"That's nice, thanks for helping me out.\"",
+          "responses": [
+            {
+              "response": "\"Yeah it was fun, was there anything else I could do for you?\"",
+              "next": 2
+            },
+            {
+              "resepose": "\"Glad to help, talk to you again soon.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Carny",
+          "line": "\"Not at this time, thanks for asking.\""
+        },
+        {
+          "idx": 3,
+          "character": "Carny",
+          "line": "\"Alright, see you again sometime.\""
+        },
+        {
+          "idx": 4,
+          "character": "Carny",
+          "scene": "shootinggallery",
+          "line": "\"All right, let's see how you do.\""
+        }
+      ]
+    }
+  ]
+}

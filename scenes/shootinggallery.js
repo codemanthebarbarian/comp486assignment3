@@ -35,6 +35,7 @@ class ShootingGallery extends Phaser.Scene {
         this.hit = this.sound.add('hit', { loop: false});
         this.music.play();
         this.hits = 0;
+        this.shots = 24;
         this.matter.world.setBounds(-150, 0, game.config.width + 450, game.config.height + 200).disableGravity();
         this.objectShapes = this.cache.json.get('object_shapes');
         this.stallShapes = this.cache.json.get('stall_shapes');
@@ -45,13 +46,9 @@ class ShootingGallery extends Phaser.Scene {
         this.crosshair = this.matter.add.image(game.canvas.clientWidth / 2, game.canvas.clientHeight / 2, 'hud', 'crosshair_red_small.png')
             .setDepth(6).setCollisionGroup(this.nonColliding);
 
-        let text1 = this.add.text(game.canvas.clientWidth / 2, 10, 'This is the Shooting Gallery scene');
-        this.score = this.add.text(10,10, "Hits: " + this.hits);
-        this.txtExit = this.add.text(game.canvas.clientWidth - 20, 10, 'Exit').setOrigin(1);
-        this.matter.add.gameObject(this.txtExit).setDepth(6).setCollisionGroup(this.nonColliding)
-        text1.setOrigin(0.5); //centre the text
-        text1.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
-        this.score.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
+        this.score = this.add.text(10,25, "Hits: " + this.hits).setFontSize(50).setColor('#ffff00');
+        this.txtExit = this.add.text(game.canvas.clientWidth - 20, 25, 'Exit').setFontSize(50).setColor('#ffff00').setOrigin(1);
+        this.matter.add.gameObject(this.txtExit).setDepth(6).setCollisionGroup(this.nonColliding);
         this.initializeInput();
     }
 
@@ -106,6 +103,9 @@ class ShootingGallery extends Phaser.Scene {
     }
 
     shoot(){
+        if(this.shots < 0) return;
+        this.bulletGroup.getChildren().pop().destroy();
+        --this.shots;
         this.miss.play();
         let x = this.crosshair.x;
         let y = this.crosshair.y;
@@ -114,13 +114,13 @@ class ShootingGallery extends Phaser.Scene {
         if(this.matter.overlap(shot, this.txtExit)){
             this.txtExit.emit('exit');
         } else if(this.matter.overlap(shot, this.shieldFront)){
-            shot.depth(6);
+            shot.setDepth(6);
         } else if(this.matter.overlap(shot, this.targetsFront)){
             ++this.hits;
             this.hit.play();
-            shot.depth(4);
+            shot.setDepth(4);
         } else if(this.matter.overlap(shot, this.shieldMid)){
-            shot.depth(4);
+            shot.setDepth(4);
         } else if(this.matter.overlap(shot, this.ducksMid)){
             ++this.hits;
             this.hit.play();
@@ -198,7 +198,6 @@ class ShootingGallery extends Phaser.Scene {
                     duration: 10000,
                     positionOnPath: true,
                     repeat: -1,
-                    //delay: i * 1000
                     startAt: i * .1
                 }
             );
@@ -217,10 +216,11 @@ class ShootingGallery extends Phaser.Scene {
         this.targetsFront = [];
         let graphics = this.add.graphics();
         let path = new Phaser.Curves.Path();
-        path.add(new Phaser.Curves.Ellipse(250, 500, 100, 100, 135, 45));
+        this.resizeShape(this.objectShapes.target_colored, 0.3);
+        path.add(new Phaser.Curves.Ellipse(320, 500, 100, 100, 135, 45));
         graphics.lineStyle(1, 0xffffff, 1);
         path.draw(graphics).setDepth(5);
-        let follower = this.add.follower(path, 250, 500, 'objects', 'target_colored.png').setDepth(5);
+        let follower = this.add.follower(path, 320, 500, 'objects', 'target_colored.png').setDepth(5);
         follower.setScale(0.3).setDepth(5);
         this.targetsFront.push(
             this.matter.add.gameObject(follower, { shape: this.objectShapes.target_colored })
@@ -233,7 +233,24 @@ class ShootingGallery extends Phaser.Scene {
             ease: 'Sine.easeInOut',
             repeat: -1
         });
-        this.shieldFront = [];//bg_wood.png
+        let path2 = new Phaser.Curves.Path();
+        path2.add(new Phaser.Curves.Ellipse(640, 500, 100, 100, 135, 45));
+        path2.draw(graphics).setDepth(5);
+        let follower2 = this.add.follower(path2, 640, 500, 'objects', 'target_colored.png').setDepth(5);
+        follower2.setScale(0.3).setDepth(5);
+        this.targetsFront.push(
+            this.matter.add.gameObject(follower2, { shape: this.objectShapes.target_colored })
+                .setCollisionGroup(this.nonColliding)
+        );
+        follower2.startFollow({
+            duration: 3000,
+            positionOnPath: true,
+            yoyo: true,
+            ease: 'Sine.easeInOut',
+            repeat: -1,
+            startAt: 1
+        });
+        this.shieldFront = [];
         let z, x;
         for (z = 0 , x = 0 ; z < 5 ; ++z , x += 256 ){
             this.shieldFront.push(
@@ -241,6 +258,19 @@ class ShootingGallery extends Phaser.Scene {
                     .setDepth(6).setCollisionGroup(this.nonColliding)
             );
         }
+
+        this.bulletGroup = this.add.group({
+            key: 'hud',
+            frame: 'icon_bullet_gold_long.png',
+            quantity: 25,
+            setXY:
+                {
+                    x: 35,
+                    y: 550,
+                    stepX: 35
+                },
+            setDepth: { value: 7, step: 0 }
+        });
     }
 
     /**
@@ -254,19 +284,29 @@ class ShootingGallery extends Phaser.Scene {
         shape.isResized = true;
         let newData = [];
         let data = shape.fixtures;
+
         for(let i = 0; i < data.length; i++) {
-            let vertices = [];
-            for(let j = 0; j < data[i].vertices.length; ++j) {
-                let vals = [];
-                for(let k = 0; k < data[i].vertices[j].length; ++k){
-                    vals.push({
-                        x: data[i].vertices[j][k].x * scale,
-                        y: data[i].vertices[j][k].y * scale
-                    })
+            if(data[i].vertices) {
+                let vertices = [];
+                for (let j = 0; j < data[i].vertices.length; ++j) {
+                    let vals = [];
+                    for (let k = 0; k < data[i].vertices[j].length; ++k) {
+                        vals.push({
+                            x: data[i].vertices[j][k].x * scale,
+                            y: data[i].vertices[j][k].y * scale
+                        });
+                    }
+                    vertices.push(vals);
                 }
-                vertices.push(vals);
+                newData.push({ vertices : vertices });
             }
-            newData.push({ vertices : vertices });
+            if(data[i].circle){
+                let circle = {};
+                circle.x = data[i].circle.x * scale;
+                circle.y = data[i].circle.y * scale;
+                circle.radius = data[i].circle.radius * scale;
+                newData.push({ circle: circle });
+            }
         }
         shape.fixtures = newData;
     }

@@ -1,0 +1,171 @@
+{
+  "trigger": "ticketbooth",
+  "title": "Ticket Booth",
+  "stages": [
+    {
+      "name": "default",
+      "endState": "",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Ticket Booth Sign",
+          "line": [
+            "5  Tickets $2.00",
+            "15 Tickets $5.00",
+            "40 Tickets $10.00"
+          ],
+          "next": 1
+        },
+        {
+          "idx": 1,
+          "character": "Ticket Sales",
+          "lines": [
+            { "line": "\"What can I get you?\"" },
+            { "line": "\"How many tickets?\"" }
+          ],
+          "responses": [
+            {
+              "response": "\"5 tickets please.\"",
+              "next": 2
+            },
+            {
+              "response": "\"15 tickets please.\"",
+              "next": 3
+            },
+            {
+              "response": "\"40 tickets please.\"",
+              "next": 4
+            },
+            {
+              "response": "Leave the line.",
+              "next": 5
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Ticket Sales",
+          "line": "\"That will be $2.00.\"",
+          "requires": {
+            "cash": 2.00
+          },
+          "responses": {
+            "yes": [
+              {
+                "response": "Give the cashier $2.00.",
+                "next": 6
+              }
+            ],
+            "no": [
+              {
+                "response": "Sorry, I have to get some money.",
+                "next": 9
+              },
+              {
+                "response": "Leave the line.",
+                "next": 8
+              }
+            ]
+          }
+        },
+        {
+          "idx": 3,
+          "character": "Ticket Sales",
+          "line": "\"That will be $5.00.\"",
+          "requires": {
+            "cash": 5.00
+          },
+          "responses": {
+            "yes": [
+              {
+                "response": "Give the cashier $5.00.",
+                "next": 7
+              }
+            ],
+            "no": [
+              {
+                "response": "\"Sorry, I think I'll take 5 tickets\".",
+                "next": 2
+              },
+              {
+                "response": "\"Sorry, I have to get some money.\"",
+                "next": 9
+              },
+              {
+                "response": "Leave the line.",
+                "next": 5
+              }
+            ]
+          }
+        },
+        {
+          "idx": 4,
+          "character": "Ticket Sales",
+          "line": "\"That will be $10.00.\"",
+          "requires": {
+            "cash": 10.00
+          },
+          "responses": {
+            "yes": [
+              {
+                "response": "Give the cashier $10.00.",
+                "next": 8
+              }
+            ],
+            "no": [
+              {
+                "response": "\"Sorry, I think I'll take 5 tickets\".",
+                "next": 2
+              },
+              {
+                "response": "\"Actually, I'll take 15 tickets\".",
+                "next": 3
+              },
+              {
+                "response": "\"Sorry, I have to get more money.\"",
+                "next": 9
+              },
+              {
+                "response": "Leave the line.",
+                "next": 5
+              }
+            ]
+          }
+        },
+        {
+          "idx": 5,
+          "character": "Ticket Sales",
+          "endState": "",
+          "line": "\"Weird.\""
+        },
+        {
+          "idx": 6,
+          "character": "Ticket Sales",
+          "endState": "",
+          "award": { "tickets":  5 },
+          "line": "\"Here you go.\""
+        },
+        {
+          "idx": 7,
+          "character": "Ticket Sales",
+          "endState": "",
+          "award": { "tickets":  15 },
+          "line": "\"Here you go.\""
+        },
+        {
+          "idx": 8,
+          "character": "Ticket Sales",
+          "endState": "",
+          "award": { "tickets":  40 },
+          "line": "\"Here you go.\""
+        },
+        {
+          "idx": 9,
+          "character": "Ticket Sales",
+          "endState": "",
+          "line": "\"Ok.\""
+        }
+      ]
+    }
+  ]
+}

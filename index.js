@@ -14,7 +14,8 @@ let config = {
     },
     plugins: {
         global: [
-            { key: 'InventoryRepo', plugin: InventoryRepo, start: false, mapping: 'inventory' }
+            { key: 'InventoryRepo', plugin: InventoryRepo, start: false, mapping: 'inventory' },
+            { key: 'QuestRepo', plugin: QuestRepo, start: false, mapping: 'quests' }
         ]
     },
     scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars ]

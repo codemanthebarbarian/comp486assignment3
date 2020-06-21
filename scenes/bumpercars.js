@@ -44,15 +44,13 @@ class BumperCars extends Phaser.Scene {
         let speed = .12;
         if(this.up.isDown || this.thrust) {
             this.player.thrust(speed);
-            //this.player.body.setVelocityY(speed);
-        } else if(this.down.isDown) {
-            //this.player.body.setVelocityY(0);
         }
         if(this.left.isDown) this.player.setAngularVelocity(-.1);
         else if(this.right.isDown) this.player.setAngularVelocity(.1);
     }
 
     initializeInput(){
+        let mouseTrack = new Phaser.Geom.Line(this.player.getCenter(), this.player.getCenter());
         this.thrust = false;
         let exit = function(){
             this.scene.stop();
@@ -80,8 +78,14 @@ class BumperCars extends Phaser.Scene {
         this.input.addPointer(1); // need two touch inputs: move and fire
         this.input.on('pointermove', function (pointer) {
             //orient the car towards the pointer
-            //.crosshair.x = pointer.x;
-            //this.crosshair.y = pointer.y;
+            let c = this.player.getCenter();
+            mouseTrack.x1 = c.x;
+            mouseTrack.y1 = c.y;
+            mouseTrack.x2 = pointer.x;
+            mouseTrack.y2 = pointer.y;
+            let a = Phaser.Math.RadToDeg(Phaser.Geom.Line.Angle(mouseTrack));
+            if(this.player.angle > a) this.player.setAngularVelocity(-.1);
+            else this.player.setAngularVelocity(.1);
         }, this);
         this.input.on('pointerdown', move, this);
         this.input.on('pointerup', stop, this);

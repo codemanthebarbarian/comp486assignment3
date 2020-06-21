@@ -1,0 +1,287 @@
+{
+  "trigger": "pettingzoo",
+  "title": "Petting Zoo",
+  "stages": [
+    {
+      "name": "default",
+      "endState": "",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Attendant",
+          "line": "\"Sorry the petting zoo is closed right now.\"",
+          "responses": [
+            {
+              "response": "\"Oh that's too bad, how come?\"",
+              "next": 1
+            },
+            {
+              "response": "\"Ok, maybe I will come back again some other time.\"",
+              "next": 5
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Attendant",
+          "line": "\"It seems like one of the animals has gone missing.\"",
+          "responses": [
+            {
+              "response": "\"Oh really, anything I need to worry about?\"",
+              "next": 2
+            },
+            {
+              "response": "\"What's missing?\"",
+              "next": 3
+            },
+            {
+              "response": "\"I hope you find it soon.\"",
+              "next": 5
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"This is a petting zoo, the animals are supposed to be friendly.\""
+            },
+            {
+              "line":"\"Unless you consider man eating tigers dangerous. Dude this is a petting zoo, of course there's nothign to worry about.\""
+            },
+            {
+              "line": "The attendant looks at you weird and point to the petting zoo sign"
+            }
+          ],
+          "responses": [
+            {
+              "response":"\"Ugh, yeah... so what did escape?\"",
+              "next": 3
+            },
+            {
+              "response": "\"Yeah, I guess that make sense. Maybe I'll come back another time\"",
+              "next": 5
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Attendant",
+          "line": [
+            "\"Well is seems like one of our ducks has disappeared.",
+            "I know she hasn't flown away. She is a rescue and can't fly. People really like her too, super friendly.",
+            "I think that guy over at the shooting gallery might have something to do with it. I just get this feeling he's not much of a duck fan\""
+          ],
+          "responses": [
+            {
+              "response": "\"Wow, let me know if there is anything I can do?\"",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "endState": "DUCK",
+          "character": "Attendant",
+          "line": "\"Thanks, I would be really happy to get her back.\""
+        },
+        {
+          "idx": 5,
+          "character": "Attendant",
+          "line": "\"Hopefully we'll be open then.\""
+        }
+      ]
+    },
+    {
+      "name": "DUCK",
+      "script": [
+        {
+          "idx": 0,
+          "requires": {
+            "items": ["DUCK"]
+          },
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"So have you found my duck?\""
+            },
+            {
+              "line": "\"Any luck?\""
+            },
+            {
+              "line": "\"How are you making out?\""
+            }
+          ],
+          "responses": {
+            "yes": [
+              {
+                "line": "\"Is this the duck you are looking for?\"",
+                "next": 2
+              },
+              {
+                "line": "\"Here you go.\"",
+                "next": 2
+              },
+              {
+                "line": "\"I think your going to be happy.\"",
+                "next": 2
+              }
+            ],
+            "no": [
+              {
+                "line": "\"No not yet.\"",
+                "next": 1
+              },
+              {
+                "line": "\"I'm still looking.\"",
+                "next": 1
+              }
+            ]
+          }
+        },
+        {
+          "idx": 1,
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"I almost had my hope up.\""
+            },
+            {
+              "line": "\"Ok, thanks for looking.\""
+            },
+            {
+              "line": "\"Let me know when you find something.\""
+            },
+            {
+              "line": "\"I still think that shooting gallery guy still has something to do with it.\""
+            },
+            {
+              "line": "\"I starting to get worried.\""
+            },
+            {
+              "line": "\"I hope she's alright.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"Oh my word, I can't believe you found her!\""
+            },
+            {
+              "line": "\"That's awesome, I'm so glad you found her.\""
+            },
+            {
+              "line": "\"I'm so glad she's back.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"It wasn't easy but I found her.\"",
+              "next": 3
+            },
+            {
+              "response": "\"You wouldn't believe where I found her.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Attendant",
+          "line": "\"I bet you found her out by that shooting gallery. It think they just wanted to use her for target practice.\"",
+          "responses": [
+            {
+              "response": "\"Actually, he had nothing to do with it.\"",
+              "next": 4
+            },
+            {
+              "response": "\"I found her at the beer garden. Looks like she made a nest and wanted some quiet time.\"",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "endState": "FOUND",
+          "award": {
+            "cash": 5.00,
+            "tickets": 5,
+            "items": [ "Golden Egg", "Detective Badge", "Apology" ]
+          },
+          "character": "Attendant",
+          "line": "\"I guess I really owe the shooting gallery guy an apology. Next time you see him, can you tell him I'm sorry. You can also give him this. It's a golden egg. Not real gold, but I think he like it. Also here's a little something for you.\""
+        }
+      ]
+    },
+    {
+      "name": "FOUND",
+      "endState": "FOUND",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"Hey I can't thank you enough for finding her.\""
+            },
+            {
+              "line": "\"Nice to see you again, I'm so glad she's back.\""
+            },
+            {
+              "line": "\"Good to see you.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"How is she doing?\"",
+              "next": 2
+            },
+            {
+              "response": "\"Are you open yet?\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Attendant",
+          "line": "\"We're not open yet, but hopefully soon.\""
+        },
+        {
+          "idx": 2,
+          "character": "Attendant",
+          "line": "\"She's doing great, I'm giving her more quiet time.\"",
+          "responses": [
+            {
+              "response": "\"Are you open yet?\"",
+              "next": 1
+            },
+            {
+              "response": "\"Glad to hear, I will talk to you later.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"Ok, talk to you soon.\""
+            },
+            {
+              "line": "\"Have a great day.\""
+            },
+            {
+              "line": "\"Thanks again.\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "trigger": "prizebooth",
+  "title": "Prize Booth",
+  "stages": [
+    {
+      "name": "default",
+      "endState": "",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Prize Booth Sign",
+          "line": "Trade in Tokens for Prizes",
+          "responses": [
+            { "response": "Get Prizes", "next": 1 },
+            { "response": "Leave the booth", "next": 3 }
+          ]
+        },
+        {
+          "idx": 1,
+          "character" : "Prize Booth Attendant",
+          "lines": [
+            { "line":  "\"See anything you like?\"" },
+            { "line": "\"So, have you been lucky today?\"" }
+          ],
+          "responses": [
+            {
+              "response": "\"Yes, let's see what you've got.\"",
+              "next": 2
+            },
+            {
+              "response": "\"Thanks, maybe some other time.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Prize Booth Attendant",
+          "scene": "prizebooth",
+          "lines": [
+            { "line": "\"Sure, we have some great stuff.\"" },
+            { "line": "\"Great, just let me know if there is anything you would like.\"" },
+            { "line": "The attendant points towards the prizes." }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Prize Booth Attendant",
+          "lines": [
+            { "line": "\"Hope to see you soon.\"" },
+            { "line": "\"Better come back soon, the good stuff won't last.\"" },
+            { "line": "\"Come back anytime.\"" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "checkout",
+      "endstate": "",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Prize Booth Attendant",
+          "line": "\"Looks like you found something, can I get you anything else.\"",
+          "responses": [
+            {
+              "response": "\"Yeah, I'd like another look.\"",
+              "next": 1
+            },
+            {
+              "response": "\"No, this is all.\"",
+              "next": 2
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Prize Booth Attendant",
+          "scene": "prizebooth",
+          "lines": [
+            { "line": "\"Sure, there's lots of choices.\"" },
+            { "line": "\"Great.\"" },
+            { "line": "The attendant nods." }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Prize Booth Attendant",
+          "lines": [
+            { "line": "\"Hope to see you soon.\"" },
+            { "line": "\"Better come back soon, the good stuff won't last.\"" },
+            { "line": "\"Come back anytime.\"" }
+          ]
+        }
+      ]
+    }
+  ]
+}

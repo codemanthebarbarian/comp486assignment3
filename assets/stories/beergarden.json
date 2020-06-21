@@ -1,0 +1,133 @@
+{
+  "trigger": "beergarden",
+  "title": "Beer Garden",
+  "stages": [
+    {
+      "name": "default",
+      "endState": "",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Bouncer",
+          "lines": [
+            {
+              "line": "\"Where do you think you're going?\""
+            },
+            {
+              "line": "\"Hey, not so fast.\""
+            },
+            {
+              "line": "The bouncer holds out his arms and snaps his fingers"
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Yeah, I just need to get inside for a minute.\"",
+              "next": 1
+            },
+            {
+              "response": "\"Just want to get a quick drink.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "requires": {
+            "items": ["ID"]
+          },
+          "character": "Bouncer",
+          "lines": [
+            {
+              "line": "\"ID\""
+            },
+            {
+              "line": "\"I'm going to need to see some ID.\""
+            },
+            {
+              "line": "\"Drivers License.\""
+            }
+          ],
+          "responses":  {
+            "yes": [
+              {
+                "response": "\"Here you go.\"",
+                "next": 4
+              }
+            ],
+            "no":[
+                {
+                  "response": "\"I don't have it on me right now.\"",
+                  "next": 2
+                },
+                {
+                  "response": "\"I'm not old enough.\"",
+                  "next": 3
+                }
+              ]
+          }
+        },
+        {
+          "idx": 2,
+          "character": "Bouncer",
+          "lines": [
+            {
+              "line": "\"Next!\""
+            },
+            {
+              "line": "\"You can come back when you get it.\""
+            },
+            {
+              "line": "\"No ID, No entry.\""
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Bouncer",
+          "lines": [
+            {
+              "line": "The bouncer looks at you and shakes his head."
+            },
+            {
+              "line": "\"Nice try.\""
+            },
+            {
+              "line": "\"Come back when you get a little older.\""
+            },
+            {
+              "line": "\"Next!.\""
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "endState": "CHECKED",
+          "character": "Bouncer",
+          "line": "\"Ok, Go on in.\""
+        }
+      ]
+    },
+    {
+      "name": "CHECKED",
+      "endState": "CHECKED",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Bouncer",
+          "lines": [
+            {
+              "line": "\"I remember you, go on in.\""
+            },
+            {
+              "line": "The bouncer nods at you and waves you in"
+            },
+            {
+              "line": "\"Back for another?\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

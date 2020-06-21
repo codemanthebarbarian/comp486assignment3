@@ -1,4 +1,7 @@
-
+/**
+ * The main entry for the game. This extends Phaser 3 scene.
+ * It displays the main title .
+ */
 class SplashScene extends Phaser.Scene {
 
     constructor() {
