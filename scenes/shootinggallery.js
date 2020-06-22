@@ -16,8 +16,8 @@ class ShootingGallery extends Phaser.Scene {
 
     preload() {
         this.load.audio('theme', './assets/shootinggallery/in_the_circus_psg2.ogg');
-        this.load.audio('fire', './assets/shootinggallery/sfx_15b.ogg');
-        this.load.audio('hit', './assets/shootinggallery/pings_and_scrapes_Marker_2.wav');
+        this.load.audio('fire', './assets/shootinggallery/sfx_15b.ogg', { instances: 5 });
+        this.load.audio('hit', './assets/shootinggallery/pings_and_scrapes_Marker_2.wav', { instances: 3 });
         this.load.atlasXML('objects', './assets/shootinggallery/spritesheet_objects.png',
             './assets/shootinggallery/spritesheet_objects.xml');
         this.load.atlasXML('hud', './assets/shootinggallery/spritesheet_hud.png',
@@ -57,6 +57,7 @@ class ShootingGallery extends Phaser.Scene {
         let speed = 5;
 
         let exit = function() {
+            this.music.stop();
             this.scene.stop();
             this.scene.wake('carnival');
         };

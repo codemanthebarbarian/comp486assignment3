@@ -14,7 +14,16 @@
             "15 Tickets $5.00",
             "40 Tickets $10.00"
           ],
-          "next": 1
+          "responses": [
+            {
+              "response": "Purchase tickets.",
+              "next": 1
+            },
+            {
+              "response": "Leave the line.",
+              "next": 5
+            }
+          ]
         },
         {
           "idx": 1,

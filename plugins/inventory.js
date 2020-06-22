@@ -92,6 +92,14 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
     }
 
     /**
+     * Gets the items owned by the player
+     * @returns {[]} the array of items
+     */
+    items(){
+        return this.inv.items;
+    }
+
+    /**
      * Checks if the player own the specified item.
      * @param itm the item or array of items to check
      * @returns {boolean} true if the player has the item otherwise false

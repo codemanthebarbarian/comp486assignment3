@@ -57,15 +57,35 @@ class StoryScene extends Phaser.Scene {
          * Called when the the story is over.
          */
         let exit = function() {
+            let setState = function(state){
+                if(!state) return;
+                if(state.constructor === Array)
+                    state.forEach(i => {
+                        this.quests.setState(i.story, i.state);
+                    }, this)
+                else this.quests.setState(this.story.trigger, state)
+                this.quests.save();
+            }
+
+            this.inventory.save();
+            setState.bind(this)(this.storyLine.endState || this.stage.endState);
+            // this.registry.set(this.story.trigger,
+            //     { stage: this.storyLine.endState ? this.storyLine.endState : this.stage.endState } );
+            let nextScene = this.storyLine.scene || this.stage.scene;
             this.scene.stop();
-            this.scene.wake('carnival', { exit: this.stage });
+            if(nextScene) {
+                // we are not going back to carnival, so pause backgroud
+                this.scene.get('carnival').music.pause();
+                this.scene.run(nextScene);
+            }
+            else this.scene.wake('carnival', { exit: this.stage });
         };
         /**
          * Called when the user submits a response.
          */
         let submitResponse = function() { // commit the currently selected response
             this.graphics.clear();
-            if(!this.storyResponses) this.exit();
+            if(!this.storyResponses) exit.bind(this)();
             if(this.currentResponse < 0) return;
             this.loadLine(this.storyResponses[this.currentResponse].next);
         };
@@ -127,34 +147,6 @@ class StoryScene extends Phaser.Scene {
     }
 
     /**
-     * Exits the story and loads the resulting scene if provided or returns to the carnival scene.
-     */
-    exit(){
-        /**
-         * Sets the end state of this story or any others provided.
-         * @param state the state to set for this story or an array of story states to set
-         */
-        let setState = function(state){
-            if(!state) return;
-            if(state.constructor === Array)
-                state.forEach(i => {
-                    this.quests.setState(i.story, i.state);
-                }, this)
-            else this.quests.setState(this.story.trigger, state)
-            this.quests.save();
-        }
-
-        this.inventory.save();
-        setState.bind(this)(this.storyLine.endState || this.stage.endState);
-        // this.registry.set(this.story.trigger,
-        //     { stage: this.storyLine.endState ? this.storyLine.endState : this.stage.endState } );
-        let nextScene = this.storyLine.scene || this.stage.scene;
-        this.scene.stop();
-        if(nextScene) this.scene.run(nextScene);
-        else this.scene.wake('carnival', { exit: this.stage });
-    }
-
-    /**
      * Loads the appropriate stage from the story's JSON file using the state currently
      * stored in the registry for the story.
      */
@@ -168,13 +160,30 @@ class StoryScene extends Phaser.Scene {
             this.stage = this.story.stages.find(s => s.name === questState);
             if(!this.stage) this.stage = this.story.stages[0];
         }
-        this.add.text(game.canvas.clientWidth / 2, 50, this.story.title).setOrigin(0.5);
-        this.character = this.make.text({
+        this.make.text({
+            x: (game.canvas.clientWidth / 2),
+            y: 25,
+            text: this.story.title,
+            style: {
+                font: 'bold 25px Arial',
+                fill: 'green'
+            }
+        }).setOrigin(.5, .5);
+        this.characterName = this.make.text({
+            x: 70,
+            y: 50,
+            text: null,
+            style: {
+                font: 'bold 25px Arial',
+                fill: 'green'
+            }
+        });
+        this.characterLine = this.make.text({
             x: 140,
             y: 100,
             text: null,
             style: {
-                font: 'bold 25px Arial',
+                font: '25px Arial',
                 fill: 'green',
                 wordWrap: { width: 800, useAdvancedWrap: true }
             }
@@ -190,7 +199,8 @@ class StoryScene extends Phaser.Scene {
      */
     loadLine(idx) {
         this.storyLine = this.stage.script[idx];
-        this.character.setText(this.storyLine.line ||
+        this.characterName.setText(this.storyLine.character + ':');
+        this.characterLine.setText(this.storyLine.line ||
             this.storyLine.lines[Phaser.Math.Between(1, this.storyLine.lines.length) - 1].line);
         this.loadResponses();
         this.getAward();
@@ -236,7 +246,7 @@ class StoryScene extends Phaser.Scene {
                 y: y,
                 text: n + ': ' + resp,
                 style: {
-                    font: 'bold 25px Arial',
+                    font: '25px Arial',
                     fill: 'green',
                     wordWrap: { width: 800, useAdvancedWrap: true }
                 }

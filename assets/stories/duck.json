@@ -1,0 +1,102 @@
+{
+  "trigger": "duck",
+  "title": "Duck",
+  "stages": [
+    {
+      "name": "default",
+      "endState": "FOUND",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Duck",
+          "line": "\"Quack, Quack.\" You hear a duck.",
+          "response": [
+            {
+              "response": "Look in the fountain.",
+              "next": 1
+            },
+            {
+              "response": "Look near the corner of the fence.",
+              "next": 2
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Duck",
+          "line": "Nothing is in the fountain, but you see the edge of the back is wet.",
+          "responses": [
+            {
+              "response": "Look near the corner of the fence.",
+              "next": 2
+            },
+            {
+              "response": "Look between the fence and fountain.",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Duck",
+          "line": "You don't seen anything but some pulled grass fragments heading toward the fountain.",
+          "responses": [
+            {
+              "response": "Look in the fountain.",
+              "next": 1
+            },
+            {
+              "response": "Look between the fence and fountain.",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Duck",
+          "line": "You see a duck sitting in a new nest.",
+          "responses": [
+            {
+              "response": "Quack back at the duck",
+              "next": 4
+            },
+            {
+              "response": "Hold your hand out to the duck.",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "character": "Duck",
+          "line": "The duck come up to you and appears very friendly.",
+          "responses": [
+            {
+              "response": "Pick up the duck.",
+              "next": 5
+            }
+          ]
+        },
+        {
+          "idx": 5,
+          "award": {
+            "items": ["DUCK"]
+          },
+          "character": "Duck",
+          "line": "The duck allows you to pick it up."
+        }
+      ]
+    },
+    {
+      "name": "FOUND",
+      "endState": "FOUND",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Nest",
+          "line": "You see the nest where you found the duck."
+        }
+      ]
+    }
+  ]
+}

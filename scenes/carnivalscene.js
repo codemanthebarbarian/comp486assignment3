@@ -16,6 +16,7 @@ class CarnivalScene extends Phaser.Scene {
      * any related graphical and sound elements.
      */
     preload() {
+        this.load.audio('rollupSong', './assets/carnival/RollUp.ogg');
         this.load.image('city', './assets/carnival/magecity.png');
         this.load.image('fence', './assets/carnival/fence_medieval.png');
         this.load.image('deco', './assets/carnival/decorations-medieval.png');
@@ -61,6 +62,9 @@ class CarnivalScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.buildings, null, null, this);
         this.physics.add.collider(this.player, this.top, null, null, this);
 
+        this.music = this.sound.add('rollupSong', { loop: true, volumne: .7});
+        this.music.play();
+
         this.buildStages();
         this.loadText();
         this.setGates();
@@ -75,6 +79,7 @@ class CarnivalScene extends Phaser.Scene {
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        this.setActionKeys();
 
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
 
@@ -89,6 +94,8 @@ class CarnivalScene extends Phaser.Scene {
      * @param data
      */
     onWake(sys, data) {
+        if(this.music.isPaused) this.music.resume();
+        if(!this.music.isPlaying) this.music.play();
         this.player.setData('zoneoverlap', true);
         if(data && data.exit == 'bumpercars'){
             let pnt = this.mapObjects.objects.find(o => o.name === 'bumpercars_exit', this);
@@ -98,6 +105,13 @@ class CarnivalScene extends Phaser.Scene {
         }
         //set the blocked sections
         this.setGates();
+    }
+
+    setActionKeys() {
+        let showInventory = function(){
+            this.scene.switch('inventory');
+        }
+        this.input.keyboard.on('keydown-I', showInventory, this);
     }
 
     /**
@@ -320,20 +334,7 @@ class CarnivalScene extends Phaser.Scene {
         this.buildStory('prizebooth2', 'prizebooth', 'prizebooth', 'prizebooth');
         this.buildStory('ticketbooth1', 'ticketbooth', 'ticketbooth', 'ticketsbooth');
         this.buildStory('ticketbooth2', 'ticketbooth', 'ticketbooth', 'ticketsbooth');
-        // this.buildStage('bumpercars',
-        //     () => {
-        //         if(this.player.data.values.bumpercars === 'enter') return;
-        //         this.player.setData('bumpercars', 'enter');
-        //         this.scene.switch('bumpercars');
-        //     });
-        // this.buildStage('shootinggallery',
-        //     () => {
-        //         if(this.player.getData('zoneoverlap')) return;
-        //         this.player.setData('zineoverlap', true);
-        //         //if(this.player.data.values.shootinggallery === 'enter') return;
-        //         this.player.setData('shootinggallery', 'enter');
-        //         this.scene.switch('shootinggallery');
-        //     });
+        this.buildStory('duck', 'duck', 'duck', 'duck');
     }
 
     /**
@@ -377,19 +378,5 @@ class CarnivalScene extends Phaser.Scene {
                 }
             }).setOrigin(.5, .5);
         }, this);
-    }
-
-    /**
-     * Builds and binds a stage to a zone on the map. A stage is not a story element.
-     * @param name the name of the scene to play
-     * @param onOverlap the method to call when the zone is overlapped. (triggered)
-     */
-    buildStage(name, onOverlap) {
-        let obj = this.mapObjects.objects.find(o => o.name === name, this);
-        let zn = this.add.zone(obj.x, obj.y, obj.width, obj.height);
-        zn.name = name;
-        this.physics.world.enable(zn);
-        zn.body.debugBodyColor = 0xffff00;
-        this.physics.add.overlap(this.player, zn, onOverlap, null, this);
     }
 }

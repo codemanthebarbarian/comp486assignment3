@@ -42,7 +42,6 @@
                     "line": "\"Whatever, that'll be $15.00.\""
                 },
                 {
-                    "isRandom": true,
                     "character": "Cashier",
                     "lines": [
                         { "line": "\"Thank you.\"" },
@@ -79,7 +78,6 @@
                     ]
                 },
                 {
-                    "isRandom": true,
                     "character": "Cashier",
                     "endState": "intro",
                     "award": {
@@ -92,7 +90,6 @@
                     ]
                 },
                 {
-                    "isRandom": true,
                     "character": "Cashier",
                     "endState": "intro",
                     "lines": [
