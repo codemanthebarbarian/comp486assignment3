@@ -10,7 +10,7 @@
           "idx": 0,
           "character": "Duck",
           "line": "\"Quack, Quack.\" You hear a duck.",
-          "response": [
+          "responses": [
             {
               "response": "Look in the fountain.",
               "next": 1

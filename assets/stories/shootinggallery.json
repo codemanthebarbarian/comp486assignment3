@@ -124,6 +124,9 @@
             },
             {
               "response": "\"Maybe some other time.\"",
+              "refund": {
+                "tickets": 10
+              },
               "next": 7
             }
           ]
@@ -161,6 +164,9 @@
             },
             {
               "response": "\"No, not at this time.\"",
+              "refund": {
+                "tickets": 10
+              },
               "next": 7
             }
           ]
@@ -195,6 +201,9 @@
             },
             {
               "response": "\"No, I think I'll pass\"",
+              "refund": {
+                "tickets": 10
+              },
               "next": 7
             }
           ]
@@ -214,6 +223,9 @@
             },
             {
               "response": "\"I'll have to think about it.\"",
+              "refund": {
+                "tickets": 10
+              },
               "next": 7
             }
           ]
@@ -239,7 +251,8 @@
           "idx": 0,
           "character": "Carny",
           "requires": {
-            "items": ["Apology"]
+            "items": ["Apology"],
+            "consumableItems": [ "Apology" ]
           },
           "lines": [
             {
@@ -319,6 +332,9 @@
             "no": [
               {
                 "response": "\"No, I don't have the tickets, guess I better find that duck.\"",
+                "refund": {
+                  "tickets": 10
+                },
                 "next": 4
               }
             ]
@@ -350,7 +366,8 @@
           "idx": 0,
           "character": "Carny",
           "requires": {
-            "items": ["Apology"]
+            "items": ["Apology"],
+            "consumableItems": [ "Apology" ]
           },
           "lines": [
             {

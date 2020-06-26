@@ -1,0 +1,299 @@
+{
+  "trigger": "portraits",
+  "title": "Portrait Booth",
+  "stages": [
+    {
+      "name": "intro",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Photographer",
+          "line": [
+            "\"Welcome to the portrait studio",
+            "Are you wanting a souvenir photo?\""
+          ],
+          "responses": [
+            {
+              "response": "\"What kind of portraits?\"",
+              "next": 1
+            },
+            {
+              "response": "\"Maybe some other time.\"",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "requires": {
+            "items": [ "McLovin" ]
+          },
+          "character": "Photographer",
+          "line": [
+            "\"We have a few options for backdrops and costumes.",
+            "You could have a western, space, or zombie themes.",
+            "Any of those sound interesting to you?\""
+          ],
+          "responses": {
+            "yes": [
+              {
+                "response": "\"Maybe, how much does it cost?\"",
+                "next": 2
+              },
+              {
+                "response": "\"I think I'm looking for something McLovin style.\"",
+                "next": 7
+              },
+              {
+                "response": "\"Naw, maybe later.\"",
+                "next": 6
+              }
+            ],
+            "no": [
+              {
+                "response": "\"Maybe, how much does it cost?\"",
+                "next": 2
+              },
+              {
+                "response": "\"Naw, maybe later.\"",
+                "next": 6
+              }
+            ]
+          }
+        },
+        {
+          "idx": 2,
+          "requires": {
+            "cash": 5.00
+          },
+          "character": "Photographer",
+          "line": "\"They're $5.00 each.\"",
+          "responses": {
+            "yes": [
+              {
+                "response": "\"A western photo would be fun.\"",
+                "next": 3
+              },
+              {
+                "response": "\"A space photo would be cool.\"",
+                "next": 4
+              },
+              {
+                "response": "\"How about a zombie pic..\"",
+                "next": 5
+              },
+              {
+                "response": "\"I'm not sure, maybe I'll come back later.\"",
+                "refund": {
+                  "cash": 5.00
+                },
+                "next": 6
+              }
+            ],
+            "no": [
+              {
+                "response": "I'm a bit short right now, maybe some other time",
+                "next": 6
+              }
+            ]
+          }
+        },
+        {
+          "idx": 3,
+          "award": {
+            "items": [ "Western Photo" ]
+          },
+          "character": "Photographer",
+          "line": "\"Here you go, you look like a real gunslinger.\""
+        },
+        {
+          "idx": 4,
+          "award": {
+            "items": [ "Space Photo" ]
+          },
+          "character": "Photographer",
+          "line": "\"You look like martian explorer.\""
+        },
+        {
+          "idx": 5,
+          "award": {
+            "items": [ "Zombie Photo" ]
+          },
+          "character": "Photographer",
+          "line": "\"Nice, Brains, Brains, Brains!.\""
+        },
+        {
+          "idx": 6,
+          "character": "Photographer",
+          "line": "\"Alright, I'll be here.\""
+        },
+        {
+          "idx": 7,
+          "requires": {
+            "cash": 15.00
+          },
+          "character": "Photographer",
+          "line": [
+            "\"McLovin you say.",
+            "That's going to be a little more.",
+            "$15.00 and I can hook you up.\""
+          ],
+          "responses": {
+            "yes": [
+              {
+                "response": "\"Sounds like a deal.\"",
+                "next": 8
+              },
+              {
+                "response": "\"Maybe later.\"",
+                "refund": {
+                  "cash": 15.00
+                },
+                "next": 10
+              }
+            ],
+            "no": [
+              {
+                "response": "\"I don't have that kind of cash on me.\"",
+                "next": 9
+              }
+            ]
+          }
+        },
+        {
+          "idx": 8,
+          "endState": "ID",
+          "award": {
+            "items": ["ID"]
+          },
+          "character": "Photographer",
+          "line": "\"One fake ID as promised.\""
+        },
+        {
+          "idx": 9,
+          "endState": "ID",
+          "award": {
+            "items": ["ID"]
+          },
+          "character": "Photographer",
+          "line": "\"I'm feeling generous today, here you go.\""
+        },
+        {
+          "idx": 10,
+          "character": "Photographer"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Photographer",
+          "lines": [
+            {
+              "line": "\"Nice to see you again... McLovin\""
+            },
+            {
+              "line": "\"You're back, interested in some more photos?\""
+            },
+            {
+              "line": "The photographer gives you a nod."
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"I think I'd like some souvenir photos\"",
+              "next": 2
+            },
+            {
+              "response": "\"Just stopped by to say hi, the ID works like a charm, thanks\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Photographer",
+          "lines": [
+            {
+              "line": "\"Glad to hear it.\""
+            },
+            {
+              "line": "\"Thanks, feel free to send other customers my way.\""
+            },
+            {
+              "line": "\"Nice to see you again too. I hope your putting that ID to good use.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "requires": {
+            "cash": 5.00
+          },
+          "character": "Photographer",
+          "line": "\"They're $5.00 each.\"",
+          "responses": {
+            "yes": [
+              {
+                "response": "\"A western photo would be fun.\"",
+                "next": 3
+              },
+              {
+                "response": "\"A space photo would be cool.\"",
+                "next": 4
+              },
+              {
+                "response": "\"How about a zombie pic..\"",
+                "next": 5
+              },
+              {
+                "response": "\"I'm not sure, maybe I'll come back later.\"",
+                "refund": {
+                  "cash": 5.00
+                },
+                "next": 6
+              }
+            ],
+            "no": [
+              {
+                "response": "I'm a bit short right now, maybe some other time",
+                "next": 6
+              }
+            ]
+          }
+        },
+        {
+          "idx": 3,
+          "award": {
+            "items": [ "Western Photo" ]
+          },
+          "character": "Photographer",
+          "line": "\"Here you go, you look like a real gunslinger.\""
+        },
+        {
+          "idx": 4,
+          "award": {
+            "items": [ "Space Photo" ]
+          },
+          "character": "Photographer",
+          "line": "\"You look like martian explorer.\""
+        },
+        {
+          "idx": 5,
+          "award": {
+            "items": [ "Zombie Photo" ]
+          },
+          "character": "Photographer",
+          "line": "\"Nice, Brains, Brains, Brains!.\""
+        },
+        {
+          "idx": 6,
+          "character": "Photographer",
+          "line": "\"Alright, I'll be here.\""
+        }
+      ]
+    }
+  ]
+}

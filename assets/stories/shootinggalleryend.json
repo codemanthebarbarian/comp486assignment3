@@ -1,0 +1,116 @@
+{
+  "trigger": "shootinggalleryend",
+  "title": "Shooting Gallery",
+  "stages": [
+    {
+      "name": "Nothing",
+      "script": [
+        {
+          "idx": 0,
+          "award": {
+            "tickets": 5
+          },
+          "character": "Carny",
+          "line": [
+            "\"Lets see how you did.",
+            "Wow, nada, zip, nothin.",
+            "So, nothing out this, not even a token.",
+            "Can't really have that can we, here's 5 tickets, maybe you might want to give it another shot."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "default",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Carny",
+          "line": [
+            "\"Lets see how you did.",
+            "Hmmm, not that many. If you get at least 10, you will earn some badges.",
+            "At least you get some tokens.\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shooter",
+      "script": [
+        {
+          "idx": 0,
+          "award": {
+            "items": [
+              "Shooter"
+            ]
+          },
+          "character": "Carny",
+          "line": [
+            "\"You've hit quite a few, better then most.",
+            "You get a Shooter badge in addition to the tokens.\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DeadEye",
+      "script": [
+        {
+          "idx": 0,
+          "award": {
+            "tickets": 1,
+            "items": [
+              "Deadeye"
+            ]
+          },
+          "character": "Carny",
+          "line": [
+            "\"That's pretty good.",
+            "You got over 15, better than half.",
+            "That'll get you the Deadeye badge, tokens and a ticket.\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Marksman",
+      "script": [
+        {
+          "idx": 0,
+          "award": {
+            "tickets": 3,
+            "items": [
+              "Marksman"
+            ]
+          },
+          "character": "Carny",
+          "line": [
+            "\"You've got some skills.",
+            "That's over 20 targets.",
+            "You've earned yourself a Marksman badge, tokens, and 3 tickets.\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Sharpshooter",
+      "script": [
+        {
+          "idx": 0,
+          "award": {
+            "tickets": 5,
+            "items": [
+              "Sharpshooter"
+            ]
+          },
+          "character": "Carny",
+          "line": [
+            "\"Well, Well, Well...",
+            "Perfect score, 25 hits. That makes you a Sharpshooter.",
+            "Here's your Sharpshooter badge, 5 tickets and tokens.\""
+          ]
+        }
+      ]
+    }
+  ]
+}

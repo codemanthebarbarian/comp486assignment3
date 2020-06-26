@@ -15,7 +15,7 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
         super(pluginManager);
         let json = localStorage.getItem('inventory');
         if(json) this.inv = JSON.parse(json);
-        else this.inv = { cash: 50.00, tickets: null, items: [] };
+        else this.inv = { cash: 50.00, tickets: 0, tokens: 0, items: [] };
         localStorage.setItem('inventory', JSON.stringify(this.inv));
     }
 
@@ -92,6 +92,42 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
     }
 
     /**
+     * Get the number of tokens in the player's inventory
+     * @returns {null} the number of tokens they player has.
+     */
+    tokens() {
+        return this.inv.tokens;
+    }
+
+    /**
+     * Adds the specified amount of tokens to the player's inventory.
+     * @param amt the number of tokens to add
+     */
+    addTokens(amt) {
+        this.inv.tokens += amt;
+    }
+
+    /**
+     * Check if the player has the required amount of tokens in their inventory.
+     * @param amt the amount of tokens required
+     * @returns {boolean} true if they have the required amount otherwise false.
+     */
+    hasTokens(amt){
+        return amt <= this.inv.tokens;
+    }
+
+    /**
+     * Gets the specified amount of tokens from the players inventory.
+     * @param amt the number of tokens to get.
+     * @returns {number|*} the number of tokens required or 0 if the player does not have enough tokens.
+     */
+    getTokens(amt) {
+        if(!this.hasTickets(amt)) return 0;
+        this.inv.tokens -= amt;
+        return amt;
+    }
+
+    /**
      * Gets the items owned by the player
      * @returns {[]} the array of items
      */
@@ -112,7 +148,7 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
             }, this)
             return result;
         }
-        return this.inv.items.find(i => i === itm) === true;
+        return this.inv.items.includes(itm);
     }
 
     /**

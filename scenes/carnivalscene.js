@@ -335,21 +335,26 @@ class CarnivalScene extends Phaser.Scene {
         this.buildStory('ticketbooth1', 'ticketbooth', 'ticketbooth', 'ticketsbooth');
         this.buildStory('ticketbooth2', 'ticketbooth', 'ticketbooth', 'ticketsbooth');
         this.buildStory('duck', 'duck', 'duck', 'duck');
+        this.buildStory('quack', 'quack', 'quack', 'quack');
+        this.buildStory('toilet', 'toilet', 'toilet', 'toilet');
+        this.buildStory('portraits', 'portraits', 'portraits', 'portraits');
+        this.buildStory(null, 'shootinggalleryend', 'shootinggalleryend', 'shootinggalleryend');
     }
 
     /**
      * Builds a story element and binds it to a zone which can be triggered by the player.
-     * @param zone the zone to bind the story to.
+     * @param zone the zone to bind the story to or null if not bound to a zone.
      * @param key the story key.
      * @param stage the story stage
      * @param file the name of the story's JSON file.
      */
     buildStory(zone, key, stage, file) {
+        if(!this.scene.manager.keys[key])  // add the scene if it does not exist
+            this.scene.add(key, StoryScene, false, { story: file});
+        if(!zone) return; // we are just adding a story not linked to a zone
         let obj = this.mapObjects.objects.find(o => o.name === zone, this);
         let zn = this.add.zone(obj.x, obj.y, obj.width, obj.height);
         zn.name = zone;
-        if(!this.scene.manager.keys[key])  // add the scene if it does not exist
-            this.scene.add(key, StoryScene, false, { story: file});
         this.physics.world.enable(zn);
         zn.body.debugBodyColor = 0xffff00;
         this.physics.add.overlap(this.player, zn, () => {

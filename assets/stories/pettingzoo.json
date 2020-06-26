@@ -99,7 +99,8 @@
         {
           "idx": 0,
           "requires": {
-            "items": ["DUCK"]
+            "items": ["DUCK"],
+            "consumableItems": ["DUCK"]
           },
           "character": "Attendant",
           "lines": [

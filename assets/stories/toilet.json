@@ -1,0 +1,145 @@
+{
+  "trigger": "toilet",
+  "title": "Toilet Graffiti",
+  "stages": [
+    {
+      "name": "intro",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Graffiti",
+          "line": [
+            "Johnny wuz here", "",
+            "Joanie luvs Chachi","",
+            "Jenny wuz here 2","",
+            "Zeppelin Rules"
+          ],
+          "responses": [
+            {
+              "response": "Read More.",
+              "next": 1
+            },
+            {
+              "response": "Leave.",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Graffiti",
+          "line": [
+            "\uD83D\uDC96\uD83D\uDC96",
+            "JD + ID",
+            "\uD83D\uDC96\uD83D\uDC96"
+          ],
+          "responses": [
+            {
+              "response": "Read More.",
+              "next": 2
+            },
+            {
+              "response": "Leave.",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Graffiti",
+          "line": [
+            "Things I Hate:",
+            "1. Graffiti",
+            "2. Vandalism",
+            "3. Lists",
+            "4. Irony"
+          ],
+          "responses": [
+            {
+              "response": "Read More.",
+              "next": 3
+            },
+            {
+              "response": "Leave.",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Graffiti",
+          "line": [
+            "Look Left -> You Failed!",
+            "",
+            "Say no to drugs... maybe",
+            "",
+            "A picture is worth a fake ID",
+            " - JD "
+          ],
+          "responses": [
+            {
+              "response": "Read More.",
+              "next": 4
+            },
+            {
+              "response": "Leave.",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "character": "Graffiti",
+          "award": {
+            "items": [ "McLovin" ]
+          },
+          "line": [
+            "Carnies Rule",
+            "",
+            "The Password is McLovin"
+          ],
+          "responses": [
+            {
+              "response": "Read More.",
+              "next": 5
+            },
+            {
+              "response": "Leave.",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 5,
+          "character": "Graffiti",
+          "line": [
+            "Since writing on bathrooms walls",
+            " is done for neither wealth",
+            "  or critical acclaim,",
+            "    it is the purest form of art.",
+            "       - Discuss"
+          ],
+          "responses": [
+            {
+              "response": "Read More.",
+              "next": 6
+            },
+            {
+              "response": "Leave.",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 6,
+          "character": "Graffiti",
+          "line": [
+            " That's",
+            "      All ",
+            "          Folks!"
+          ]
+        }
+      ]
+    }
+  ]
+}

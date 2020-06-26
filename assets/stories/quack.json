@@ -1,0 +1,34 @@
+{
+  "trigger": "quack",
+  "title": "If it Sounds Like a Duck",
+  "stages": [
+    {
+      "name": "intro",
+      "script": [
+        {
+          "character": "Duck",
+          "lines": [
+            {
+              "line": "\"Quack\""
+            },
+            {
+              "line": "\"Quack Quack\""
+            },
+            {
+              "line": "\"Quack Quack Quack\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "COMPLETE",
+      "script": [
+        {
+          "character": "Fountain",
+          "line": "All quiet except for the people in the beer garden and the splashing of water in the fountian."
+        }
+      ]
+    }
+  ]
+}

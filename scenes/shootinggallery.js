@@ -1,6 +1,11 @@
-
+/**
+ * The scene for the shooting gallery game.
+ */
 class ShootingGallery extends Phaser.Scene {
 
+    /**
+     * The scene constructor inherited
+     */
     constructor() {
         let cfg = {
             key: 'shootinggallery',
@@ -104,7 +109,25 @@ class ShootingGallery extends Phaser.Scene {
     }
 
     shoot(){
-        if(this.shots < 0) return;
+        if(this.shots < -1) return;
+        if(this.shots < 0) {
+            let quest = 'shootinggalleryend';
+            // give the player tokens and set the story state
+            if(this.hits > 0) this.inventory.addTokens(this.hits);
+            if(this.hits === 0) this.quests.setState(quest, 'Nothing');
+            else if(this.hits < 10) this.quests.setState(quest, 'default');
+            else if(this.hits < 15) this.quests.setState(quest, 'Shooter');
+            else if(this.hits < 20) this.quests.setState(quest, 'Deadeye');
+            else if(this.hits < 25) this.quests.setState(quest, 'Marksman');
+            else this.quests.setState(quest, 'Sharpshooter');
+            --this.shots;
+            this.time.delayedCall(5000, () => {
+                this.music.stop();
+                this.scene.stop();
+                this.scene.run(quest);
+            }, [], this);
+            return;
+        }
         this.bulletGroup.getChildren().pop().destroy();
         --this.shots;
         this.miss.play();

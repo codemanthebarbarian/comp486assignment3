@@ -366,7 +366,76 @@
                  "width":32,
                  "x":960,
                  "y":380
-                }],
+                },
+           {
+             "height":40,
+             "id":29,
+             "name":"quack",
+             "rotation":0,
+             "type":"",
+             "visible":true,
+             "width":64,
+             "x":1354,
+             "y":390
+           },
+           {
+             "height":21,
+             "id":30,
+             "name":"toilet",
+             "rotation":0,
+             "type":"",
+             "visible":true,
+             "width":110,
+             "x":894,
+             "y":166
+           },
+           {
+             "height":128,
+             "id":32,
+             "name":"portraits",
+             "rotation":0,
+             "type":"",
+             "visible":true,
+             "width":28,
+             "x":94,
+             "y":1136
+           },
+           {
+             "height":19,
+             "id":33,
+             "name":"",
+             "rotation":0,
+             "text":
+             {
+               "color":"#ffff00",
+               "halign":"center",
+               "text":"Portraits",
+               "wrap":true
+             },
+             "type":"",
+             "visible":true,
+             "width":83,
+             "x":20,
+             "y":1108
+           },
+           {
+             "height":19,
+             "id":34,
+             "name":"",
+             "rotation":0,
+             "text":
+             {
+               "color":"#ffff00",
+               "halign":"center",
+               "text":"Toilets",
+               "wrap":true
+             },
+             "type":"",
+             "visible":true,
+             "width":83,
+             "x":856,
+             "y":106
+           }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,

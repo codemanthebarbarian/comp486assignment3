@@ -20,6 +20,13 @@
                             {
                                 "response": "\"Here you go.\"",
                                 "next": 1
+                            },
+                            {
+                                "response": "\"I've changed my mind.\"",
+                                "refund": {
+                                    "tickets": 5
+                                },
+                                "next": 3
                             }
                         ],
                         "no": [
@@ -50,7 +57,17 @@
                     "lines": [
                         { "line": "The ride attendant rolls his eyes." },
                         { "line": "\"You can buy tickets at the ticket booth.\"" },
-                        { "line": "\"Will, I hope you enjoyed the line.\""}
+                        { "line": "\"Well, I hope you enjoyed the line.\""}
+                    ]
+                },
+                {
+                    "idx": 3,
+                    "character": "Carny",
+                    "lines": [
+                        { "line": "The ride attendant rolls his eyes." },
+                        { "line": "\"Your loss.\"" },
+                        { "line": "\"Well, I hope you enjoyed the line.\""},
+                        { "line": "\"If you change your mind, you know where to find me..\""}
                     ]
                 }
             ]

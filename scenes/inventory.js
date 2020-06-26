@@ -16,9 +16,10 @@ class Inventory extends Phaser.Scene {
     create() {
         this.add.text(game.config.width / 2, 30, 'Inventory').setFontSize(50).setColor('#ffff00').setOrigin(.5, .5);
         this.add.text(game.config.width / 4, 75, "Cash: $" + this.inventory.cash()).setFontSize(25).setColor('#ffff00');
-        this.add.text(game.config.width / 4, 100, "Tickets " + this.inventory.tickets()).setFontSize(25).setColor('#ffff00');
-        this.add.text(game.config.width / 8, 125, "Items:").setFontSize(25).setColor('#ffff00');
-        this.add.text(game.config.width / 8, 150, this.inventory.items()).setFontSize(25).setColor('#ffff00');
+        this.add.text(game.config.width / 4, 100, "Tickets: " + this.inventory.tickets()).setFontSize(25).setColor('#ffff00');
+        this.add.text(game.config.width / 4, 125, "Tokens: " + this.inventory.tokens()).setFontSize(25).setColor('#ffff00');
+        this.add.text(game.config.width / 8, 150, "Items:").setFontSize(25).setColor('#ffff00');
+        this.add.text(game.config.width / 8, 175, this.inventory.items()).setFontSize(25).setColor('#ffff00');
 
         /**
          * A function to exit the scene and return to the carnival scene.

@@ -87,7 +87,9 @@ class StoryScene extends Phaser.Scene {
             this.graphics.clear();
             if(!this.storyResponses) exit.bind(this)();
             if(this.currentResponse < 0) return;
-            this.loadLine(this.storyResponses[this.currentResponse].next);
+            let response = this.storyResponses[this.currentResponse];
+            this.getAward(response.refund);
+            this.loadLine(response.next);
         };
         /**
          * Called when the pointer is down (item selected).
@@ -128,12 +130,12 @@ class StoryScene extends Phaser.Scene {
     /**
      * Gets any awards associated with the current story line.
      */
-    getAward(){
-        let award = this.storyLine.award;
+    getAward(award){
         if(!award) return;
         if(award.items) this.inventory.addItem(award.items);
-        if(award.cash) this.inventory.addCash(award.cash)
-        if(award.tickets) this.inventory.addTickets(award.tickets)
+        if(award.cash) this.inventory.addCash(award.cash);
+        if(award.tickets) this.inventory.addTickets(award.tickets);
+        if(award.tokens) this.inventory.addTokens(award.tokens);
     }
 
     /**
@@ -160,34 +162,34 @@ class StoryScene extends Phaser.Scene {
             this.stage = this.story.stages.find(s => s.name === questState);
             if(!this.stage) this.stage = this.story.stages[0];
         }
-        this.make.text({
-            x: (game.canvas.clientWidth / 2),
-            y: 25,
-            text: this.story.title,
-            style: {
+        this.add.text(
+            (game.canvas.clientWidth / 2),
+            25,
+            this.story.title,
+            {
                 font: 'bold 25px Arial',
                 fill: 'green'
             }
-        }).setOrigin(.5, .5);
-        this.characterName = this.make.text({
-            x: 70,
-            y: 50,
-            text: null,
-            style: {
+        ).setOrigin(.5, .5);
+        this.characterName = this.add.text(
+            70,
+            50,
+            null,
+            {
                 font: 'bold 25px Arial',
                 fill: 'green'
             }
-        });
-        this.characterLine = this.make.text({
-            x: 140,
-            y: 100,
-            text: null,
-            style: {
+        );
+        this.characterLine = this.add.text(
+            140,
+            100,
+            null,
+            {
                 font: '25px Arial',
                 fill: 'green',
                 wordWrap: { width: 800, useAdvancedWrap: true }
             }
-        });
+        );
         this.loadLine(0);
     }
 
@@ -203,7 +205,7 @@ class StoryScene extends Phaser.Scene {
         this.characterLine.setText(this.storyLine.line ||
             this.storyLine.lines[Phaser.Math.Between(1, this.storyLine.lines.length) - 1].line);
         this.loadResponses();
-        this.getAward();
+        this.getAward(this.storyLine.award);
     }
 
     /**
@@ -273,7 +275,7 @@ class StoryScene extends Phaser.Scene {
             // Has requirements
             if(requires.cash) this.inventory.getCash(requires.cash);
             if(requires.tickets) this.inventory.getTickets(requires.tickets);
-            if(requires.items) this.inventory.getItem(requires.items);
+            if(requires.consumableItems) this.inventory.getItem(requires.consumableItems);
             return this.storyLine.responses.yes;
         };
 
