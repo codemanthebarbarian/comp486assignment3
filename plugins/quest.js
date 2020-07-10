@@ -1,5 +1,5 @@
 /**
- * A class for interactin with player quests. This is a repository pattern
+ * A class for interacting with player quests. This is a repository pattern
  * that will initialize itself from the browser's local storage. It will
  * also save itself to localstorage. It extends from Phaser's BasePlugin
  * and will be loaded and available for all scenes of the game.
@@ -14,8 +14,7 @@ class QuestRepo extends Phaser.Plugins.BasePlugin {
         super(pluginManager);
         let json = localStorage.getItem('quests');
         if(json) this.quests = JSON.parse(json);
-        else this.quests = {};
-        localStorage.setItem('quests', JSON.stringify(this.quests));
+        else this.reset();
     }
 
     /**
@@ -34,6 +33,14 @@ class QuestRepo extends Phaser.Plugins.BasePlugin {
      */
     getState(quest){
         return this.quests[quest];
+    }
+
+    /**
+     * Resets the player's quests.
+     */
+    reset(){
+        this.quests = {};
+        this.save();
     }
 
     /**

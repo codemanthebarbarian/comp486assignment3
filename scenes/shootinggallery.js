@@ -38,7 +38,7 @@ class ShootingGallery extends Phaser.Scene {
         this.music = this.sound.add('theme', { loop: true, volume: .5 });
         this.miss = this.sound.add('fire', { loop : false });
         this.hit = this.sound.add('hit', { loop: false});
-        this.music.play();
+        if(this.settings.isBackgroundMusicEnabled()) this.music.play();
         this.hits = 0;
         this.shots = 24;
         this.matter.world.setBounds(-150, 0, game.config.width + 450, game.config.height + 200).disableGravity();

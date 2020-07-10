@@ -36,7 +36,7 @@
         {
           "idx": 2,
           "character": "Prize Booth Attendant",
-          "scene": "prizebooth",
+          "scene": "prizes",
           "lines": [
             { "line": "\"Sure, we have some great stuff.\"" },
             { "line": "\"Great, just let me know if there is anything you would like.\"" },
@@ -76,7 +76,7 @@
         {
           "idx": 1,
           "character": "Prize Booth Attendant",
-          "scene": "prizebooth",
+          "scene": "prizes",
           "lines": [
             { "line": "\"Sure, there's lots of choices.\"" },
             { "line": "\"Great.\"" },

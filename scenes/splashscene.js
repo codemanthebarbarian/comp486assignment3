@@ -5,7 +5,17 @@
 class SplashScene extends Phaser.Scene {
 
     constructor() {
-        super('splash');
+        let cfg = {
+            key: 'splash',
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 0 },
+                    debug: false
+                }
+            }
+        }
+        super(cfg);
     }
 
     preload() {
@@ -13,19 +23,91 @@ class SplashScene extends Phaser.Scene {
     }
 
     create() {
-        this.music = this.sound.add('circus', { loop: true, volume: .5 });
-        this.music.play();
-        let text1 = this.add.text(100, 100, 'The Carnival');
+        let music = this.sound.add('circus', { loop: true, volume: .5 });
+        if(this.settings.isBackgroundMusicEnabled()) music.play();
+        let xMid = game.canvas.width / 2;
+        let graphics = this.add.graphics();
+        graphics.lineStyle(1, 0xff0000, 1);
 
-        text1.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
+        this.add.text(xMid, game.canvas.height / 3,
+            'The Carnival',
+            {
+                font: '50px Arial'
+            }).setOrigin(.5, .5).setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
 
-        let exit = function() {
-            this.music.stop();
-            this.scene.stop();
-            this.scene.start('carnival');
+        let playtxt = this.add.text(xMid, game.canvas.height * .6, 'Play',
+            {
+                font:'25px bold Arial',
+                fill: 'yellow'
+            }).setOrigin(.5, .5).setName('play').setInteractive();
+
+        let settingstxt = this.add.text(xMid, game.canvas.height * .75, 'Settings',
+            {
+               font: '20px Arial',
+               fill: 'yellow'
+            }).setOrigin(.5, 1).setName('settings').setInteractive();
+
+        this.add.text(xMid, game.canvas.height - 25,
+            'Use \'Up\' and \'Down\' arrow keys to highlight and \'Enter\' to select',
+            {
+                font: '15px Arial',
+                fill: 'yellow'
+            }).setOrigin(.5, 1);
+
+        let setInput = function(){
+
+            this.physics.add.existing(playtxt);
+            this.physics.add.existing(settingstxt);
+
+            let selected = playtxt;
+            graphics.strokeRectShape(selected.getBounds());
+            this.input.keyboard.addCapture('UP, DOWN');
+
+            let setNext = function(){
+                if(selected.name === 'play') selected = settingstxt;
+                else selected = playtxt;
+                graphics.clear();
+                graphics.strokeRectShape(selected.getBounds());
+            }
+
+            let onMouseOver = function(event, txt){
+                let itm = Array.isArray(txt) ? txt[0] : txt;
+                if(!itm.name) return;
+                selected = itm;
+                graphics.clear();
+                graphics.strokeRectShape(selected.getBounds());
+            }
+
+            let play = function() {
+                music.stop();
+                this.scene.stop();
+                this.scene.start('carnival');
+            };
+
+            let showProperties = function() {
+                let props = this.scene.get('settings');
+                props.setCallingScene(this, music);
+                this.scene.switch(props);
+            }
+
+            let onPointerDown = function(pointer) {
+                let coord = pointer.position;
+                let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
+                if(txt.length > 0) doInput.bind(this)();
+            }
+
+            let doInput = function(){
+                if(selected.name === 'play') play.bind(this)();
+                else showProperties.bind(this)();
+            }
+
+            this.input.keyboard.on('keydown-ENTER', doInput, this);
+            this.input.keyboard.on('keydown-UP', setNext);
+            this.input.keyboard.on('keydown-DOWN', setNext);
+            this.input.on('pointerover', onMouseOver, this);
+            this.input.on('pointerdown', onPointerDown, this);
         };
 
-        this.input.keyboard.on('keydown-ENTER', exit, this);
-        this.input.on('pointerdown', exit, this);
+        setInput.bind(this)();
     }
 }

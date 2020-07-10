@@ -37,7 +37,7 @@ class BumperCars extends Phaser.Scene {
      */
     create() {
         this.music = this.sound.add('background', { loop: true });
-        this.music.play();
+        if(this.settings.isBackgroundMusicEnabled()) this.music.play();
         this.hitSound = this.sound.add('bangShort', { loop: false });
         this.hits = 0;
         this.score = this.add.text(10, 10, 'Hits: ' + this.hits).setColor('#000000').setDepth(3);

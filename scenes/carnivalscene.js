@@ -63,7 +63,7 @@ class CarnivalScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.top, null, null, this);
 
         this.music = this.sound.add('rollupSong', { loop: true, volumne: .7});
-        this.music.play();
+        if (this.settings.isBackgroundMusicEnabled()) this.music.play();
 
         this.buildStages();
         this.loadText();
@@ -75,14 +75,29 @@ class CarnivalScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-        this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-        this.setActionKeys();
+        let setInput = function(){
+
+            let showInventory = function(){
+                this.scene.switch('inventory');
+            };
+
+            let showProperties = function(){
+                let props = this.scene.get('settings');
+                props.setCallingScene(this, this.music);
+                this.scene.switch(props);
+            }
+
+            this.input.keyboard.addCapture('UP, DOWN', 'LEFT', 'RIGHT');
+            this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+            this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+            this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+            this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+            this.input.keyboard.on('keydown-I', showInventory, this);
+            this.input.keyboard.on('keydown-P', showProperties, this);
+        };
+        setInput.bind(this)();
 
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
-
         this.debugGraphics = this.add.graphics();
         this.drawDebug();
     }
@@ -94,8 +109,9 @@ class CarnivalScene extends Phaser.Scene {
      * @param data
      */
     onWake(sys, data) {
-        if(this.music.isPaused) this.music.resume();
-        if(!this.music.isPlaying) this.music.play();
+        if(this.settings.isBackgroundMusicEnabled() && this.music.isPaused) this.music.resume();
+        if(this.settings.isBackgroundMusicEnabled() && !this.music.isPlaying) this.music.play();
+        if(!this.settings.isBackgroundMusicEnabled() && this.music.isPlaying) this.music.stop();
         this.player.setData('zoneoverlap', true);
         if(data && data.exit == 'bumpercars'){
             let pnt = this.mapObjects.objects.find(o => o.name === 'bumpercars_exit', this);
@@ -105,13 +121,6 @@ class CarnivalScene extends Phaser.Scene {
         }
         //set the blocked sections
         this.setGates();
-    }
-
-    setActionKeys() {
-        let showInventory = function(){
-            this.scene.switch('inventory');
-        }
-        this.input.keyboard.on('keydown-I', showInventory, this);
     }
 
     /**
@@ -367,6 +376,9 @@ class CarnivalScene extends Phaser.Scene {
         }, null, this);
     }
 
+    /**
+     * This loads the text elements (objects) from the tiled map file.
+     */
     loadText(){
         let textObjects = this.map.filterObjects(this.mapObjects, o => {
             if(o.text) return true;

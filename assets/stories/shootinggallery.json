@@ -232,13 +232,39 @@
         },
         {
           "idx": 12,
-          "endState": "DUCK10",
+          "endState": [
+            {
+              "story": "shootinggallery",
+              "state": "DUCK10"
+            },
+            {
+              "story": "pettingzoo",
+              "state": "DUCK"
+            },
+            {
+              "story": "duck",
+              "state": "DUCK"
+            }
+          ],
           "character": "Carny",
           "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
         },
         {
           "idx": 12,
-          "endState": "DUCK15",
+          "endState": [
+          {
+            "story": "shootinggallery",
+            "state": "DUCK15"
+          },
+          {
+            "story": "pettingzoo",
+            "state": "DUCK"
+          },
+            {
+              "story": "duck",
+              "state": "DUCK"
+            }
+        ],
           "character": "Carny",
           "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
         }

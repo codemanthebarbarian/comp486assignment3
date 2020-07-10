@@ -15,8 +15,7 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
         super(pluginManager);
         let json = localStorage.getItem('inventory');
         if(json) this.inv = JSON.parse(json);
-        else this.inv = { cash: 50.00, tickets: 0, tokens: 0, items: [] };
-        localStorage.setItem('inventory', JSON.stringify(this.inv));
+        else this.reset();
     }
 
     /**
@@ -141,7 +140,7 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      * @returns {boolean} true if the player has the item otherwise false
      */
     owns(itm) {
-        if(itm.constructor === Array){
+        if(Array.isArray(itm)){
             let result = true;
             itm.forEach(i => {
                 result = result && this.owns(i);
@@ -158,7 +157,7 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      */
     getItem(itm) {
         if(!this.owns(itm)) return null;
-        if(itm.constructor === Array){
+        if(Array.isArray(itm)){
             let itms = [];
             itm.forEach(i => itms.push(this.getItem(i)), this);
             return itms;
@@ -175,8 +174,16 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      * @param itm the item or array of items to add.
      */
     addItem(itm) {
-        if(itm.constructor === Array) this.inv.items = this.inv.items.concat(itm);
+        if(Array.isArray(itm)) this.inv.items = this.inv.items.concat(itm);
         else this.inv.items.push(itm);
+    }
+
+    /**
+     * Resets the player's inventory to the defaults.
+     */
+    reset(){
+        this.inv = { cash: 50.00, tickets: 0, tokens: 0, items: [] };
+        this.save();
     }
 
     /**

@@ -29,8 +29,12 @@ class Inventory extends Phaser.Scene {
             this.scene.wake('carnival');
         }
 
-        this.add.text(game.canvas.clientWidth - 20, game.canvas.clientHeight - 20, 'Exit').setOrigin(1, 1)
-            .setColor('#ffff00').setFontSize(25).setInteractive()
+        this.add.text(game.canvas.clientWidth - 20, game.canvas.clientHeight - 20, 'Exit',
+            {
+                font: '25px bold Arial',
+                fill: 'yellow'
+            }).setOrigin(1, 1)
+            .setInteractive()
             .on('pointerdown', exit, this);
 
         this.input.keyboard.on('keydown-ESC', exit, this);

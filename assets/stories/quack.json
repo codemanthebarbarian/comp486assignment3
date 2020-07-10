@@ -22,7 +22,8 @@
       ]
     },
     {
-      "name": "COMPLETE",
+      "name": "FOUND",
+      "endState": "FOUND",
       "script": [
         {
           "character": "Fountain",

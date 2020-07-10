@@ -59,7 +59,7 @@ class StoryScene extends Phaser.Scene {
         let exit = function() {
             let setState = function(state){
                 if(!state) return;
-                if(state.constructor === Array)
+                if(Array.isArray(state))
                     state.forEach(i => {
                         this.quests.setState(i.story, i.state);
                     }, this)
@@ -120,7 +120,7 @@ class StoryScene extends Phaser.Scene {
             if(this.currentResponse >= this.storyResponses.length) this.currentResponse = 0;
             this.highlight();
         };
-        this.input.keyboard.on('keydown-ESC', exit,this);
+        this.input.keyboard.on('keydown-ESC', exit, this);
         this.input.keyboard.on('keydown-DOWN', selectNext, this);
         this.input.keyboard.on('keydown-UP', selectPrevious, this);
         this.input.keyboard.on('keydown-ENTER', submitResponse, this);

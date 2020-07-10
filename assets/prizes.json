@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Unicorn",
+    "emoji": "0x1F984",
+    "tokens": 20
+  },
+  {
+    "name": "Tiger Cub",
+    "emoji": "0x1F405",
+    "tokens": 20
+  },
+  {
+    "name": "Husky Puppy",
+    "emoji": "0x1F415",
+    "tokens": 20
+  },
+  {
+    "name": "Monkey",
+    "emoji": "0x1F412",
+    "tokens": 20
+  },
+  {
+    "name": "Ted",
+    "emoji": "0x1F9F8",
+    "tokens": 25
+  },
+  {
+    "name": "Hippo",
+    "emoji": "0x1F99B",
+    "tokens": 15
+  },
+  {
+    "name": "Mouse",
+    "emoji": "0x1F400",
+    "tokens": 15
+  },
+  {
+    "name": "Bunny",
+    "emoji": "0x1F407",
+    "tokens": 15
+  },
+  {
+    "name": "Hedgehog",
+    "emoji": "0x1F994",
+    "tokens": 15
+  },
+  {
+    "name": "Owl",
+    "emoji": "0x1F989",
+    "tokens": 20
+  },
+  {
+    "name": "Sauropod",
+    "emoji": "0x1F995",
+    "tokens": 30
+  },
+  {
+    "name": "T-Rex",
+    "emoji": "0x1F996",
+    "tokens": 30
+  }
+]
