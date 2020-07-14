@@ -86,7 +86,7 @@ class PrizesScene extends Phaser.Scene {
                     String.fromCharCode(parseInt(code[0], 16)) +
                     String.fromCharCode(parseInt(code[1], 16)),
                     {
-                        font: '75px Arial',
+                        font: '75px',
                         fill: 'yellow',
                         align: 'center',
                         wordWrap: { width: 100, useAdvancedWrap: true }
