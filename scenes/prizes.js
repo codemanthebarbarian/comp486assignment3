@@ -26,7 +26,7 @@ class PrizesScene extends Phaser.Scene {
      * This gets the json file storing the available prizes.
      */
     preload(){
-        this.load.json('prizes', './assets/prizes.json');
+        this.load.json('prizes', './assets/prizes_compatible.json');
     }
 
     /**
