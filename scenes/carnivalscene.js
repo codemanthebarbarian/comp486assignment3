@@ -113,7 +113,7 @@ class CarnivalScene extends Phaser.Scene {
         if(this.settings.isBackgroundMusicEnabled() && !this.music.isPlaying) this.music.play();
         if(!this.settings.isBackgroundMusicEnabled() && this.music.isPlaying) this.music.stop();
         this.player.setData('zoneoverlap', true);
-        if(data && data.exit == 'bumpercars'){
+        if(data && data.exit === 'bumpercars'){
             let pnt = this.mapObjects.objects.find(o => o.name === 'bumpercars_exit', this);
             this.player.setData('bumpercars', 'exit')
             this.player.x = pnt.x;

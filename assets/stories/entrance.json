@@ -4,7 +4,7 @@
     "stages": [
         {
             "name": "intro",
-            "endState": "complete",
+            "endState": "stamp",
             "script": [
                 {
                     "character": "Cashier",
@@ -50,7 +50,6 @@
                     ]
                 },
                 {
-                    "isRandom": true,
                     "character": "Cashier",
                     "lines": [
                         { "line": "\"OK, you seem like a good kid. Go on in.\"" },
@@ -60,7 +59,7 @@
             ]
         },
         {
-            "name": "complete",
+            "name": "stamp",
             "endState": "complete",
             "script": [
                 {
@@ -79,7 +78,6 @@
                 },
                 {
                     "character": "Cashier",
-                    "endState": "intro",
                     "award": {
                         "items": ["Entry Stamp"]
                     },
@@ -91,10 +89,113 @@
                 },
                 {
                     "character": "Cashier",
-                    "endState": "intro",
                     "lines": [
                         { "line": "\"Hope to see you again soon.\""},
                         { "line": "\"Have a great day.\"" }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "complete",
+            "endState": "complete",
+            "script": [
+                {
+                    "idx": 0,
+                    "requires": {
+                        "items": ["Entry Stamp"]
+                    },
+                    "character": "Cashier",
+                    "line": "\"Welcome to the carnival.\"",
+                    "responses": {
+                        "yes": [
+                            {
+                                "response": "\"I have a stamp.\"",
+                                "next": 1
+                            },
+                            {
+                                "response": "Show the cashier your stamp",
+                                "next": 1
+                            }
+                        ],
+                        "no": [
+                            {
+                                "response": "How much is it?",
+                                "next": 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "idx": 1,
+                    "character": "Cashier",
+                    "lines": [
+                        { "line": "\"Thank you.\"" },
+                        { "line": "\"Have fun.\""},
+                        { "line": "The cashier waves you through." }
+                    ]
+                },
+                {
+                    "idx": 2,
+                    "character": "Cashier",
+                    "line": "\"The entrance fee is $15.00 per person. How many?\"",
+                    "requires": { "cash":  15.00 },
+                    "responses": {
+                        "yes": [
+                            {
+                                "response": "Give the the cashier $15.00",
+                                "next": 5
+                            },
+                            {
+                                "response": "\"Just one.\"",
+                                "next": 3
+                            },
+                            {
+                                "response": "\"I was here earlier but forgot to get a stamp.\"",
+                                "next": 4
+                            }
+                        ],
+                        "no":[
+                            {
+                                "response": "Oh, it looks like I don't have enough.",
+                                "next": 6
+                            },
+                            {
+                                "response": "\"I was here earlier but forgot to get a stamp.\"",
+                                "next": 4
+                            }
+                        ]
+                    }
+                },
+                {
+                    "idx": 3,
+                    "endState": "stamp",
+                    "character": "Cashier",
+                    "line": "\"Hmmm... Okay, that's $15.00.\""
+                },
+                {
+                    "idx": 4,
+                    "endState": "stamp",
+                    "character": "Cashier",
+                    "line": "\"Ok, go on in. Remember to get a stamp.\""
+                },
+                {
+                    "idx": 5,
+                    "endState": "stamp",
+                    "character": "Cashier",
+                    "lines": [
+                        { "line": "\"Thank you.\"" },
+                        { "line": "\"Have fun.\""},
+                        { "line": "The cashier take your money." }
+                    ]
+                },
+                {
+                    "idx": 6,
+                    "endState": "stamp",
+                    "character": "Cashier",
+                    "lines": [
+                        { "line": "\"OK, you seem like a good kid. Go on in.\"" },
+                        { "line": "(Whispers) \"Go on in, but keep this a secret.\""}
                     ]
                 }
             ]

@@ -125,13 +125,13 @@ class SettingsScene extends Phaser.Scene {
                 if(!itm.name) return;
                 selected = items.getChildren().indexOf(itm);
                 highlight();
-            }
+            };
 
             let onPointerDown = function(pointer){
                 let coord = pointer.position;
                 let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
                 if(txt.length > 0) onEnter.bind(this)();
-            }
+            };
 
             /**
              * move the index to the next interactive element.
@@ -139,7 +139,8 @@ class SettingsScene extends Phaser.Scene {
             let moveNext = function() {
                 ++selected;
                 if(selected >= items.length) selected = 0;
-            }
+                highlight();
+            };
 
             /**
              * move to the previous interactive element
@@ -147,7 +148,8 @@ class SettingsScene extends Phaser.Scene {
             let movePrevious = function() {
                 --selected;
                 if(selected < 0) selected = items.length - 1;
-            }
+                highlight();
+            };
 
             /**
              * handle the execute function for the interactive element.
@@ -166,7 +168,7 @@ class SettingsScene extends Phaser.Scene {
                         toggleBackgroundMusic.bind(this)();
                         break;
                 }
-            }
+            };
 
             this.input.on('pointerover', onMouseOver, this);
             this.input.on('pointerdown', onPointerDown, this);

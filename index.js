@@ -19,7 +19,7 @@ let config = {
             { key: 'SettingsRepo', plugin: SettingsRepo, start: false, mapping: 'settings' }
         ]
     },
-    scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars, Inventory, PrizesScene, SettingsScene ]
+    scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars, Inventory, PrizesScene, PrizeClaimScene, SettingsScene ]
 };
 
 let game = new Phaser.Game(config);

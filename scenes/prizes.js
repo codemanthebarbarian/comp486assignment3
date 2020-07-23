@@ -26,6 +26,9 @@ class PrizesScene extends Phaser.Scene {
      * This gets the json file storing the available prizes.
      */
     preload(){
+        // the prizes.json file worked well on linux but a number of missing emojis
+        // were found when testing on windows. An alternate method using image files
+        // could be used in future versions.
         this.load.json('prizes', './assets/prizes_compatible.json');
     }
 
@@ -41,6 +44,15 @@ class PrizesScene extends Phaser.Scene {
                 fill: 'yellow'
             }
             ).setOrigin(.5, 0);
+        let tokensTxt = 'Tokens: %1';
+        this.add.text(
+            game.canvas.clientWidth - 50, game.canvas.clientHeight - 25,
+            Phaser.Utils.String.Format(tokensTxt, [this.inventory.tokens()]),
+            {
+                font: '25px Arial',
+                fill: 'yellow'
+            }
+        ).setOrigin(1,1);
 
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xff0000, 1);
@@ -68,9 +80,10 @@ class PrizesScene extends Phaser.Scene {
         let getPrize = function(idx){
             let prize = prizes[idx];
             if(this.inventory.hasTokens(prize.tokens)){
+                // get the prize
 
             } else {
-
+                // display error
             }
         }
 
@@ -87,7 +100,6 @@ class PrizesScene extends Phaser.Scene {
                     String.fromCharCode(parseInt(code[1], 16)),
                     {
                         font: '75px',
-                        fill: 'yellow',
                         align: 'center',
                         wordWrap: { width: 100, useAdvancedWrap: true }
                     }
@@ -101,7 +113,7 @@ class PrizesScene extends Phaser.Scene {
                         wordWrap: { width: 100, useAdvancedWrap: true }
                     }
                 ).setOrigin(.5, 0);
-                container.add(emoji).add(price).setName(i++);
+                container.add(emoji).add(price).setName(i++).setData('cost', p.tokens);
                 group.add(container);
             }, this);
         };
@@ -137,7 +149,7 @@ class PrizesScene extends Phaser.Scene {
              */
             let movePrevious = function() { //select the next response
                 --selected;
-                if(selected < 0) selected = group.size - 1;
+                if(selected < 0) selected = group.children.entries.length - 1;
                 highlight();
             };
 
@@ -146,17 +158,34 @@ class PrizesScene extends Phaser.Scene {
              */
             let moveNext = function() {
                 ++selected;
-                if(selected >= group.length) selected = 0;
-                this.highlight();
+                if(selected >= group.children.entries.length) selected = 0;
+                highlight();
             };
 
             let onMouseOver = function(event, txt){
                 selected = Array.isArray(txt) ? txt[0].name : txt.name;
                 highlight();
-            }
+            };
+
+            let onPointerDown = function(pointer){
+                let coord = pointer.position;
+                group.children.each(c => {
+                    if(Phaser.Geom.Rectangle.ContainsPoint(c.getData('bounds'), coord)){
+                        onEnter.bind(this)();
+                    }
+                }, this);
+            };
 
             let onEnter = function() {
-
+                //get the prize text game object
+                let container = group.getChildren()[selected];
+                if(!container) return;
+                let prize = container.list[0];
+                if(!prize) return;
+                let scene = this.scene.get('prizeclaim');
+                scene.setPrize(prize.text, container.getData('cost'));
+                this.scene.sleep();
+                this.scene.run(scene);
             };
 
             group.children.each(c => {
@@ -165,6 +194,7 @@ class PrizesScene extends Phaser.Scene {
             }, this);
 
             this.input.on('pointerover', onMouseOver, this);
+            this.input.on('pointerdown', onPointerDown, this);
             this.input.keyboard.on('keydown-DOWN', moveNext, this);
             this.input.keyboard.on('keydown-UP', movePrevious, this);
             this.input.keyboard.on('keydown-ENTER', onEnter, this);
