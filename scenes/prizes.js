@@ -77,16 +77,6 @@ class PrizesScene extends Phaser.Scene {
             return [lead.toString(16), trail.toString(16)]
         }
 
-        let getPrize = function(idx){
-            let prize = prizes[idx];
-            if(this.inventory.hasTokens(prize.tokens)){
-                // get the prize
-
-            } else {
-                // display error
-            }
-        }
-
         /**
          * This creates the prizes and displays them to the user.
          */
@@ -126,6 +116,13 @@ class PrizesScene extends Phaser.Scene {
         let setInput = function(){
 
             this.input.keyboard.addCapture('UP, DOWN');
+            let exitText = this.add.text(game.canvas.width / 2 , game.canvas.height - 10,
+                'Exit',{
+                    font: '25px Arial bold',
+                    fill: 'yellow'
+                }).setName(group.children.entries.length).setOrigin(.5, 1).setInteractive();
+            exitText.setData('bounds', exitText.getBounds());
+            group.add(exitText);
 
             /**
              * The method to exit the prize booth.
@@ -176,10 +173,8 @@ class PrizesScene extends Phaser.Scene {
                 }, this);
             };
 
-            let onEnter = function() {
+            let getPrize = function(container) {
                 //get the prize text game object
-                let container = group.getChildren()[selected];
-                if(!container) return;
                 let prize = container.list[0];
                 if(!prize) return;
                 let scene = this.scene.get('prizeclaim');
@@ -188,10 +183,18 @@ class PrizesScene extends Phaser.Scene {
                 this.scene.run(scene);
             };
 
+            let onEnter = function(){
+                let item = group.getChildren()[selected];
+                if(!item) return;
+                if(item === exitText) exit.bind(this)();
+                else getPrize.bind(this)(item);
+            };
+
             group.children.each(c => {
                 let b = c.getBounds(); // getBounds on container is expensive so cache in data
                 c.setData('bounds', b);
             }, this);
+
 
             this.input.on('pointerover', onMouseOver, this);
             this.input.on('pointerdown', onPointerDown, this);

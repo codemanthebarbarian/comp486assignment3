@@ -78,6 +78,7 @@ class PrizeClaimScene extends Phaser.Scene {
             let claimPrize = function() {
                 this.inventory.getTokens(this.cost);
                 this.inventory.addItem(this.prize);
+                this.inventory.save();
             }
 
             let hasTokensHandler = {

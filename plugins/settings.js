@@ -39,10 +39,18 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
         return this.vals.audio.background.enabled;
     }
 
+    /**
+     * Toggles the background music and returns if the current state after toggle.
+     * @returns {boolean} true if the background music is enabled or false if disabled.
+     */
     toggleBackgroundMusicEnabled() {
         return this.setBackgroundMusicEnabled(! this.vals.audio.background.enabled);
     }
 
+    /**
+     * Save the players current settings. Currently if the
+     * background music is to be enabled or not.
+     */
     save() {
         localStorage.setItem('settings', JSON.stringify(this.vals))
     }

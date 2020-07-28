@@ -36,6 +36,7 @@ class SettingsScene extends Phaser.Scene {
             }
         ).setOrigin(.5, 0);
 
+        let gameStateFmt = 'Game State: %1';
         let toggleBackgroundMusicTxt = 'Background Music:  %1';
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xff0000, 1);
@@ -49,6 +50,17 @@ class SettingsScene extends Phaser.Scene {
             }
         ).setOrigin(.5).setName('toggleBackground').setInteractive();
 
+        /**
+         * Gets the current state of the game
+         * @return {boolean} true if a new game (default state) otherwise false
+         */
+        let getGameResetState = function(){
+          return this.inventory.isReset() && this.quests.isReset();
+        };
+
+        /**
+         * Toggles the background music state
+         */
         let toggleBackgroundMusic = function(){
             let enabled = this.settings.toggleBackgroundMusicEnabled();
             musicToggle.setText(Phaser.Utils.String.Format(toggleBackgroundMusicTxt,
@@ -60,6 +72,7 @@ class SettingsScene extends Phaser.Scene {
                     this.backgroundMusic.play();
             }
         };
+
         let resetTxt = this.add.text(null, null, 'Reset Game',
             {
                 font: '25px Arial',
@@ -70,6 +83,13 @@ class SettingsScene extends Phaser.Scene {
                 font: '25px Arial',
                 fill: 'yellow'
             }).setOrigin(.5).setName('exit').setInteractive();
+        let gameStateTxt = this.add.text(
+            game.canvas.clientWidth / 2, game.canvas.height - 10,
+            Phaser.Utils.String.Format(gameStateFmt, getGameResetState.bind(this)() ? ['New Game'] : ['In Progress']),
+            {
+                font: '20px Arial',
+                fill: 'yellow'
+            }).setOrigin(.5, 1);
 
         let items = this.add.group()
             .add(musicToggle)
@@ -87,7 +107,8 @@ class SettingsScene extends Phaser.Scene {
         let reset = function() {
             this.quests.reset();
             this.inventory.reset();
-            this.scene = 'splash';
+            this.caller = this.scene.get('splash');
+            gameStateTxt.setText(Phaser.Utils.String.Format(gameStateFmt, getGameResetState.bind(this)() ? ['Reset'] : ['In Progress']));
         };
 
         /**
@@ -98,6 +119,9 @@ class SettingsScene extends Phaser.Scene {
             let selected = -1;
             this.input.keyboard.addCapture('UP, DOWN');
 
+            /**
+             * Highlights the currently selected option.
+             */
             let highlight = function() {
                 if(selected < 0) return;
                 graphics.clear();
@@ -127,6 +151,11 @@ class SettingsScene extends Phaser.Scene {
                 highlight();
             };
 
+            /**
+             * Executes the selected command on pointer down if the pointer is currently hovering
+             * over the currently selected option.
+             * @param pointer the pointer object
+             */
             let onPointerDown = function(pointer){
                 let coord = pointer.position;
                 let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
@@ -161,7 +190,7 @@ class SettingsScene extends Phaser.Scene {
                     case 'exit':
                         exit.bind(this)();
                         break;
-                    case 'reset':
+                    case 'resetGame':
                         reset.bind(this)();
                         break;
                     case 'toggleBackground':

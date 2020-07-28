@@ -13,6 +13,8 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      */
     constructor(pluginManager) {
         super(pluginManager);
+        let d = { cash: 50.00, tickets: 0, tokens: 0, items: [] };
+        this.default = JSON.stringify(d);
         let json = localStorage.getItem('inventory');
         if(json) this.inv = JSON.parse(json);
         else this.reset();
@@ -182,8 +184,16 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      * Resets the player's inventory to the defaults.
      */
     reset(){
-        this.inv = { cash: 50.00, tickets: 0, tokens: 0, items: [] };
+        this.inv = JSON.parse(this.default);
         this.save();
+    }
+
+    /**
+     * Checks if the inventory is at the default state
+     * @returns {boolean} true if reset else false
+     */
+    isReset(){
+        return JSON.stringify(this.inv) === this.default;
     }
 
     /**

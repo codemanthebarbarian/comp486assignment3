@@ -12,6 +12,8 @@ class QuestRepo extends Phaser.Plugins.BasePlugin {
      */
     constructor(pluginManager){
         super(pluginManager);
+        let d = {};
+        this.default = JSON.stringify(d);
         let json = localStorage.getItem('quests');
         if(json) this.quests = JSON.parse(json);
         else this.reset();
@@ -39,8 +41,16 @@ class QuestRepo extends Phaser.Plugins.BasePlugin {
      * Resets the player's quests.
      */
     reset(){
-        this.quests = {};
+        this.quests = JSON.parse(this.default);
         this.save();
+    }
+
+    /**
+     * Checks if the quests are currently in the default state
+     * @returns {boolean} true if the quests are in the default state
+     */
+    isReset(){
+        return JSON.stringify(this.quests) === this.default;
     }
 
     /**

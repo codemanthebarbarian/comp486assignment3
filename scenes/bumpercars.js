@@ -40,7 +40,10 @@ class BumperCars extends Phaser.Scene {
         if(this.settings.isBackgroundMusicEnabled()) this.music.play();
         this.hitSound = this.sound.add('bangShort', { loop: false });
         this.hits = 0;
-        this.score = this.add.text(10, 10, 'Hits: ' + this.hits).setColor('#000000').setDepth(3);
+        this.score = this.add.text(10, 10, 'Hits: ' + this.hits, {
+            font: '20px Arial bold',
+            fill: 'red'
+        }).setDepth(3);
         this.cameras.main.setBackgroundColor('#d3d3d3');
         let track = this.make.tilemap({ key: 'track' });
         let tiles = track.addTilesetImage('track', 'track_tiles');
@@ -48,21 +51,29 @@ class BumperCars extends Phaser.Scene {
         this.debugLine = this.add.graphics({ lineStyle: { width: 1, color: 0xaa00aa } });
         this.matter.world.setBounds(20, 20, track.widthInPixels - 40, track.heightInPixels - 40).disableGravity();
         this.matter.world.on('collisionstart', this.countHits, this);
-        this.player = this.matter.add.image(100 , 150, 'cars', 'car_blue_small_5.png');
+        this.player = this.matter.add.image(100 , 150, 'cars', 'car_red_small_5.png');
         this.createCars();
         this.initializeInput();
         this.active = true;
         this.time.delayedCall(60000, () => {
             this.active = false;
-            this.make.text({
-                x: (game.canvas.clientWidth / 2),
-                y: (game.canvas.clientHeight / 2),
-                text: [ 'Ride Over', 'Exit to the south' ],
-                style: {
+            let tokens = Math.floor(this.hits / 10);
+            this.inventory.addTokens(tokens);
+            this.inventory.save();
+            this.add.text(
+                (game.canvas.clientWidth / 2),
+                (game.canvas.clientHeight / 2),
+                [
+                    'Ride Over',
+                    'You get ' + tokens + ' tokens.',
+                    'Please exit to the south'
+                ],
+                {
                     font: 'bold 25px Arial',
+                    align: 'center',
                     fill: 'red'
                 }
-            }).setDepth(3).setOrigin(.5, .5);
+            ).setDepth(3).setOrigin(.5, .5);
         }, [], this);
     }
 
@@ -111,9 +122,11 @@ class BumperCars extends Phaser.Scene {
             this.thrust = false;
         }
 
-        this.add.text(game.canvas.clientWidth - 20, 10, 'Exit').setOrigin(1, 0)
-            .setColor('#000000').setDepth(3).setInteractive()
-            .on('pointerdown', exit, this);
+        this.add.text(game.canvas.clientWidth - 20, 10, 'Exit',{
+            font: '20px Ariel bold',
+            fill: 'red'
+        }).setOrigin(1, 0).setDepth(3).setInteractive().on('pointerdown', exit, this);
+
         this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT');
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -199,11 +212,11 @@ class BumperCars extends Phaser.Scene {
      * A method to setup all the non-player cars for the bumper cars session.
      */
     createCars() {
-        let car1 = this.matter.add.image(100, 250, 'cars', 'car_red_small_5.png');
+        let car1 = this.matter.add.image(100, 250, 'cars', 'car_blue_small_3.png');
         let car2 = this.matter.add.image(100, 300, 'cars', 'car_green_small_5.png');
-        let car3 = this.matter.add.image(100, 350, 'cars', 'car_yellow_small_5.png');
+        let car3 = this.matter.add.image(100, 350, 'cars', 'car_green_small_3.png');
         let car4 = this.matter.add.image(800, 150, 'cars', 'car_yellow_small_2.png');
-        let car5 = this.matter.add.image(800, 250, 'cars', 'car_red_small_2.png');
+        let car5 = this.matter.add.image(800, 250, 'cars', 'car_blue_small_2.png');
         let car6 = this.matter.add.image(800, 350, 'cars', 'car_green_small_2.png');
         let car7  = this.matter.add.image(800, 450, 'cars', 'car_blue_small_2.png');
 
