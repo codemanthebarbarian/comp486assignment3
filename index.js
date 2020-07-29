@@ -1,4 +1,13 @@
-
+/**
+ * Gets if the game is in debug mode.
+ * @return {boolean|any} true if the game is in debug mode otherwise false
+ */
+let getDebug = function(){
+    let json = localStorage.getItem('settings');
+    if(!json) return false;
+    let settings = JSON.parse(json);
+    return settings && settings.debug;
+};
 
 let config = {
     type: Phaser.AUTO,
@@ -9,7 +18,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: getDebug()
         }
     },
     plugins: {

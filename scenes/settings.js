@@ -90,6 +90,13 @@ class SettingsScene extends Phaser.Scene {
                 font: '20px Arial',
                 fill: 'yellow'
             }).setOrigin(.5, 1);
+        let gameStateDebug = this.add.text(
+            game.canvas.clientWidth / 2, game.canvas.height - 35,
+            '',
+            {
+                font: '15px Arial',
+                fill: 'red'
+            }).setOrigin(.5, 1);
 
         let items = this.add.group()
             .add(musicToggle)
@@ -111,6 +118,13 @@ class SettingsScene extends Phaser.Scene {
             gameStateTxt.setText(Phaser.Utils.String.Format(gameStateFmt, getGameResetState.bind(this)() ? ['Reset'] : ['In Progress']));
         };
 
+        let setDebug = function() {
+            this.settings.toggleDebug();
+            let txt = 'Debug Mode (Refresh Required): ' + (this.settings.isDebugging() ? 'ON' : 'OFF');
+            gameStateDebug.setText(txt);
+            this.settings.save();
+        };
+
         /**
          * Set the scene's player input
          */
@@ -118,6 +132,11 @@ class SettingsScene extends Phaser.Scene {
 
             let selected = -1;
             this.input.keyboard.addCapture('UP, DOWN');
+            this.input.keyboard.createCombo('debug', { resetOnMatch: true, maxKeyDelay: 1000 });
+
+            this.input.keyboard.on('keycombomatch', function (event) {
+                setDebug.bind(this)();
+            }, this);
 
             /**
              * Highlights the currently selected option.

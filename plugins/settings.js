@@ -13,7 +13,8 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
         if(json) this.vals = JSON.parse(json);
         else this.vals = { audio: {
                 background: {
-                    enabled: true
+                    enabled: true,
+                    debug: false
                 }
             }
         };
@@ -45,6 +46,21 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
      */
     toggleBackgroundMusicEnabled() {
         return this.setBackgroundMusicEnabled(! this.vals.audio.background.enabled);
+    }
+
+    /**
+     * return if the game is currently in debug mode
+     * @return {*} true if debugging otherwise false
+     */
+    isDebugging(){
+        return this.vals.debug;
+    }
+
+    /**
+     * Toggle the game to and from debug mode.
+     */
+    toggleDebug(){
+        this.vals.debug = !this.vals.debug;
     }
 
     /**
