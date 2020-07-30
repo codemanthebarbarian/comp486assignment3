@@ -12,7 +12,7 @@ class BumperCars extends Phaser.Scene {
             physics: {
                 default: 'matter',
                 matter: {
-                    debug: true
+                    debug: isDebugging
                 }
             }
         }
@@ -82,7 +82,7 @@ class BumperCars extends Phaser.Scene {
      */
     update() {
         if(!this.active) return; // Game over
-        this.debugLine.clear();
+        if(isDebugging) this.debugLine.clear();
         this.cars.getChildren().forEach(this.updateTarget, this);
         let speed = .12;
         if(this.up.isDown || this.thrust) {
@@ -193,7 +193,7 @@ class BumperCars extends Phaser.Scene {
         if(car.angle > a) car.setAngularVelocity(-.1);
         else car.setAngularVelocity(.1);
         car.thrust(.12);
-        this.debugLine.strokeLineShape(line);
+        if(isDebugging) this.debugLine.strokeLineShape(line);
     }
 
     /**

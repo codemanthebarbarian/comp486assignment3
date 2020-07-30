@@ -45,7 +45,7 @@ class PrizesScene extends Phaser.Scene {
             }
             ).setOrigin(.5, 0);
         let tokensTxt = 'Tokens: %1';
-        this.add.text(
+        let tokens = this.add.text(
             game.canvas.clientWidth - 50, game.canvas.clientHeight - 25,
             Phaser.Utils.String.Format(tokensTxt, [this.inventory.tokens()]),
             {
@@ -53,6 +53,13 @@ class PrizesScene extends Phaser.Scene {
                 fill: 'yellow'
             }
         ).setOrigin(1,1);
+
+        let onWake = function(){
+            let txt = Phaser.Utils.String.Format(tokensTxt, [this.inventory.tokens()]);
+            tokens.setText(txt);
+        };
+
+        this.events.on('wake', onWake, this);
 
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xff0000, 1);

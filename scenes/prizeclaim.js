@@ -60,26 +60,29 @@ class PrizeClaimScene extends Phaser.Scene {
              */
             let highlight = function(){
                 graphics.clear();
-                if (selected) graphics.strokeRectShape(selected);
+                if (selected) graphics.strokeRectShape(selected.getBounds());
             }
 
-            let onMouseOver = function(event, txt){
-                if(!text || !text.name) return;
-                selected = txt;
+            let onMouseOver = function(event, txt) {
+                if(!txt) return;
+                let itm = Array.isArray(txt) ? txt[0] : txt;
+                if(!itm || !itm.name) return;
+                selected = itm;
                 highlight();
-            }
+            };
 
             let onPointerDown = function(pointer) {
                 let coord = pointer.position;
                 let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
-                if(txt.length > 0) handler.onEnter();
-            }
+                if(txt.length > 0) handler.onEnter.bind(this)();
+            };
 
             let claimPrize = function() {
                 this.inventory.getTokens(this.cost);
                 this.inventory.addItem(this.prize);
                 this.inventory.save();
-            }
+                exit.bind(this)();
+            };
 
             let hasTokensHandler = {
                 init : function() {
@@ -87,22 +90,26 @@ class PrizeClaimScene extends Phaser.Scene {
                     'Claim', {
                         font: '25px Arial',
                         fill: 'Yellow'
-                    }).setOrigin(0, .5).setName('claim').setInteractive();
+                    }).setOrigin(1, .5).setName('claim').setInteractive();
                     inputBack = this.add.text(center + 10, yCoord,
                     'Back', {
                         font: '25px Arial',
                         fill: 'Yellow'
                     }).setOrigin(0, .5).setName('back').setInteractive();
+                    this.physics.add.existing(inputClaim);
+                    this.physics.add.existing(inputBack);
                 },
 
                 moveNext: function() {
                     if(selected && selected.name === 'claim') selected = inputBack;
                     else selected = inputClaim;
+                    highlight();
                 },
 
                 movePrevious: function(){
                     if(selected && selected.name === 'back') selected = inputClaim;
                     else selected = inputBack;
+                    highlight();
                 },
 
                 onEnter: function() {
@@ -125,6 +132,7 @@ class PrizeClaimScene extends Phaser.Scene {
                             font: '25px Arial',
                             fill: 'Yellow'
                         }).setOrigin(.5, 0).setName('back').setInteractive();
+                    this.physics.add.existing(inputBack);
                 },
 
                 moveNext: function() {

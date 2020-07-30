@@ -117,25 +117,25 @@
           "responses": {
             "yes": [
               {
-                "line": "\"Is this the duck you are looking for?\"",
+                "response": "\"Is this the duck you are looking for?\"",
                 "next": 2
               },
               {
-                "line": "\"Here you go.\"",
+                "response": "\"Here you go.\"",
                 "next": 2
               },
               {
-                "line": "\"I think your going to be happy.\"",
+                "response": "\"I think your going to be happy.\"",
                 "next": 2
               }
             ],
             "no": [
               {
-                "line": "\"No not yet.\"",
+                "response": "\"No not yet.\"",
                 "next": 1
               },
               {
-                "line": "\"I'm still looking.\"",
+                "response": "\"I'm still looking.\"",
                 "next": 1
               }
             ]

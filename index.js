@@ -9,6 +9,12 @@ let getDebug = function(){
     return settings && settings.debug;
 };
 
+/**
+ * A constant used to see if we are currently in debug mode
+ * @type {boolean|*} true if debugging
+ */
+const isDebugging = getDebug();
+
 let config = {
     type: Phaser.AUTO,
     parent: 'game',
@@ -18,7 +24,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: getDebug()
+            debug: isDebugging
         }
     },
     plugins: {

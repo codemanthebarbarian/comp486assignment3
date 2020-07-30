@@ -12,7 +12,7 @@ class ShootingGallery extends Phaser.Scene {
             physics: {
                 default: 'matter',
                 matter: {
-                    debug: true
+                    debug: isDebugging
                 }
             }
         }
@@ -121,7 +121,7 @@ class ShootingGallery extends Phaser.Scene {
             else if(this.hits < 25) this.quests.setState(quest, 'Marksman');
             else this.quests.setState(quest, 'Sharpshooter');
             --this.shots;
-            this.time.delayedCall(5000, () => {
+            this.time.delayedCall(3000, () => {
                 this.music.stop();
                 this.scene.stop();
                 this.scene.run(quest);
@@ -169,7 +169,7 @@ class ShootingGallery extends Phaser.Scene {
                 path.ellipseTo(96, 62, 225, 315, false, 0);
         }
         graphics.lineStyle(1, 0xffffff, 1);
-        path.draw(graphics);
+        if(isDebugging) path.draw(graphics);
         this.resizeShape(this.objectShapes.duck_target_yellow, 0.5);
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 150, 'objects', 'duck_target_yellow.png' ).setScale(0.5).setDepth(1);
@@ -209,7 +209,7 @@ class ShootingGallery extends Phaser.Scene {
                 path.ellipseTo(-96, 62, 225, 315, false, 0);
         }
         graphics.lineStyle(1, 0xffffff, 1);
-        path.draw(graphics).setDepth(3);
+        if(isDebugging) path.draw(graphics).setDepth(3);
         this.resizeShape(this.objectShapes.duck_target_white_flip, 0.5);
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 300, 'objects', 'duck_target_white.png').setFlipX(true).setScale(0.5).setDepth(3);
@@ -243,7 +243,7 @@ class ShootingGallery extends Phaser.Scene {
         this.resizeShape(this.objectShapes.target_colored, 0.3);
         path.add(new Phaser.Curves.Ellipse(320, 500, 100, 100, 135, 45));
         graphics.lineStyle(1, 0xffffff, 1);
-        path.draw(graphics).setDepth(5);
+        if(isDebugging) path.draw(graphics).setDepth(5);
         let follower = this.add.follower(path, 320, 500, 'objects', 'target_colored.png').setDepth(5);
         follower.setScale(0.3).setDepth(5);
         this.targetsFront.push(
@@ -259,7 +259,7 @@ class ShootingGallery extends Phaser.Scene {
         });
         let path2 = new Phaser.Curves.Path();
         path2.add(new Phaser.Curves.Ellipse(640, 500, 100, 100, 135, 45));
-        path2.draw(graphics).setDepth(5);
+        if(isDebugging) path2.draw(graphics).setDepth(5);
         let follower2 = this.add.follower(path2, 640, 500, 'objects', 'target_colored.png').setDepth(5);
         follower2.setScale(0.3).setDepth(5);
         this.targetsFront.push(
