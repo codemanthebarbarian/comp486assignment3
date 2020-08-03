@@ -82,7 +82,20 @@
         },
         {
           "idx": 4,
-          "endState": "DUCK",
+          "endState": [
+            {
+              "story": "pettingzoo",
+              "state": "DUCK"
+            },
+            {
+              "story": "shootinggallery",
+              "state": "GOSSIP"
+            },
+            {
+              "story": "duck",
+              "state": "DUCK"
+            }
+          ],
           "character": "Attendant",
           "line": "\"Thanks, I would be really happy to get her back.\""
         },
@@ -90,6 +103,99 @@
           "idx": 5,
           "character": "Attendant",
           "line": "\"Hopefully we'll be open then.\""
+        }
+      ]
+    },{
+      "name": "PROBLEM",
+      "script": [
+        {
+          "idx": 0,
+          "requires": {
+            "items": ["DUCK"],
+            "consumableItems": ["DUCK"]
+          },
+          "character": "Attendant",
+          "line": "\"Sorry the petting zoo is closed right now. We are missing a duck.\"",
+          "responses": {
+            "yes": [
+              {
+                "response": "\"Is this the duck you are looking for?\"",
+                "next": 2
+              },
+              {
+                "response": "\"I think your going to be happy.\"",
+                "next": 2
+              }
+            ],
+            "no": [
+              {
+                "response": "\"I heard. I wanted to let you know that I'm looking for her.\"",
+                "next": 1
+              }
+            ]
+          }
+        },
+        {
+          "idx": 1,
+          "endState": [
+            {
+              "story": "pettingzoo",
+              "state": "DUCK"
+            }
+          ],
+          "character": "Attendant",
+          "line": "\"Thanks, I would be really happy to get her back.\""
+        },
+        {
+          "idx": 2,
+          "character": "Attendant",
+          "lines": [
+            {
+              "line": "\"Oh my word, I can't believe you found her!\""
+            },
+            {
+              "line": "\"That's awesome, I'm so glad you found her.\""
+            },
+            {
+              "line": "\"I'm so glad she's back.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"It wasn't easy but I found her.\"",
+              "next": 3
+            },
+            {
+              "response": "\"You wouldn't believe where I found her.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Attendant",
+          "line": "\"I bet you found her out by that shooting gallery. It think they just wanted to use her for target practice.\"",
+          "responses": [
+            {
+              "response": "\"Actually, he had nothing to do with it.\"",
+              "next": 4
+            },
+            {
+              "response": "\"I found her at the beer garden. Looks like she made a nest and wanted some quiet time.\"",
+              "next": 4
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "endState": "FOUND",
+          "award": {
+            "cash": 5.00,
+            "tickets": 5,
+            "items": [ "Golden Egg", "Detective Badge", "Apology" ]
+          },
+          "character": "Attendant",
+          "line": "\"I guess I really owe the shooting gallery guy an apology. Next time you see him, can you tell him I'm sorry. You can also give him this. It's a golden egg. Not real gold, but I think he like it. Also here's a little something for you.\""
         }
       ]
     },

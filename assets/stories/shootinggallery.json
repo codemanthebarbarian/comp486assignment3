@@ -239,7 +239,7 @@
             },
             {
               "story": "pettingzoo",
-              "state": "DUCK"
+              "state": "PROBLEM"
             },
             {
               "story": "duck",
@@ -258,7 +258,7 @@
           },
           {
             "story": "pettingzoo",
-            "state": "DUCK"
+            "state": "PROBLEM"
           },
             {
               "story": "duck",
@@ -266,6 +266,112 @@
             }
         ],
           "character": "Carny",
+          "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
+        }
+      ]
+    },
+    {
+      "name": "GOSSIP",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Carny",
+          "line": "\"Hey there, would you like to give it a try.\"",
+          "responses": [
+            {
+              "response": "\"I heard you have an issue with ducks.\"",
+              "next": 1
+            },
+            {
+              "response": "\"A little ducky told me told me a secret.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Carny",
+          "line": [
+            "\"Sounds like you've tried to visit the petting zoo.",
+            "I'll tell you, I don't care what he's been saying, I have nothin to do with it.",
+            "If you help me out and find that duck I'll make it worth your while."
+          ],
+          "responses": [
+            {
+              "response": "\"Sure, what do you have in mind?\"",
+              "next": 2
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Carny",
+          "line": "\"I'll give you 10 bucks if you find that duck and clear my good name.\"",
+          "responses": [
+            {
+              "response": "\"That sounds like a good deal\"",
+              "next": 5
+            },
+            {
+              "response": "\"I would think a good name is worth a more than that.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Carny",
+          "line": "\"I suppose you have a point, how about 15?\"",
+          "responses": [
+            {
+              "response": "\"How about 20?\"",
+              "next": 4
+            },
+            {
+              "response": "\"Sweet, you have a deal\"",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "character": "Carny",
+          "line": "\"How about 5?\"",
+          "responses": [
+            {
+              "response": "\"15 sounds good.\"",
+              "next": 6
+            }
+          ]
+        },
+        {
+          "idx": 5,
+          "character": "Carny",
+          "endState": [
+            {
+              "story": "shootinggallery",
+              "state": "DUCK10"
+            },
+            {
+              "story": "duck",
+              "state": "DUCK"
+            }
+          ],
+          "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
+        },
+        {
+          "idx": 6,
+          "character": "Carny",
+          "endState": [
+            {
+              "story": "shootinggallery",
+              "state": "DUCK15"
+            },
+            {
+              "story": "duck",
+              "state": "DUCK"
+            }
+          ],
           "line": "\"Let me know when you've found it, I should get an apology from that petting zoo guy.\""
         }
       ]
@@ -379,6 +485,7 @@
         },
         {
           "idx": 5,
+          "endState": "COMPLETE",
           "award": { "cash":  10.00 },
           "character": "Carny",
           "line": "\"Well that's great news. And I guess I own you $10.\""
@@ -491,6 +598,7 @@
         },
         {
           "idx": 5,
+          "endState": "COMPLETE",
           "award": { "cash":  15.00 },
           "character": "Carny",
           "line": "\"Well that's great news. And I guess I own you $15.\""
