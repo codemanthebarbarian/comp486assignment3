@@ -3,6 +3,9 @@
  */
 class PrizeClaimScene extends Phaser.Scene {
 
+    /**
+     * The constructor for the scene. Inherited from Phaser 3 scene.
+     */
     constructor() {
         let cfg = {
             key: 'prizeclaim',
@@ -17,6 +20,9 @@ class PrizeClaimScene extends Phaser.Scene {
         super(cfg);
     }
 
+    /**
+     * Creates and loads the scene.
+     */
     create(){
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xff0000, 1);
@@ -39,6 +45,9 @@ class PrizeClaimScene extends Phaser.Scene {
                 fill: 'Yellow'
             }).setOrigin(.5, 0);
 
+        /**
+         * Sets the player's input.
+         */
         let setInput = function(){
 
             this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT');
@@ -63,6 +72,11 @@ class PrizeClaimScene extends Phaser.Scene {
                 if (selected) graphics.strokeRectShape(selected.getBounds());
             }
 
+            /**
+             * Handles the mouse over event to highlight any selectable options.
+             * @param event the mouse over event
+             * @param txt the text hovered over
+             */
             let onMouseOver = function(event, txt) {
                 if(!txt) return;
                 let itm = Array.isArray(txt) ? txt[0] : txt;
@@ -71,12 +85,19 @@ class PrizeClaimScene extends Phaser.Scene {
                 highlight();
             };
 
+            /**
+             * Handles the on pointer down event (either mouse or touch screen)
+             * @param pointer the pointer object
+             */
             let onPointerDown = function(pointer) {
                 let coord = pointer.position;
                 let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
                 if(txt.length > 0) handler.onEnter.bind(this)();
             };
 
+            /**
+             * Selects the prize and puts it into the player's inventory.
+             */
             let claimPrize = function() {
                 this.inventory.getTokens(this.cost);
                 this.inventory.addItem(this.prize);
@@ -84,7 +105,14 @@ class PrizeClaimScene extends Phaser.Scene {
                 exit.bind(this)();
             };
 
+            /**
+             * The input handler for when the player has enough tokens to claim the prize
+             * @type {{init: init, onEnter: onEnter, moveNext: moveNext, movePrevious: movePrevious}}
+             */
             let hasTokensHandler = {
+                /**
+                 * The initialization function for this handler
+                 */
                 init : function() {
                     inputClaim = this.add.text(center - 10, yCoord,
                     'Claim', {
@@ -100,18 +128,27 @@ class PrizeClaimScene extends Phaser.Scene {
                     this.physics.add.existing(inputBack);
                 },
 
+                /**
+                 * The move next function for this handler
+                 */
                 moveNext: function() {
                     if(selected && selected.name === 'claim') selected = inputBack;
                     else selected = inputClaim;
                     highlight();
                 },
 
+                /**
+                 * The move previous function for this handler
+                 */
                 movePrevious: function(){
                     if(selected && selected.name === 'back') selected = inputClaim;
                     else selected = inputBack;
                     highlight();
                 },
 
+                /**
+                 * The on enter function for this handler
+                 */
                 onEnter: function() {
                     if(!selected) return;
                     if(selected.name === 'claim') claimPrize.bind(this)();
@@ -120,7 +157,14 @@ class PrizeClaimScene extends Phaser.Scene {
 
             };
 
+            /**
+             * The handler implementation for when the player does not have enough tokens to claim the prize.
+             * @type {{init: init, onEnter: onEnter, moveNext: moveNext, movePrevious: movePrevious}}
+             */
             let shortTokensHandler = {
+                /**
+                 * The initialization method for this handler.
+                 */
                 init: function() {
                     this.add.text(center, yCoord - 5,
                         'Not enough tokens.', {
@@ -135,16 +179,25 @@ class PrizeClaimScene extends Phaser.Scene {
                     this.physics.add.existing(inputBack);
                 },
 
+                /**
+                 * The movenext function for this handler
+                 */
                 moveNext: function() {
                     selected = inputBack;
                     highlight();
                 },
 
+                /**
+                 * The moveprevious function for this handler
+                 */
                 movePrevious: function(){
                     selected = inputBack;
                     highlight();
                 },
 
+                /**
+                 * The onenter function for this handler
+                 */
                 onEnter: function() {
                     if(!selected) return;
                     exit.bind(this)();

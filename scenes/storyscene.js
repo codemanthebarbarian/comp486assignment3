@@ -288,6 +288,4 @@ class StoryScene extends Phaser.Scene {
             }
         }
     }
-
-
 }

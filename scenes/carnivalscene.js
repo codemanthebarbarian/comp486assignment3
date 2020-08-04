@@ -75,12 +75,21 @@ class CarnivalScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
+        /**
+         * Sets the player input for the game
+         */
         let setInput = function(){
 
+            /**
+             * Shows the players inventory
+             */
             let showInventory = function(){
                 this.scene.switch('inventory');
             };
 
+            /**
+             * Shows the game properties/settings
+             */
             let showProperties = function(){
                 let props = this.scene.get('settings');
                 props.setCallingScene(this, this.music);
@@ -151,6 +160,9 @@ class CarnivalScene extends Phaser.Scene {
             if(tile) tile.setCollision(true, true, true, true);
         }
 
+        /**
+         * Sets the current state of the beergarden gate (if the beergarden is blocked)
+         */
         let setBeerGarden = function(){
             let obj = this.mapObjects.objects.find(o => o.name === 'beergardengate');
             if(!obj) return;

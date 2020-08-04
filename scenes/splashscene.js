@@ -4,6 +4,9 @@
  */
 class SplashScene extends Phaser.Scene {
 
+    /**
+     * The scene constructor inherited from Phaser.Scene
+     */
     constructor() {
         let cfg = {
             key: 'splash',
@@ -18,10 +21,16 @@ class SplashScene extends Phaser.Scene {
         super(cfg);
     }
 
+    /**
+     * Preloads any assets required by the scene
+     */
     preload() {
         this.load.audio('circus', './assets/screens/CircusDilemma.mp3');
     }
 
+    /**
+     * Create the scene
+     */
     create() {
         let music = this.sound.add('circus', { loop: true, volume: .5 });
         if(this.settings.isBackgroundMusicEnabled()) music.play();
@@ -54,6 +63,9 @@ class SplashScene extends Phaser.Scene {
                 fill: 'yellow'
             }).setOrigin(.5, 1);
 
+        /**
+         * Sets the player's input for the scene
+         */
         let setInput = function(){
 
             this.physics.add.existing(playtxt);
@@ -63,6 +75,9 @@ class SplashScene extends Phaser.Scene {
             graphics.strokeRectShape(selected.getBounds());
             this.input.keyboard.addCapture('UP, DOWN');
 
+            /**
+             * Sets the selection to the next item.
+             */
             let setNext = function(){
                 if(selected.name === 'play') selected = settingstxt;
                 else selected = playtxt;
@@ -70,6 +85,11 @@ class SplashScene extends Phaser.Scene {
                 graphics.strokeRectShape(selected.getBounds());
             }
 
+            /**
+             * Highlight any items when hovered over by the mouse
+             * @param event the hover event
+             * @param txt the items hovered
+             */
             let onMouseOver = function(event, txt){
                 let itm = Array.isArray(txt) ? txt[0] : txt;
                 if(!itm.name) return;
@@ -78,24 +98,37 @@ class SplashScene extends Phaser.Scene {
                 graphics.strokeRectShape(selected.getBounds());
             }
 
+            /**
+             * Launches the initial playable scene (the carnival map)
+             */
             let play = function() {
                 music.stop();
                 this.scene.stop();
                 this.scene.start('carnival');
             };
 
+            /**
+             * Shows the properties scene
+             */
             let showProperties = function() {
                 let props = this.scene.get('settings');
                 props.setCallingScene(this, music);
                 this.scene.switch(props);
             }
 
+            /**
+             * Handle pointer input (either mouse or touch)
+             * @param pointer
+             */
             let onPointerDown = function(pointer) {
                 let coord = pointer.position;
                 let txt = this.physics.overlapCirc(coord.x, coord.y, 2);
                 if(txt.length > 0) doInput.bind(this)();
             }
 
+            /**
+             * Do any action items from mouse or touch
+             */
             let doInput = function(){
                 if(selected.name === 'play') play.bind(this)();
                 else showProperties.bind(this)();

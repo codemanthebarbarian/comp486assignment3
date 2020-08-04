@@ -15,6 +15,10 @@ let getDebug = function(){
  */
 const isDebugging = getDebug();
 
+/**
+ * The defualt configuration for the game and scenes.
+ * @type {Phaser3 configuration}
+ */
 let config = {
     type: Phaser.AUTO,
     parent: 'game',
@@ -37,4 +41,8 @@ let config = {
     scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars, Inventory, PrizesScene, PrizeClaimScene, SettingsScene ]
 };
 
+/**
+ * The game initialization
+ * @type {Phaser.Game}
+ */
 let game = new Phaser.Game(config);

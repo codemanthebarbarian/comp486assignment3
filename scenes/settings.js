@@ -118,6 +118,9 @@ class SettingsScene extends Phaser.Scene {
             gameStateTxt.setText(Phaser.Utils.String.Format(gameStateFmt, getGameResetState.bind(this)() ? ['Reset'] : ['In Progress']));
         };
 
+        /**
+         * Toggles the game between debug modes
+         */
         let setDebug = function() {
             this.settings.toggleDebug();
             let txt = 'Debug Mode (Refresh Required): ' + (this.settings.isDebugging() ? 'ON' : 'OFF');

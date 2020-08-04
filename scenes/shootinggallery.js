@@ -19,6 +19,9 @@ class ShootingGallery extends Phaser.Scene {
         super(cfg);
     }
 
+    /**
+     * Loads any items required for this scene
+     */
     preload() {
         this.load.audio('theme', './assets/shootinggallery/in_the_circus_psg2.ogg');
         this.load.audio('fire', './assets/shootinggallery/sfx_15b.ogg', { instances: 5 });
@@ -34,6 +37,9 @@ class ShootingGallery extends Phaser.Scene {
         this.load.json('stall_shapes', './assets/shootinggallery/stall_matter.json');
     }
 
+    /**
+     * Creates the instance of the scene
+     */
     create() {
         this.music = this.sound.add('theme', { loop: true, volume: .5 });
         this.miss = this.sound.add('fire', { loop : false });
@@ -57,6 +63,9 @@ class ShootingGallery extends Phaser.Scene {
         this.initializeInput();
     }
 
+    /**
+     * Initializes the player's input for the scene
+     */
     initializeInput(){
 
         let speed = 5;
@@ -74,6 +83,9 @@ class ShootingGallery extends Phaser.Scene {
         let stopX = function() { this.crosshair.setVelocityX(0); };
         let stopY = function() { this.crosshair.setVelocityY(0); };
 
+        /**
+         * Initializes the keyboard input for the player.
+         */
         let initializeKeyboard = function() {
             this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT', 'SPACE', 'ESC');
             this.input.keyboard.on('keydown-ESC', exit, this);
@@ -88,6 +100,9 @@ class ShootingGallery extends Phaser.Scene {
             this.input.keyboard.on('keydown-SPACE', this.shoot, this);
         };
 
+        /**
+         * Initializes the touch input for the player.
+         */
         let initializeTouch = function() {
             this.input.addPointer(1); // need two touch inputs: move and fire
             this.input.on('pointermove', function (pointer) {
@@ -102,12 +117,18 @@ class ShootingGallery extends Phaser.Scene {
         initializeTouch.bind(this)();
     }
 
+    /**
+     * The update method called by Phaser
+     */
     update(){
         this.score.text = "Hits: " + this.hits;
         this.crosshair.x += Phaser.Math.Between(-2, 2);
         this.crosshair.y += Phaser.Math.Between(-2, 2);
     }
 
+    /**
+     * Shoots the gun and handles any hits or misses
+     */
     shoot(){
         if(this.shots < -1) return;
         if(this.shots < 0) {
@@ -157,6 +178,9 @@ class ShootingGallery extends Phaser.Scene {
         }
     }
 
+    /**
+     * Draws the last items (furthest away from the player (bottom layer)
+     */
     drawLast(){
         this.ducksBack = [];
         let graphics = this.add.graphics();
@@ -197,6 +221,9 @@ class ShootingGallery extends Phaser.Scene {
         }
     }
 
+    /**
+     * Draws the middle layer of the booth
+     */
     drawMid(){
         this.ducksMid = [];
         let graphics = this.add.graphics();
@@ -236,6 +263,9 @@ class ShootingGallery extends Phaser.Scene {
         }
     }
 
+    /**
+     * Draws the front layer of the booth (closest to the player)
+     */
     drawFront() {
         this.targetsFront = [];
         let graphics = this.add.graphics();
