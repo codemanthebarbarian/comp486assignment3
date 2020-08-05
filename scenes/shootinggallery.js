@@ -87,7 +87,7 @@ class ShootingGallery extends Phaser.Scene {
          * Initializes the keyboard input for the player.
          */
         let initializeKeyboard = function() {
-            this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT', 'SPACE', 'ESC');
+            this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT, SPACE');
             this.input.keyboard.on('keydown-ESC', exit, this);
             this.input.keyboard.on('keydown-RIGHT', moveRight, this);
             this.input.keyboard.on('keyup-RIGHT', stopX, this);
@@ -142,7 +142,7 @@ class ShootingGallery extends Phaser.Scene {
             else if(this.hits < 25) this.quests.setState(quest, 'Marksman');
             else this.quests.setState(quest, 'Sharpshooter');
             --this.shots;
-            this.time.delayedCall(3000, () => {
+            this.time.delayedCall(1500, () => {
                 this.music.stop();
                 this.scene.stop();
                 this.scene.run(quest);
