@@ -8,6 +8,8 @@ class StoryScene extends Phaser.Scene {
 
     /**
      * The constructor for the scene. Debugging has been turned off as it affects highlighting (make debugging worse).
+     * The config will force debug to be off. On normal debug the text is highlighted and this makes it difficult to 
+     * know what is selected.
      */
     constructor() {
         let cfg = {
@@ -57,24 +59,32 @@ class StoryScene extends Phaser.Scene {
          * Called when the the story is over.
          */
         let exit = function() {
+            
+            /**
+             * Sets the end state for the story and will set the state for other stories dependant 
+             * on the outcome.
+             * @param {*} state the story end state
+             */
             let setState = function(state){
                 if(!state) return;
+                // we could be stetting state for other stories too.
                 if(Array.isArray(state))
                     state.forEach(i => {
                         this.quests.setState(i.story, i.state);
                     }, this)
                 else this.quests.setState(this.story.trigger, state)
-                this.quests.save();
+                this.quests.save(); //Save the state to local storage
             }
 
+            //save any inventory items to local storage
             this.inventory.save();
+            //Set the state base on the storyline (if available) or stage by default
             setState.bind(this)(this.storyLine.endState || this.stage.endState);
-            // this.registry.set(this.story.trigger,
-            //     { stage: this.storyLine.endState ? this.storyLine.endState : this.stage.endState } );
+            //Set the next scene from the JSON if available
             let nextScene = this.storyLine.scene || this.stage.scene;
             this.scene.stop();
             if(nextScene) {
-                // we are not going back to carnival, so pause backgroud
+                // we are not going back to carnival, so pause background
                 this.scene.get('carnival').music.pause();
                 this.scene.run(nextScene);
             }
@@ -120,6 +130,7 @@ class StoryScene extends Phaser.Scene {
             if(this.currentResponse >= this.storyResponses.length) this.currentResponse = 0;
             this.highlight();
         };
+        //bind the keyboard controls
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.input.keyboard.on('keydown-DOWN', selectNext, this);
         this.input.keyboard.on('keydown-UP', selectPrevious, this);
@@ -268,6 +279,7 @@ class StoryScene extends Phaser.Scene {
             if(!requires) {
                 return this.storyLine.responses;
             }
+            //See if there are any dependencies specified in the JSON file for the response
             let yes = requires.cash ? this.inventory.hasCash(requires.cash) : true;
             yes = yes && requires.tickets ? this.inventory.hasTickets(requires.tickets) : yes;
             yes = yes && requires.items ? this.inventory.owns(requires.items) : yes;

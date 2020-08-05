@@ -128,6 +128,8 @@ class PrizesScene extends Phaser.Scene {
                     font: '25px Arial bold',
                     fill: 'yellow'
                 }).setName(group.children.entries.length).setOrigin(.5, 1).setInteractive();
+            //we want to cache the bounds in the data object as the calculation is expensive (as suggested in Phaser doc)
+            //so we only want to run it once as the container will not change
             exitText.setData('bounds', exitText.getBounds());
             group.add(exitText);
 

@@ -58,7 +58,7 @@ class ShootingGallery extends Phaser.Scene {
             .setDepth(6).setCollisionGroup(this.nonColliding);
 
         this.score = this.add.text(10,25, "Hits: " + this.hits).setFontSize(50).setColor('#ffff00');
-        this.txtExit = this.add.text(game.canvas.clientWidth - 20, 25, 'Exit').setFontSize(50).setColor('#ffff00').setOrigin(1);
+        this.txtExit = this.add.text(game.canvas.clientWidth - 20, 25, 'Exit').setFontSize(35).setColor('#ffff00').setOrigin(1);
         this.matter.add.gameObject(this.txtExit).setDepth(6).setCollisionGroup(this.nonColliding);
         this.initializeInput();
     }
@@ -68,7 +68,7 @@ class ShootingGallery extends Phaser.Scene {
      */
     initializeInput(){
 
-        let speed = 5;
+        let speed = 5; //The speed which the crosshairs will move
 
         let exit = function() {
             this.music.stop();
@@ -131,7 +131,7 @@ class ShootingGallery extends Phaser.Scene {
      */
     shoot(){
         if(this.shots < -1) return;
-        if(this.shots < 0) {
+        if(this.shots < 0) { //The game is over
             let quest = 'shootinggalleryend';
             // give the player tokens and set the story state
             if(this.hits > 0) this.inventory.addTokens(this.hits);
@@ -149,13 +149,16 @@ class ShootingGallery extends Phaser.Scene {
             }, [], this);
             return;
         }
+        // Get rid of an available bullet
         this.bulletGroup.getChildren().pop().destroy();
         --this.shots;
         this.miss.play();
         let x = this.crosshair.x;
         let y = this.crosshair.y;
+        //Paint the shot to the gallery
         let shot = this.matter.add.image(x,y,'objects', 'shot_blue_small.png', { shape: this.objectShapes.shot_blue_small })
             .setCollisionGroup(this.nonColliding);
+        //See if we hit anything starting from the front and working our way to the back.
         if(this.matter.overlap(shot, this.txtExit)){
             this.txtExit.emit('exit');
         } else if(this.matter.overlap(shot, this.shieldFront)){
@@ -184,7 +187,9 @@ class ShootingGallery extends Phaser.Scene {
     drawLast(){
         this.ducksBack = [];
         let graphics = this.add.graphics();
+        //Create the path for the ducks to follow
         let path = new Phaser.Curves.Path(0, 150);
+        //Creates a sine wave type path
         for (let i = 0; i < 10; i++) {
             // xRadius, yRadius, startAngle, endAngle, clockwise, rotation
             if (i % 2 === 0)
@@ -194,9 +199,13 @@ class ShootingGallery extends Phaser.Scene {
         }
         graphics.lineStyle(1, 0xffffff, 1);
         if(isDebugging) path.draw(graphics);
+        //The images are too large, 
+        //so we need to resize the hit masks them if we haven't already
+        //Phaser doesn't do this so we need to use the utility method
         this.resizeShape(this.objectShapes.duck_target_yellow, 0.5);
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 150, 'objects', 'duck_target_yellow.png' ).setScale(0.5).setDepth(1);
+            //We want things non colliding as we are handling hits ourself (otherwise things get pushed around which is not what we want)
             this.ducksBack.push(
                 this.matter.add.gameObject(follower, { shape: this.objectShapes.duck_target_yellow })
                     .setCollisionGroup(this.nonColliding)
@@ -212,7 +221,8 @@ class ShootingGallery extends Phaser.Scene {
             );
         }
         this.shieldBack = [];
-        let z, x;
+        //Paint the shield for the ducks
+        let z, x; //z is the count x is the x offset to add the image
         for (z= 0 , x = 0 ; z < 9 ; ++z , x += 132 ){
             this.shieldBack.push(
                 this.matter.add.image(x, 235, 'stall', 'water2.png', { shape: this.stallShapes.water2 })
@@ -228,6 +238,7 @@ class ShootingGallery extends Phaser.Scene {
         this.ducksMid = [];
         let graphics = this.add.graphics();
         let path = new Phaser.Curves.Path(960, 300);
+        //This is really the inverse of the other 
         for (let i = 0; i < 10; i++) {
             // xRadius, yRadius, startAngle, endAngle, clockwise, rotation
             if (i % 2 === 0)
@@ -237,6 +248,7 @@ class ShootingGallery extends Phaser.Scene {
         }
         graphics.lineStyle(1, 0xffffff, 1);
         if(isDebugging) path.draw(graphics).setDepth(3);
+        //I needed to create flipped masks for the flipped images and store them under a different key.
         this.resizeShape(this.objectShapes.duck_target_white_flip, 0.5);
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 300, 'objects', 'duck_target_white.png').setFlipX(true).setScale(0.5).setDepth(3);
@@ -271,6 +283,7 @@ class ShootingGallery extends Phaser.Scene {
         let graphics = this.add.graphics();
         let path = new Phaser.Curves.Path();
         this.resizeShape(this.objectShapes.target_colored, 0.3);
+        //This is a back and forth arc path for the target
         path.add(new Phaser.Curves.Ellipse(320, 500, 100, 100, 135, 45));
         graphics.lineStyle(1, 0xffffff, 1);
         if(isDebugging) path.draw(graphics).setDepth(5);
@@ -313,6 +326,7 @@ class ShootingGallery extends Phaser.Scene {
             );
         }
 
+        //add the player's bullet images
         this.bulletGroup = this.add.group({
             key: 'hud',
             frame: 'icon_bullet_gold_long.png',
@@ -335,16 +349,17 @@ class ShootingGallery extends Phaser.Scene {
      */
     resizeShape(shape, scale){
         if(shape.isResized) return;
-        shape.isResized = true;
+        shape.isResized = true; //This actually mutates the JSON loaded in Phaser, so multiple calls will resize it further we dont want that
         let newData = [];
         let data = shape.fixtures;
 
         for(let i = 0; i < data.length; i++) {
-            if(data[i].vertices) {
+            if(data[i].vertices) { //We are dealing with an irregular shape (like a duck)
                 let vertices = [];
                 for (let j = 0; j < data[i].vertices.length; ++j) {
                     let vals = [];
                     for (let k = 0; k < data[i].vertices[j].length; ++k) {
+                        //We just need to modify the x and y by the scale to shrink (or increase) the size
                         vals.push({
                             x: data[i].vertices[j][k].x * scale,
                             y: data[i].vertices[j][k].y * scale
@@ -354,7 +369,8 @@ class ShootingGallery extends Phaser.Scene {
                 }
                 newData.push({ vertices : vertices });
             }
-            if(data[i].circle){
+            if(data[i].circle){ //dealing with a circle 
+                //Just need to move the x and y by the scale factor and change the radius
                 let circle = {};
                 circle.x = data[i].circle.x * scale;
                 circle.y = data[i].circle.y * scale;

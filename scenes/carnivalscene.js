@@ -30,9 +30,11 @@ class CarnivalScene extends Phaser.Scene {
      * other game elements.
      */
     create() {
+        //Stop accepting input between scene changes (this scene sleeps so we want to stop listening to input)
         this.events.on('pause', this.input.keyboard.resetKeys, this.input.keyboard);
         this.events.on('sleep', this.input.keyboard.resetKeys, this.input.keyboard);
         this.events.on('wake', this.onWake, this);
+        //Load the map tiles
         this.map = this.make.tilemap({ key: 'map' });
         var tilesMage = this.map.addTilesetImage('magecity', 'city');
         var tilesDeco = this.map.addTilesetImage('deco-med', 'deco');
@@ -42,10 +44,11 @@ class CarnivalScene extends Phaser.Scene {
         // needs to be a dynamic layer to open close gates
         this.fences = this.map.createDynamicLayer('Fence', [ tilesDeco, tilesMage, tilesFence ], 0, 0);
         this.mapObjects = this.map.getObjectLayer('objects');
-
+        //set the collision tiles
         this.ground.setCollisionByProperty({ collideable: true });
         this.fences.setCollisionByProperty({ collideable: true });
 
+        //Get the spawn point when the scene loads
         let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'spawn', this);
         this.player = this.physics.add.sprite(spawnPoint.x , spawnPoint.y, 'guy');
         this.setupPlayer();
@@ -54,8 +57,9 @@ class CarnivalScene extends Phaser.Scene {
         this.top = this.map.createStaticLayer('top',  [ tilesDeco, tilesMage, tilesFence ], 0, 0);
         this.buildings.setCollisionByProperty({ collideable: true });
         this.top.setCollisionByProperty({ collideable: true });
-
+        //limit player to map
         this.player.setCollideWorldBounds(true);
+        //This will prevent a scene (story) from triggering until the player has left the hit zone
         this.player.on('zoneexit', () => this.player.setData('zoneoverlap', false), this);
         this.physics.add.collider(this.player, this.ground, null, null, this);
         this.physics.add.collider(this.player, this.fences, null, null, this);
@@ -96,7 +100,7 @@ class CarnivalScene extends Phaser.Scene {
                 this.scene.switch(props);
             }
 
-            this.input.keyboard.addCapture('UP, DOWN', 'LEFT', 'RIGHT');
+            this.input.keyboard.addCapture('UP, DOWN', 'LEFT', 'RIGHT'); //grab input from window
             this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
             this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
             this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -106,6 +110,7 @@ class CarnivalScene extends Phaser.Scene {
         };
         setInput.bind(this)();
 
+        //camera to follow the player around the map
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
         this.debugGraphics = this.add.graphics();
         this.drawDebug();
@@ -395,6 +400,7 @@ class CarnivalScene extends Phaser.Scene {
         let textObjects = this.map.filterObjects(this.mapObjects, o => {
             if(o.text) return true;
         }, this);
+        //need to create text objects for each text object in the tile map object layer
         textObjects.forEach(o => {
             this.add.text(o.x + (o.width / 2), o.y + (o.height / 2), o.text.text, {
                 color: o.text.color,

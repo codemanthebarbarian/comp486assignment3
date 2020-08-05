@@ -135,6 +135,7 @@ class SettingsScene extends Phaser.Scene {
 
             let selected = -1;
             this.input.keyboard.addCapture('UP, DOWN');
+            //this is the hidden command to put the game into debug mode
             this.input.keyboard.createCombo('debug', { resetOnMatch: true, maxKeyDelay: 1000 });
 
             this.input.keyboard.on('keycombomatch', function (event) {

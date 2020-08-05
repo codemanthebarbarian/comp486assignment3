@@ -55,6 +55,7 @@ class BumperCars extends Phaser.Scene {
         this.createCars();
         this.initializeInput();
         this.active = true;
+        //The timer call to end the ride
         this.time.delayedCall(60000, () => {
             this.active = false;
             let tokens = Math.floor(this.hits / 10);
@@ -83,6 +84,7 @@ class BumperCars extends Phaser.Scene {
     update() {
         if(!this.active) return; // Game over
         if(isDebugging) this.debugLine.clear();
+        //Do the NPC car update
         this.cars.getChildren().forEach(this.updateTarget, this);
         let speed = .12;
         if(this.up.isDown || this.thrust) {
@@ -127,7 +129,7 @@ class BumperCars extends Phaser.Scene {
             fill: 'red'
         }).setOrigin(1, 0).setDepth(3).setInteractive().on('pointerdown', exit, this);
 
-        this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT');
+        this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT'); // we dont want to scroll the screen so capture keys
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -143,7 +145,9 @@ class BumperCars extends Phaser.Scene {
             mouseTrack.y1 = c.y;
             mouseTrack.x2 = pointer.x;
             mouseTrack.y2 = pointer.y;
+            //calculate the angle from car to pointer
             let a = Phaser.Math.RadToDeg(Phaser.Geom.Line.Angle(mouseTrack));
+            //rotate left or right based on angle
             if(this.player.angle > a) this.player.setAngularVelocity(-.1);
             else this.player.setAngularVelocity(.1);
         }, this);
@@ -162,6 +166,7 @@ class BumperCars extends Phaser.Scene {
          * @param pair
          */
         let checkCollision = function (pair) {
+            //cycle through collision bodies and see if anything hit the player
             if (pair.bodyA.gameObject !== this.player) return;
             this.hitSound.play();
             this.cameras.main.shake(250, .025);
@@ -179,20 +184,23 @@ class BumperCars extends Phaser.Scene {
      * @param car the car to update the target
      */
     updateTarget(car) {
-        if(car.name === 'car0') return;
-        this.setTarget(car);
+        if(car.name === 'car0') return; //this is the player, they are on their own
+        this.setTarget(car); //see if we want to attack a different player
         let target = car.getData(this.carTarget);
         let line = car.getData(this.carLine);
+        //get a vector from the car to to the attack target
         let v = car.getCenter();
         line.x1 = v.x;
         line.y1 = v.y;
         v = this.cars.getChildren().find((c) => c.name === target).getCenter();
         line.x2 = v.x;
         line.y2 = v.y;
+        //get the angle to the attack target
         let a = Phaser.Math.RadToDeg(Phaser.Geom.Line.Angle(line));
+        //rotate left or right based on angle
         if(car.angle > a) car.setAngularVelocity(-.1);
         else car.setAngularVelocity(.1);
-        car.thrust(.12);
+        car.thrust(.12); //attack
         if(isDebugging) this.debugLine.strokeLineShape(line);
     }
 
@@ -202,8 +210,9 @@ class BumperCars extends Phaser.Scene {
      * @param car the car to set the target for
      */
     setTarget(car) {
+        //occasionally we want to attack someone else 
         if(Phaser.Math.Between(-1, 120) > 0) return; // keep same target
-        let key = 'car' + Phaser.Math.Between(0, 7);
+        let key = 'car' + Phaser.Math.Between(0, 7); //pick a random target (could be the same target)
         if(car.name === key) return; // dont target self
         car.setData(this.carTarget, key);
     }
