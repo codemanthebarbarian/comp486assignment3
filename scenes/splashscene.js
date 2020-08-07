@@ -39,7 +39,7 @@ class SplashScene extends Phaser.Scene {
         graphics.lineStyle(1, 0xff0000, 1);
 
         this.add.text(xMid, game.canvas.height / 3,
-            'The Carnival',
+            ['The Carnival','Trouble in Playland'],
             {
                 font: '50px Arial'
             }).setOrigin(.5, .5).setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
