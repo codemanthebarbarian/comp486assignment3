@@ -1,2 +1,2 @@
-# comp466assignment2
-COMP486 Assignment 2 - Carnival
+# comp466assignment3
+COMP486 Assignment 3 - Carnival Trouble in Playland
