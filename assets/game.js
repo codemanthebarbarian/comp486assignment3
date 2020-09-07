@@ -1,0 +1,337 @@
+/*
+ * This file hold classes share throughout the game
+ */
+
+
+class Stats {
+
+    constructor(hitPoints, speed) {
+        this.baseHitPoints = hitPoints;
+        this.baseSpeed = speed;
+        this.level = 1;
+        this.hitPoints = hitPoints;
+        this.speed = speed;
+    }
+
+    reset() {
+        this.hitPoints = this.baseHitPoints;
+        this.speed = this.baseSpeed;
+    }
+
+}
+
+class Weapon {
+
+    constructor(damage, fireRate, range, velocity) {
+        this.baseDamage = damage;
+        this.fireRate = fireRate;
+        this.baseRange = range;
+        this.baseVelocity = velocity;
+        this.level = 1;
+        this.damage = damage;
+        this.fireRate = fireRate;
+        this.range = range;
+        this.velocity = velocity;
+    }
+
+    reset() {
+        this.damage = this.baseDamage;
+        this.fireRate = this.fireRate;
+        this.range = this.baseRange;
+        this.velocity = this.baseVelocity;
+    }
+
+}
+
+/**
+ * The player character sprite used in the cave scene.
+ */
+class Player extends Phaser.GameObjects.Sprite {
+
+    constructor(scene, x, y) {
+        super(scene, x, y);
+        this.currentAnimation = 'down';
+        this.setTexture('guy');
+        this.setSize(20,25,true);
+        this.setDataEnabled();
+        this.isWalking = false;
+        this.facing = 90;
+        this.stats = new Stats(100, 75);
+
+        //The global animations have been create, nothing to do
+        if(!scene.anims.exists('left')) {
+            scene.anims.create({
+                key: 'left',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', frames: [10], zeroPad: 4}),
+                frameRate: 20,
+                repeat: -1
+            });
+            scene.anims.create({
+                key: 'walk-left',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', start: 9, end: 11, zeroPad: 4}),
+                frameRate: 20,
+                repeat: -1
+            });
+            scene.anims.create({
+                key: 'right',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', frames: [4], zeroPad: 4}),
+                frameRate: 20,
+                repeat: 1
+            });
+            scene.anims.create({
+                key: 'walk-right',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', start: 3, end: 5, zeroPad: 4}),
+                frameRate: 5,
+                repeat: -1
+            });
+            scene.anims.create({
+                key: 'down',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', frames: [1], zeroPad: 4}),
+                frameRate: 20,
+                repeat: 1
+            });
+            scene.anims.create({
+                key: 'walk-down',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', start: 0, end: 2, zeroPad: 4}),
+                frameRate: 5,
+                repeat: -1
+            });
+            scene.anims.create({
+                key: 'up',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', frames: [7], zeroPad: 4}),
+                frameRate: 20,
+                repeat: 1
+            });
+            scene.anims.create({
+                key: 'walk-up',
+                frames: scene.anims.generateFrameNames('guy', {prefix: 'MainGuy', start: 6, end: 8, zeroPad: 4}),
+                frameRate: 5,
+                repeat: -1
+            });
+        }
+    }
+
+    setAnimation(isWalking, direction){
+        this.isWalking = isWalking;
+        if(!isWalking) {
+            //not walking, so we've stopped just face previous direction
+            //or keep facing in same direction
+            this.currentAnimation = this.currentAnimation.replace('walk-', '');
+        } else if (direction !== this.facing) {
+            // there has been a change in direction
+            let absDir = Math.abs(direction);
+            if (absDir % 90) {
+                //Walking at an angle if they were not walking they should be
+                if (!this.currentAnimation.includes('walk-'))
+                    this.currentAnimation = 'walk-' + this.currentAnimation;
+            } else {
+                // walking it a 90 degree angle
+                if (absDir === 180) this.currentAnimation = 'walk-left';
+                else if (direction === 0) this.currentAnimation = 'walk-right';
+                else if (direction < 0) this.currentAnimation = 'walk-up';
+                else this.currentAnimation = 'walk-down';
+            }
+        }
+        this.isWalking = isWalking;
+        this.facing = direction;
+        this.anims.play(this.currentAnimation, true);
+    }
+}
+
+/**
+ * A non-player bat sprite. Used in the cave scene.
+ */
+class Bat extends Phaser.GameObjects.Sprite {
+
+    constructor(scene, x, y) {
+        super(scene, x, y);
+        this.setTexture('bat');
+
+        this.stats = new Stats(100, 25);
+
+        //if the animations do not exist, create them.
+        if(!scene.anims.exists('bat-left')){
+            scene.anims.create({
+                key: 'bat-left',
+                frames: scene.anims.generateFrameNumbers('bat', { start: 12, end: 15 }),
+                frameRate: 20,
+                repeat: -1,
+                yoyo: true
+            });
+            scene.anims.create({
+                key: 'bat-right',
+                frames: scene.anims.generateFrameNumbers('bat', { start: 4, end: 7 }),
+                frameRate: 20,
+                repeat: -1,
+                yoyo: true
+            });
+            scene.anims.create({
+                key: 'bat-up',
+                frames: scene.anims.generateFrameNumbers('bat', { start: 8, end: 11 }),
+                frameRate: 20,
+                repeat: -1,
+                yoyo: true
+            });
+            scene.anims.create({
+                key: 'bat-down',
+                frames: scene.anims.generateFrameNumbers('bat', { start: 0, end: 3 }),
+                frameRate: 20,
+                repeat: -1,
+                yoyo: true
+            });
+        }
+    }
+
+    registerHit(damage) {
+        this.stats.hitPoints -= damage;
+        if(this.stats.hitPoints > 0) return false;
+        this.destroy();
+        return true;
+    }
+
+    /**
+     * Override the update method in the sprite class
+     * (param descriptions from Phaser documentation)
+     * @param time {number} The current time. Either a High Resolution Timer value if it comes from Request Animation Frame, or Date.now if using SetTimeout.
+     * @param delta {number} The delta time in ms since the last frame. This is a smoothed and capped value based on the FPS rate.
+     * @param target {Vector2}
+     */
+    update(time, delta, target){
+        if(!this.body) return;
+        let me = this.getCenter();
+        let x = target.x - me.x;
+        let y = target.y - me.y;
+        if(x > this.stats.speed) x = this.stats.speed;
+        if(y > this.stats.speed) y = this.stats.speed;
+        this.body.setVelocityX(x);
+        this.body.setVelocityY(y);
+        this.body.velocity.normalize().scale(this.stats.speed);
+    }
+
+}
+
+
+class Crosshair extends Phaser.GameObjects.Image {
+    constructor (scene, center, worldBounds)
+    {
+        super(scene, center.x, center.y + 250, 'hud', 'crosshair_white_small.png');
+        this.setDisplaySize(24, 24);
+        this.limit = new Phaser.Geom.Circle(center.x, center.y, 250);
+        this.direction = 90;
+        this.minX = worldBounds.x;
+        this.minY = worldBounds.y;
+        this.maxX = worldBounds.x + worldBounds.width;
+        this.maxY = worldBounds.y + worldBounds.height;
+    }
+
+    /**
+     *
+     * @param vectorPlayer
+     * @param playerFacing
+     * @param direction - for left + for right 0 for no
+     * @param line the line from the player to the mouse
+     */
+    update(vectorPlayer, playerFacing, direction, line){
+
+        // we want to move crosshairs left to right more or less
+        // so reverse if player if facing up or directly right or left
+        let reverse = playerFacing > 0;
+
+        let constrain = function() {
+
+            // Normalize the angle to what we expect
+            if(this.direction >= 180) this.direction += -360;
+            else if(this.direction < -180) this.direction += 360;
+
+            //get our acceptable range
+            let swath = 80; // max degrees left of right of players facing direction
+            let max = playerFacing + swath;
+            let min = playerFacing - swath;
+
+            // normalize the min and max
+            if(min >= 180) min += -360;
+            if(min < -180) min += 360;
+            if(max >= 180) max += -360;
+            if(max < -180) max += 360;
+
+
+            if (min > max) {
+                if(this.direction >= min) return;
+                if(this.direction <= max) return;
+                if(this.direction < 0) this.direction = max; //closer to the max
+                else this.direction = min;
+            } else {
+                if(this.direction < min) this.direction = min;
+                if(this.direction > max) this.direction = max;
+            }
+        };
+
+        if(line) {
+            this.direction = Phaser.Math.RadToDeg(Phaser.Geom.Line.Angle(line));
+            constrain.bind(this)();
+        } else if(direction){
+            if(reverse) direction *= -1; //flip if reversed
+            this.direction += direction > 0 ? 1.7 : -1.7;
+            constrain.bind(this)();
+        }
+
+        this.limit.setPosition(vectorPlayer.x, vectorPlayer.y);
+        var p = Phaser.Geom.Circle.CircumferencePoint(this.limit, Phaser.Math.DegToRad(this.direction));
+        if(p.x < this.minX) p.x = this.minX;
+        if(p.x > this.maxX) p.x = this.maxX;
+        if(p.y < this.minY) p.y = this.minY;
+        if(p.y > this.maxY) p.y = this.maxY;
+        this.setPosition(p.x, p.y);
+    }
+}
+
+/**
+ * Represents an individual bullet fired from a weapon.
+ */
+class Bullet extends Phaser.GameObjects.Image {
+    constructor(scene, x, y, range, velocity) {
+        super(scene, x, y, 'cave_bullet');
+        this.setDisplaySize(17, 7);
+        this.setActive(false);
+        this.setVisible(false);
+        this.range = range;
+        this.velocity = velocity;
+    }
+
+    fire(vector2, angle, range, velocity) {
+        if(range) this.range = range;
+        if(velocity) this.velocity = velocity;
+        this.origin = vector2.clone();
+        this.setPosition(this.origin.x, this.origin.y);
+        this.body.world.add(this.body);
+        this.body.setSize(7,7, true);
+        this.body.onWorldBounds = true;
+        this.setAngle(angle);
+        this.setActive(true);
+        this.setVisible(true);
+    }
+
+    recycle() {
+        this.setActive(false);
+        this.setVisible(false);
+        this.body.world.remove(this.body);
+        this.body.onWorldBounds = false;
+    }
+
+    onWorldBoundsHandler() {
+        this.recycle();
+    }
+
+    /**
+     * Override the update method in the sprite class
+     * (param descriptions from Phaser documentation)
+     * @param time {number} The current time. Either a High Resolution Timer value if it comes from Request Animation Frame, or Date.now if using SetTimeout.
+     * @param delta {number} The delta time in ms since the last frame. This is a smoothed and capped value based on the FPS rate.
+     */
+    update(time, delta){
+        let c = this.getCenter();
+        let d = Phaser.Math.Distance.BetweenPoints(this.origin, c);
+        if(d > this.range) return this.recycle();
+        this.scene.physics.velocityFromAngle(this.angle, this.velocity, this.body.velocity);
+    }
+}

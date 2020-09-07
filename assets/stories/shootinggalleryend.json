@@ -86,7 +86,7 @@
           "character": "Carny",
           "line": [
             "\"You've got some skills.",
-            "That's over 20 targets.",
+            "That's over 20 points.",
             "You've earned yourself a Marksman badge, tokens, and 3 tickets.\""
           ]
         }
@@ -106,7 +106,7 @@
           "character": "Carny",
           "line": [
             "\"Well, Well, Well...",
-            "Perfect score, 25 hits. That makes you a Sharpshooter.",
+            "That's a great score, 30 points. That makes you a Sharpshooter.",
             "Here's your Sharpshooter badge, 5 tickets and tokens.\""
           ]
         }

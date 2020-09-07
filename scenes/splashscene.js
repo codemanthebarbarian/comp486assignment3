@@ -26,6 +26,7 @@ class SplashScene extends Phaser.Scene {
      */
     preload() {
         this.load.audio('circus', './assets/screens/CircusDilemma.mp3');
+        this.load.atlasXML('icons', './assets/sheet_white1x.png', './assets/sheet_white1x.xml');
     }
 
     /**
@@ -136,7 +137,9 @@ class SplashScene extends Phaser.Scene {
 
             this.input.keyboard.on('keydown-ENTER', doInput, this);
             this.input.keyboard.on('keydown-UP', setNext);
+            this.input.keyboard.on('keydown-W', setNext);
             this.input.keyboard.on('keydown-DOWN', setNext);
+            this.input.keyboard.on('keydown-S', setNext);
             this.input.on('pointerover', onMouseOver, this);
             this.input.on('pointerdown', onPointerDown, this);
         };

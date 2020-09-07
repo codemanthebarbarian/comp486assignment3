@@ -35,10 +35,11 @@ let config = {
         global: [
             { key: 'InventoryRepo', plugin: InventoryRepo, start: false, mapping: 'inventory' },
             { key: 'QuestRepo', plugin: QuestRepo, start: false, mapping: 'quests' },
-            { key: 'SettingsRepo', plugin: SettingsRepo, start: false, mapping: 'settings' }
+            { key: 'SettingsRepo', plugin: SettingsRepo, start: false, mapping: 'settings' },
+            { key: 'WeaponsRepo', plugin: WeaponsRepo, start: false, mapping: 'weapons'}
         ]
     },
-    scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars, Inventory, PrizesScene, PrizeClaimScene, SettingsScene ]
+    scene: [ SplashScene, CarnivalScene, ShootingGallery, BumperCars, Inventory, PrizesScene, PrizeClaimScene, SettingsScene, Help, Cave ]
 };
 
 /**

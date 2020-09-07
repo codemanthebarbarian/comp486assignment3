@@ -13,10 +13,11 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
         if(json) this.vals = JSON.parse(json);
         else this.vals = { audio: {
                 background: {
-                    enabled: true,
-                    debug: false
+                    enabled: true
                 }
-            }
+            },
+            debug: false,
+            rightHanded: true
         };
         localStorage.setItem('settings', JSON.stringify(this.vals));
     }
@@ -54,6 +55,22 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
      */
     isDebugging(){
         return this.vals.debug;
+    }
+
+    /**
+     * Is the player set for right handed.
+     * @return {boolean} true if righty otherwise lefty
+     */
+    isRightHanded() {
+        return this.vals.rightHanded;
+    }
+
+    /**
+     * Toggle between right and left handed.
+     * @return {boolean} true if righty otherwise lefty
+     */
+    toggleHanded() {
+        return this.vals.rightHanded = !this.vals.rightHanded;
     }
 
     /**

@@ -36,8 +36,15 @@ class SettingsScene extends Phaser.Scene {
             }
         ).setOrigin(.5, 0);
 
+        let iconHelp = this.add.image(null, null, 'icons', 'question.png')
+            .setName('help').setTint(0xFFEF00).setInteractive();
+        let iconMusicOn = this.add.image(null, null, 'icons', 'musicOn.png')
+            .setName('musicOn').setTint(0xFFEF00).setInteractive();
+        let iconMusicOff = this.add.image(null, null, 'icons', 'musicOff.png')
+            .setName('musicOff').setTint(0xFFEF00).setInteractive();
         let gameStateFmt = 'Game State: %1';
         let toggleBackgroundMusicTxt = 'Background Music:  %1';
+        let handedFmt = 'Handedness: %1';
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xff0000, 1);
 
@@ -73,6 +80,22 @@ class SettingsScene extends Phaser.Scene {
             }
         };
 
+        let handedTxt = this.add.text(null, null,
+            Phaser.Utils.String.Format(handedFmt,
+                [this.settings.isRightHanded() ? "Right" : "Left" ]),
+            {
+                font: '25px Arial',
+                fill: 'yellow'
+            }).setOrigin(.5).setName('handed').setInteractive();
+
+        /**
+         * Toggles between right and left handed.
+         */
+        let toggleHandedness = function() {
+            handedTxt.setText(Phaser.Utils.String.Format(handedFmt,
+                [this.settings.toggleHanded() ? "Right" : "Left"]));
+        };
+
         let resetTxt = this.add.text(null, null, 'Reset Game',
             {
                 font: '25px Arial',
@@ -101,12 +124,16 @@ class SettingsScene extends Phaser.Scene {
         let items = this.add.group()
             .add(musicToggle)
             .add(resetTxt)
+            .add(handedTxt)
+            .add(iconHelp)
             .add(exitTxt)
-            .incXY(game.canvas.clientWidth / 2, 200, null, 100);
+            .incXY(game.canvas.clientWidth / 2, 200, null, 75);
 
         this.physics.add.existing(musicToggle);
         this.physics.add.existing(resetTxt);
+        this.physics.add.existing(handedTxt);
         this.physics.add.existing(exitTxt);
+        this.physics.add.existing(iconHelp);
 
         /**
          * Resets the game to a new game.
@@ -114,6 +141,7 @@ class SettingsScene extends Phaser.Scene {
         let reset = function() {
             this.quests.reset();
             this.inventory.reset();
+            this.weapons.reset();
             this.caller = this.scene.get('splash');
             gameStateTxt.setText(Phaser.Utils.String.Format(gameStateFmt, getGameResetState.bind(this)() ? ['Reset'] : ['In Progress']));
         };
@@ -161,6 +189,11 @@ class SettingsScene extends Phaser.Scene {
                 else this.scene.wake('carnival');
             };
 
+            let showHelp = function() {
+                this.scene.sleep();
+                this.scene.run('help', { help: "main" });
+            };
+
             /**
              * Handles the mouse over event. This will highlight the interactive text
              * element.
@@ -190,7 +223,7 @@ class SettingsScene extends Phaser.Scene {
              */
             let moveNext = function() {
                 ++selected;
-                if(selected >= items.length) selected = 0;
+                if(selected >= items.children.entries.length) selected = 0;
                 highlight();
             };
 
@@ -199,7 +232,7 @@ class SettingsScene extends Phaser.Scene {
              */
             let movePrevious = function() {
                 --selected;
-                if(selected < 0) selected = items.length - 1;
+                if(selected < 0) selected = items.children.entries.length - 1;
                 highlight();
             };
 
@@ -219,6 +252,11 @@ class SettingsScene extends Phaser.Scene {
                     case 'toggleBackground':
                         toggleBackgroundMusic.bind(this)();
                         break;
+                    case 'help':
+                        showHelp.bind(this)();
+                        break;
+                    case 'handed':
+                        toggleHandedness.bind(this)();
                 }
             };
 
@@ -226,7 +264,9 @@ class SettingsScene extends Phaser.Scene {
             this.input.on('pointerdown', onPointerDown, this);
             this.input.keyboard.on('keydown-ESC', exit, this);
             this.input.keyboard.on('keydown-DOWN', moveNext, this);
+            this.input.keyboard.on('keydown-S', moveNext, this);
             this.input.keyboard.on('keydown-UP', movePrevious, this);
+            this.input.keyboard.on('keydown-W', movePrevious, this);
             this.input.keyboard.on('keydown-ENTER', onEnter, this);
         };
 

@@ -36,9 +36,9 @@ class CarnivalScene extends Phaser.Scene {
         this.events.on('wake', this.onWake, this);
         //Load the map tiles
         this.map = this.make.tilemap({ key: 'map' });
-        var tilesMage = this.map.addTilesetImage('magecity', 'city');
-        var tilesDeco = this.map.addTilesetImage('deco-med', 'deco');
-        var tilesFence = this.map.addTilesetImage('fence_medieval', 'fence');
+        let tilesMage = this.map.addTilesetImage('magecity', 'city');
+        let tilesDeco = this.map.addTilesetImage('deco-med', 'deco');
+        let tilesFence = this.map.addTilesetImage('fence_medieval', 'fence');
         // these layers are painted below the player
         this.ground = this.map.createStaticLayer('ground', [ tilesDeco, tilesMage, tilesFence ], 0, 0);
         // needs to be a dynamic layer to open close gates
@@ -105,6 +105,10 @@ class CarnivalScene extends Phaser.Scene {
             this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
             this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
             this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+            this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+            this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+            this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+            this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
             this.input.keyboard.on('keydown-I', showInventory, this);
             this.input.keyboard.on('keydown-P', showProperties, this);
         };
@@ -127,9 +131,13 @@ class CarnivalScene extends Phaser.Scene {
         if(this.settings.isBackgroundMusicEnabled() && !this.music.isPlaying) this.music.play();
         if(!this.settings.isBackgroundMusicEnabled() && this.music.isPlaying) this.music.stop();
         this.player.setData('zoneoverlap', true);
-        if(data && data.exit === 'bumpercars'){
+        if(data && data.exit === 'bumpercars') {
             let pnt = this.mapObjects.objects.find(o => o.name === 'bumpercars_exit', this);
             this.player.setData('bumpercars', 'exit')
+            this.player.x = pnt.x;
+            this.player.y = pnt.y;
+        } else if(data && data.exit === 'cave'){
+            let pnt = this.mapObjects.objects.find(o => o.name === 'cave_exit', this);
             this.player.x = pnt.x;
             this.player.y = pnt.y;
         }
@@ -188,20 +196,20 @@ class CarnivalScene extends Phaser.Scene {
         if(!this.player.body.embedded && this.player.body.wasTouching) this.player.emit('zoneexit');
         //this.debugPointer();
         let animation = this.player.anims.currentAnim ? this.player.anims.currentAnim.key : 'down';
-        let speed = 75;
-        if(this.up.isDown) {
+        let speed = 90;
+        if(this.up.isDown || this.w.isDown) {
             this.player.body.setVelocityY(speed * -1);
             animation = 'walk-up';
-        } else if(this.down.isDown) {
+        } else if(this.down.isDown || this.s.isDown) {
             this.player.body.setVelocityY(speed);
             animation = 'walk-down';
         } else {
             this.player.body.setVelocityY(0);
         }
-        if(this.left.isDown) {
+        if(this.left.isDown || this.a.isDown) {
             this.player.body.setVelocityX(speed * -1);
             animation = 'walk-left';
-        } else if(this.right.isDown) {
+        } else if(this.right.isDown || this.d.isDown) {
             this.player.body.setVelocityX(speed);
             animation = 'walk-right';
         } else {
@@ -365,6 +373,7 @@ class CarnivalScene extends Phaser.Scene {
         this.buildStory('toilet', 'toilet', 'toilet', 'toilet');
         this.buildStory('portraits', 'portraits', 'portraits', 'portraits');
         this.buildStory(null, 'shootinggalleryend', 'shootinggalleryend', 'shootinggalleryend');
+        this.buildStory('cave', 'caveentrance', 'caveentrance', 'caveentrance');
     }
 
     /**

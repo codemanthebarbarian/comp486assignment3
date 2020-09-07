@@ -51,7 +51,18 @@ class BumperCars extends Phaser.Scene {
         this.debugLine = this.add.graphics({ lineStyle: { width: 1, color: 0xaa00aa } });
         this.matter.world.setBounds(20, 20, track.widthInPixels - 40, track.heightInPixels - 40).disableGravity();
         this.matter.world.on('collisionstart', this.countHits, this);
-        this.player = this.matter.add.image(100 , 150, 'cars', 'car_red_small_5.png');
+
+        // create a front bumper to detect hits.
+        let bodies = Phaser.Physics.Matter.Matter.Bodies;
+        let bodyMain = bodies.rectangle(33, 19, 65, 39);
+        let bodyFront = bodies.rectangle(63, 20, 3, 37, { isSensor: true, label: 'bumper' });
+        let playerBody = Phaser.Physics.Matter.Matter.Body.create({
+            parts: [bodyMain, bodyFront]
+        });
+        this.player = this.matter.add.image(0, 0, 'cars', 'car_red_small_5.png');
+        this.player.setExistingBody(playerBody);
+        this.player.setPosition(100, 150);
+
         this.createCars();
         this.initializeInput();
         this.active = true;
@@ -87,11 +98,11 @@ class BumperCars extends Phaser.Scene {
         //Do the NPC car update
         this.cars.getChildren().forEach(this.updateTarget, this);
         let speed = .12;
-        if(this.up.isDown || this.thrust) {
+        if(this.up.isDown || this.w.isDown || this.thrust) {
             this.player.thrust(speed);
         }
-        if(this.left.isDown) this.player.setAngularVelocity(-.1);
-        else if(this.right.isDown) this.player.setAngularVelocity(.1);
+        if(this.left.isDown || this.a.isDown) this.player.setAngularVelocity(-.1);
+        else if(this.right.isDown || this.d.isDown) this.player.setAngularVelocity(.1);
     }
 
     /**
@@ -135,6 +146,10 @@ class BumperCars extends Phaser.Scene {
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         this.input.addPointer(1); // need two touch inputs: move and fire
         this.input.on('pointermove', function (pointer) {
@@ -170,8 +185,11 @@ class BumperCars extends Phaser.Scene {
             if (pair.bodyA.gameObject !== this.player) return;
             this.hitSound.play();
             this.cameras.main.shake(250, .025);
-            ++this.hits;
-            this.score.text = 'Hits: ' + this.hits;
+            if(pair.bodyA.isSensor) {
+                // only record a hit if it's on the bumper
+                ++this.hits;
+                this.score.text = 'Hits: ' + this.hits;
+            }
         };
 
         let pairs = event.pairs;

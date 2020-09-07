@@ -1,0 +1,33 @@
+{
+    "name": "main",
+    "title": "Help",
+    "contents": [
+        {
+            "type": "text",
+            "item": [
+                "Summer is here and it’s that time of year again. The carnival is in town. You can’t wait to get to the carnival play the midway games, go in the rides, and enjoy the adventure. None of your friends can go to the carnival with you so you decide to go by yourself, hang out and have some fun. When you get there, things seem a little different. All of the games and rides are there, but since you are by yourself, the carnival workers and people seem a little different. You can choose to go in and enjoy the fun, or you can choose to see what other adventures are in store.",
+                "",
+                "You've made it this far, but just in case...",
+                "For menu items, such as on the introduction and settings screens, the up and down arrow keys can be used to switch between menu items. The enter key can then be used to execute the menu item. Alternately, menu items can be executing by clicking on them with the mouse or tapping on them with a touch screen enabled device.",
+                "",
+                "Reset Game will erase all game progress and inventory items setting them back to default values.",
+                "The settings scree is also available from the main game (carnival screen) by pressing the P key.",
+                "",
+                "To move around the carnival, the arrow keys can be used to move in different directions. Just press and hold the arrow key to move in that direction. The mouse can also be used to move. Just place the mouse cursor in away from the player in the direction you wish to move and press the mouse button move. If the mouse is in the area of where the 1 is on the screen, the player would move up. 2 is diagonal and up, 3 is right, 4 is right and down, 5 is down, 6 is left and down, 7 is left and 8 would be up and left. If a touch screen is used, tapping on the areas similar to where the mouse would be used to move will move the player in the desired direction.",
+                ""
+            ]
+        },
+        {
+            "type": "image",
+            "item": "carnival.jpg"
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "Some Text",
+                ""
+            ]
+        }
+    ]
+}

@@ -1,0 +1,91 @@
+{
+  "trigger": "caveentrance",
+  "title": "Cave",
+  "stages": [
+    {
+      "nmae": "default",
+      "endstate": "default",
+      "script": [
+        {
+          "character": "Construction Foreman",
+          "line": "\"Hey, this site is off limits?\"",
+          "responses": [
+            {
+              "response": "\"What's going on here?\"",
+              "next": 2
+            },
+            {
+              "response": "\"Oh, Ok. Sorry to bother you.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "endState": "default",
+          "lines": [
+            {
+              "line": "\"No problem.\""
+            },
+            {
+              "line": "\"Yeah best to stay away, there is some weird stuff going on here.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "line": [
+            "\"We started excavating for a new ride. Some sort of underground funhouse.",
+            "As it turns out, we found an old mine. Which would be good, but there seems to be some weird creatures down there.",
+            "Workers getting attacked and now nobody will go down there.\""
+          ],
+          "responses": [
+            {
+              "response": "\"Anything I can do?\"",
+              "next": 3
+            }, {
+              "response": "\"That sounds scary, I better get out of here.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Construction Foreman",
+          "line": [
+            "\"Hmmm, maybe you can.",
+            "I have this BB Gun I got from the shooting gallery.",
+            "You think you would be up to going in and clearing out what everyone is so afraid of?",
+            "I would, but, uhh, you know.. being the foreman and all. I'm likely more help up here.\""
+          ],
+          "responses": [
+            {
+              "response": "\"Yeah, I'm a pretty good shot, I can handle this.\"",
+              "next": 4
+            },
+            {
+              "response": "\"I don't know, maybe some other time.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 4,
+          "character": "Construction Foreman",
+          "endState": "EXPLORER",
+          "scene": "cave",
+          "lines": [
+            {
+              "line": "\"Best of luck.\""
+            },
+            {
+              "line": "\"You're braver than us.\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

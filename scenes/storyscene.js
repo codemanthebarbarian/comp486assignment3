@@ -133,7 +133,9 @@ class StoryScene extends Phaser.Scene {
         //bind the keyboard controls
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.input.keyboard.on('keydown-DOWN', selectNext, this);
+        this.input.keyboard.on('keydown-S', selectNext, this);
         this.input.keyboard.on('keydown-UP', selectPrevious, this);
+        this.input.keyboard.on('keydown-W', selectPrevious, this);
         this.input.keyboard.on('keydown-ENTER', submitResponse, this);
         this.input.on('pointerdown', onPointerDown, this);
     }

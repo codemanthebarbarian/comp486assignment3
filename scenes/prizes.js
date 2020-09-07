@@ -208,7 +208,9 @@ class PrizesScene extends Phaser.Scene {
             this.input.on('pointerover', onMouseOver, this);
             this.input.on('pointerdown', onPointerDown, this);
             this.input.keyboard.on('keydown-DOWN', moveNext, this);
+            this.input.keyboard.on('keydown-S', moveNext, this);
             this.input.keyboard.on('keydown-UP', movePrevious, this);
+            this.input.keyboard.on('keydown-W', movePrevious, this);
             this.input.keyboard.on('keydown-ENTER', onEnter, this);
             this.input.keyboard.on('keydown-ESC', exit, this);
         }

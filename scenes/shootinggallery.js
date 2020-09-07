@@ -90,13 +90,21 @@ class ShootingGallery extends Phaser.Scene {
             this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT, SPACE');
             this.input.keyboard.on('keydown-ESC', exit, this);
             this.input.keyboard.on('keydown-RIGHT', moveRight, this);
+            this.input.keyboard.on('keydown-D', moveRight, this);
             this.input.keyboard.on('keyup-RIGHT', stopX, this);
+            this.input.keyboard.on('keyup-D', stopX, this);
             this.input.keyboard.on('keydown-LEFT', moveLeft, this);
+            this.input.keyboard.on('keydown-A', moveLeft, this);
             this.input.keyboard.on('keyup-LEFT', stopX, this);
+            this.input.keyboard.on('keyup-A', stopX, this);
             this.input.keyboard.on('keydown-UP', moveUp, this);
+            this.input.keyboard.on('keydown-W', moveUp, this);
             this.input.keyboard.on('keyup-UP', stopY, this);
+            this.input.keyboard.on('keyup-W', stopY, this);
             this.input.keyboard.on('keydown-DOWN', moveDown, this);
+            this.input.keyboard.on('keydown-S', moveDown, this);
             this.input.keyboard.on('keyup-DOWN', stopY, this);
+            this.input.keyboard.on('keyup-S', stopY, this);
             this.input.keyboard.on('keydown-SPACE', this.shoot, this);
         };
 
@@ -130,6 +138,33 @@ class ShootingGallery extends Phaser.Scene {
      * Shoots the gun and handles any hits or misses
      */
     shoot(){
+
+        let processMid = function(object1, object2) {
+            if(object1.label !== 'shot_blue_small') {
+                this.ducksMid.splice(this.ducksMid.map(o => o.body.gameObject.name).indexOf(object1.gameObject.name), 1);
+                this.matter.world.remove(object2);
+                object1.gameObject.destroy();
+            } else if (object2.label !== 'shot_blue_small') {
+                this.ducksMid.splice(this.ducksMid.map(o => o.body.gameObject.name).indexOf(object2.gameObject.name), 1);
+                this.matter.world.remove(object2);
+                object2.gameObject.destroy();
+            }
+            return true;
+        };
+
+        let processBack = function(object1, object2) {
+            if(object1.label !== 'shot_blue_small') {
+                this.ducksBack.splice(this.ducksBack.map(o => o.body.gameObject.name).indexOf(object2.gameObject.name), 1);
+                this.matter.world.remove(object2);
+                object1.gameObject.destroy();
+            } else if (object2.label !== 'shot_blue_small') {
+                this.ducksBack.splice(this.ducksBack.map(o => o.body.gameObject.name).indexOf(object2.gameObject.name), 1);
+                this.matter.world.remove(object2);
+                object2.gameObject.destroy();
+            }
+            return true;
+        };
+
         if(this.shots < -1) return;
         if(this.shots < 0) { //The game is over
             let quest = 'shootinggalleryend';
@@ -139,7 +174,7 @@ class ShootingGallery extends Phaser.Scene {
             else if(this.hits < 10) this.quests.setState(quest, 'default');
             else if(this.hits < 15) this.quests.setState(quest, 'Shooter');
             else if(this.hits < 20) this.quests.setState(quest, 'Deadeye');
-            else if(this.hits < 25) this.quests.setState(quest, 'Marksman');
+            else if(this.hits < 30) this.quests.setState(quest, 'Marksman');
             else this.quests.setState(quest, 'Sharpshooter');
             --this.shots;
             this.time.delayedCall(1500, () => {
@@ -169,14 +204,14 @@ class ShootingGallery extends Phaser.Scene {
             shot.setDepth(4);
         } else if(this.matter.overlap(shot, this.shieldMid)){
             shot.setDepth(4);
-        } else if(this.matter.overlap(shot, this.ducksMid)){
+        } else if(this.matter.overlap(shot, this.ducksMid, null, processMid, this)){
             ++this.hits;
             this.hit.play();
             shot.setDepth(2);
         } else if(this.matter.overlap(shot, this.shieldBack)){
             shot.setDepth(2);
-        } else if(this.matter.overlap(shot, this.ducksBack)){
-            ++this.hits;
+        } else if(this.matter.overlap(shot, this.ducksBack, null, processBack, this)){
+            this.hits += 2;
             this.hit.play();
         }
     }
@@ -202,9 +237,9 @@ class ShootingGallery extends Phaser.Scene {
         //The images are too large, 
         //so we need to resize the hit masks them if we haven't already
         //Phaser doesn't do this so we need to use the utility method
-        this.resizeShape(this.objectShapes.duck_target_yellow, 0.5);
+        this.resizeShape(this.objectShapes.duck_target_yellow, 0.3);
         for (let i = 0 ; i < 10 ; ++i) {
-            let follower = this.add.follower(path, 96, 150, 'objects', 'duck_target_yellow.png' ).setScale(0.5).setDepth(1);
+            let follower = this.add.follower(path, 96, 150, 'objects', 'duck_target_yellow.png' ).setName(i).setScale(0.3).setDepth(1);
             //We want things non colliding as we are handling hits ourself (otherwise things get pushed around which is not what we want)
             this.ducksBack.push(
                 this.matter.add.gameObject(follower, { shape: this.objectShapes.duck_target_yellow })
@@ -249,9 +284,9 @@ class ShootingGallery extends Phaser.Scene {
         graphics.lineStyle(1, 0xffffff, 1);
         if(isDebugging) path.draw(graphics).setDepth(3);
         //I needed to create flipped masks for the flipped images and store them under a different key.
-        this.resizeShape(this.objectShapes.duck_target_white_flip, 0.5);
+        this.resizeShape(this.objectShapes.duck_target_white_flip, 0.6);
         for (let i = 0 ; i < 10 ; ++i) {
-            let follower = this.add.follower(path, 96, 300, 'objects', 'duck_target_white.png').setFlipX(true).setScale(0.5).setDepth(3);
+            let follower = this.add.follower(path, 96, 300, 'objects', 'duck_target_white.png').setName(i).setFlipX(true).setScale(0.6).setDepth(3);
             this.ducksMid.push(
                 this.matter.add.gameObject(follower, { shape: this.objectShapes.duck_target_white_flip })
                     .setCollisionGroup(this.nonColliding)
