@@ -66,7 +66,11 @@ class CarnivalScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.buildings, null, null, this);
         this.physics.add.collider(this.player, this.top, null, null, this);
 
-        this.music = this.sound.add('rollupSong', { loop: true, volumne: .7});
+        // safari doesn't support ogg files
+        if(this.sound.get('rollupSong'))
+            this.music = this.sound.add('rollupSong', { loop: true, volumne: .7});
+        else
+            this.music = this.sound.add('circus', { loop: true, volume: .5 });
         if (this.settings.isBackgroundMusicEnabled()) this.music.play();
 
         this.buildStages();

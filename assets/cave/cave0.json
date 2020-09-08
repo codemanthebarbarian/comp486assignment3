@@ -79,18 +79,18 @@
          "id":7,
          "name":"objects1",
          "objects":[
-                {
+               {
                  "height":0,
                  "id":1,
-                 "name":"playerSpawn",
+                 "name":"player",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":212,
-                 "y":143
-                }, 
+                 "x":208,
+                 "y":180
+               },
                 {
                  "height":190,
                  "id":2,
@@ -167,7 +167,18 @@
                  "width":313.5,
                  "x":1080.5,
                  "y":257
-                }],
+                },
+               {
+                 "height":24,
+                 "id":12,
+                 "name":"exit",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":79,
+                 "x":190,
+                 "y":118
+               }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,

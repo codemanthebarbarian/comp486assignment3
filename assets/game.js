@@ -143,11 +143,13 @@ class Player extends Phaser.GameObjects.Sprite {
  */
 class Bat extends Phaser.GameObjects.Sprite {
 
-    constructor(scene, x, y) {
+    constructor(scene, x, y, level) {
         super(scene, x, y);
         this.setTexture('bat');
-
-        this.stats = new Stats(100, 25);
+        this.level = level;
+        let speed = 25 + ( 7 * level );
+        let hp = 85 + ( 13 * level );
+        this.stats = new Stats(hp, speed);
 
         //if the animations do not exist, create them.
         if(!scene.anims.exists('bat-left')){

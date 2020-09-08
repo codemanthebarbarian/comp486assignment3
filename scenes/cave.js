@@ -26,6 +26,12 @@ class Cave extends Phaser.Scene {
      * Create the instance of the cave level
      */
     create() {
+        this.level = this.quests.getState('caveLevel');
+        if(! this.level) {
+            this.level = 1;
+            this.quests.setState('caveLevel', this.level);
+            this.quests.save();
+        }
         this.initializeMap();
         this.initialzePlayer();
 
@@ -67,11 +73,7 @@ class Cave extends Phaser.Scene {
          */
         let tryFire = function () {
             if (this.lastFire < this.weapon.fireRate) return;
-            let bullet = this.bullets.get();
-            if(bullet){
-                bullet.fire(this.player.getCenter(), this.aim.direction);
-                this.lastFire = 0;
-            }
+            this.doFire();
         }
 
         /**
@@ -115,7 +117,8 @@ class Cave extends Phaser.Scene {
             this.pointer.x = -1;
             return this.line;
         };
-
+        //check if player exited zone
+        if(!this.player.body.embedded && this.player.body.wasTouching) this.player.emit('zoneexit');
         let c = this.player.getCenter();
         this.visible.setPosition(c.x, c.y);
         this.lastFire += delta;
@@ -131,6 +134,15 @@ class Cave extends Phaser.Scene {
         }, this);
         if(this.fire) tryFire.bind(this)();
     }
+
+    /**
+     * The function which is called to exit the scene.
+     */
+    exit() {
+        //this.music.stop();
+        this.scene.stop();
+        this.scene.wake('carnival', { exit: 'cave' });
+    };
 
     onHitEnemy(bullet, enemy) {
         if(!bullet.active || !enemy.active) return;
@@ -163,16 +175,21 @@ class Cave extends Phaser.Scene {
     }
 
     initializeEnemy() {
+        //let spawnPoints = this.mapObjects.objects.filter(o => o.name.includes('spawn'));
         let initializeBats = function() {
-            let spawn = this.mapObjects.objects.find((o) => o.name === 'spawn1', this);
-            let rect = new Phaser.Geom.Rectangle(spawn.x, spawn.y, spawn.width, spawn.height);
+            //let spawn = this.mapObjects.objects.find((o) => o.name === 'spawn1', this);
+            //let rect = new Phaser.Geom.Rectangle(spawn.x, spawn.y, spawn.width, spawn.height);
             let items = [];
-            for(let i = 0 ; i < 10 ; ++i){
-                let pt = rect.getRandomPoint();
-                items.push(this.add.existing(
-                    new Bat(this, pt.x, pt.y).setName('bat' + i)
-                ));
-            }
+            let spawnPoints = this.mapObjects.objects.filter(o => o.name.includes('spawn'));
+            spawnPoints.forEach( spawn => {
+                let rect = new Phaser.Geom.Rectangle(spawn.x, spawn.y, spawn.width, spawn.height);
+                for (let i = 0; i < 10; ++i) {
+                    let pt = rect.getRandomPoint();
+                    items.push(this.add.existing(
+                        new Bat(this, pt.x, pt.y, this.level).setName('bat' + i)
+                    ));
+                }
+            }, this);
             this.enemies = this.physics.add.group({
                 allowRotation: false,
                 collideWorldBounds: true
@@ -197,6 +214,8 @@ class Cave extends Phaser.Scene {
 
     initializeWeapon() {
 
+        this.weapon = this.weapons.get('Shotgun');
+
         let initializeBullets = function() {
             let items = [];
             for(let i = 0 ; i < 50 ; ++i){
@@ -220,6 +239,35 @@ class Cave extends Phaser.Scene {
             else if(bulletGameObject && bulletGameObject.recycle) bulletGameObject.recycle();
         }
 
+        /**
+         * fire a single projectile
+         */
+        let fireSingle = function() {
+            let bullet = this.bullets.get();
+            if(bullet){
+                bullet.fire(this.player.getCenter(), this.aim.direction);
+                this.lastFire = 0;
+            }
+        };
+
+        /**
+         * fire a single projectile
+         */
+        let fireScatter = function() {
+            for(let i = 0 ; i < 7 ; ++i) {
+                let bullet = this.bullets.get();
+                if (bullet) {
+                    let angle = Phaser.Math.Between(-6, 6) + this.aim.direction;
+                    let range = Phaser.Math.Between(-40, 15) + this.weapon.range;
+                    let velocity = Phaser.Math.Between(-125, 75) + this.weapon.velocity;
+                    bullet.fire(this.player.getCenter(), angle, range, velocity);
+                    this.lastFire = 0;
+                }
+            }
+        };
+
+        this.doFire = this.weapon.name === 'Shotgun' ? fireScatter : fireSingle;
+
         initializeBullets.bind(this)();
         this.physics.add.collider(this.bullets, this.wallBottom, onMapCollideHandler, null, this);
         this.physics.add.collider(this.bullets, this.top, onMapCollideHandler, null, this);
@@ -231,15 +279,28 @@ class Cave extends Phaser.Scene {
     }
 
     initialzePlayer() {
-        let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'playerSpawn', this);
+        let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'player', this);
         this.player = this.physics.add.existing(this.add.existing(new Player(this, spawnPoint.x, spawnPoint.y))).setDepth(1);
         this.player.body.setCollideWorldBounds(true);
-        this.weapon = this.weapons.get('BB Gun');
         this.aim = this.add.existing(new Crosshair(this, this.player.getCenter(), this.physics.world.bounds)).setDepth(8);
+        this.player.on('zoneexit', () => this.player.setData('zoneoverlap', false), this);
         this.physics.add.collider(this.player, this.wallBottom, null, null, this);
         this.physics.add.collider(this.player, this.wallMid, null, null, this);
         this.physics.add.collider(this.player, this.top, null, null, this);
         this.physics.add.collider(this.player, this.itemsBottom, null, null, this);
+        // setup the player exit
+        let obj = this.mapObjects.objects.find(o => o.name === 'exit', this);
+        let zn = this.add.zone(obj.x, obj.y, obj.width, obj.height);
+        this.physics.world.enable(zn);
+        zn.body.debugBodyColor = 0xffff00;
+        this.physics.add.overlap(this.player, zn, () => {
+            if(this.player.getData('zoneoverlap')) return;
+            this.player.setData('zoneoverlap', true);
+            this.player.body.setVelocityY(0);
+            this.player.body.setVelocityX(0);
+            if(this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length > 0) return;
+            this.exit();
+        }, null, this);
     }
 
     initializeInput() {
@@ -252,16 +313,7 @@ class Cave extends Phaser.Scene {
         this.S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-        /**
-         * The function which is called to exit the scene.
-         */
-        let exit = function() {
-            //this.music.stop();
-            this.scene.stop();
-            this.scene.wake('carnival', { exit: 'cave' });
-        };
-
-        this.input.keyboard.on('keydown-ESC', exit, this);
+        this.input.keyboard.on('keydown-ESC', this.exit, this);
         this.pointer = new Phaser.Math.Vector2(-1,-1);
         this.line = new Phaser.Geom.Line(this.player.x, this.player.y, this.aim.x, this.aim.y);
         this.input.on('pointermove', function(pointer){

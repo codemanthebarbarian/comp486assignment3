@@ -41,7 +41,8 @@ class ShootingGallery extends Phaser.Scene {
      * Creates the instance of the scene
      */
     create() {
-        this.music = this.sound.add('theme', { loop: true, volume: .5 });
+        if(this.sound.get('theme')) this.music = this.sound.add('theme', { loop: true, volume: .5 });
+        else this.music = this.sound.add('circus', { loop: true, volume: .5 });
         this.miss = this.sound.add('fire', { loop : false });
         this.hit = this.sound.add('hit', { loop: false});
         if(this.settings.isBackgroundMusicEnabled()) this.music.play();
