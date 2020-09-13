@@ -61,8 +61,10 @@ class Cave extends Phaser.Scene {
         this.physics.world.on('worldbounds', onWorldBounds);
         //this.physics.add.overloap(this.enemies, this.visible);
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
+        this.exitText = this.add.text(10, 50, "Creatures").setFontSize(40).setColor('#ffff00').setDepth(7).setOrigin(0,0).setVisible(false);
+        this.exitText.on('zoneexit', () => this.exitText.setVisible(false), this);
         this.kills = 0;
-        this.score = this.add.text(10,10, "Kills: " + this.kills).setFontSize(50).setColor('#ffff00').setDepth(7).setOrigin(0,0);
+        this.score = this.add.text(10,10, "Kills: " + this.kills).setFontSize(30).setColor('#ffff00').setDepth(7).setOrigin(0,0);
         this.score.setScrollFactor(0);
     }
 
@@ -103,6 +105,13 @@ class Cave extends Phaser.Scene {
             }
         };
 
+        let doCollideDamage = function(){
+            if(! this.hasCollideDamage) return;
+            let damage = this.hasCollideDamage * ( delta / 1000);
+            this.player.registerHit(damage);
+            this.hasCollideDamage = 0;
+        }
+
         /**
          * Update the line used to set the crosshairs using the mouse
          * @return {null|number|LineAndPositionSetting}
@@ -118,13 +127,17 @@ class Cave extends Phaser.Scene {
             return this.line;
         };
         //check if player exited zone
-        if(!this.player.body.embedded && this.player.body.wasTouching) this.player.emit('zoneexit');
+        if(!this.player.body.embedded && this.player.body.wasTouching) {
+            this.player.emit('zoneexit');
+            this.exitText.emit('zoneexit');
+        }
         let c = this.player.getCenter();
         this.visible.setPosition(c.x, c.y);
         this.lastFire += delta;
         this.handleInput(params);
         calcDirection.bind(this)();
         this.player.setAnimation(params.isWalking, params.direction);
+        doCollideDamage.bind(this)();
         this.aim.update(this.player.getCenter(), this.player.facing, params.aim, updateLine.bind(this)());
         var inRange = this.physics.overlapCirc(this.visible.x, this.visible.y, this.visible.radius, true, true);
         var ctr = this.player.getCenter();
@@ -139,9 +152,12 @@ class Cave extends Phaser.Scene {
      * The function which is called to exit the scene.
      */
     exit() {
+        let remaining = this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length;
+        this.quests.setState('caveexit', remaining ? 'unfinished' : 'cleared');
         //this.music.stop();
         this.scene.stop();
-        this.scene.wake('carnival', { exit: 'cave' });
+        this.scene.run('caveexit');
+        //this.scene.wake('caveexit', { exit: 'cave' });
     };
 
     onHitEnemy(bullet, enemy) {
@@ -154,6 +170,11 @@ class Cave extends Phaser.Scene {
         this.emitter.setAngle(bullet.body.gameObject.angle);
         this.particles.emitParticleAt(enemy.x, enemy.y);
         bullet.recycle();
+    }
+
+    //the damage per second to inflict
+    onPlayerCollide(damage) {
+        this.hasCollideDamage += damage;
     }
 
     initializeMap() {
@@ -209,12 +230,15 @@ class Cave extends Phaser.Scene {
         initializeBats.bind(this)();
 
         this.physics.add.collider(this.enemies);
-        this.physics.add.collider(this.player, this.enemies);
+        this.physics.add.collider(this.player, this.enemies, (bodyA, bodyB) => {
+            let damage = bodyB.stats.damage;
+            this.onPlayerCollide(damage);
+        }, null, this);
     }
 
     initializeWeapon() {
 
-        this.weapon = this.weapons.get('Shotgun');
+        this.weapon = this.weapons.getModdedWeapons(this.weapons.get(this.inventory.getActiveWeapon()));
 
         let initializeBullets = function() {
             let items = [];
@@ -279,8 +303,14 @@ class Cave extends Phaser.Scene {
     }
 
     initialzePlayer() {
+        let graphics = this.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 100, 32);
+        // graphics.generateTexture('hitbar', 100, 10);
+        // graphics.destroy();
+        // this.hp = this.add.image(200, 50, 'hitbar').setDepth(8);
+        this.hasCollideDamage = 0; // the number of enemy objects colliding with the player
         let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'player', this);
         this.player = this.physics.add.existing(this.add.existing(new Player(this, spawnPoint.x, spawnPoint.y))).setDepth(1);
+        //this.player = this.physics.add.existing(new Player(this, spawnPoint.x, spawnPoint.y)).setDepth(1);
         this.player.body.setCollideWorldBounds(true);
         this.aim = this.add.existing(new Crosshair(this, this.player.getCenter(), this.physics.world.bounds)).setDepth(8);
         this.player.on('zoneexit', () => this.player.setData('zoneoverlap', false), this);
@@ -298,7 +328,12 @@ class Cave extends Phaser.Scene {
             this.player.setData('zoneoverlap', true);
             this.player.body.setVelocityY(0);
             this.player.body.setVelocityX(0);
-            if(this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length > 0) return;
+            let remaining = this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length;
+            if(remaining > 0) {
+                this.exitText.setText(remaining + " creatures remaining");
+                this.exitText.setVisible(true);
+                return;
+            }
             this.exit();
         }, null, this);
     }

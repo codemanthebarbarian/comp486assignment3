@@ -14,7 +14,7 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
                     damage: 25,
                     range: 300,
                     velocity: 750,
-                    mods: []
+                    mods: {}
                 },
                 {
                     name: "Shotgun",
@@ -22,7 +22,7 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
                     damage: 30,
                     range: 225,
                     velocity: 900,
-                    mods: []
+                    mods: {}
                 },
                 {
                     name: "Machine Gun",
@@ -30,7 +30,7 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
                     damage: 75,
                     range: 350,
                     velocity: 1000,
-                    mods: []
+                    mods: {}
                 }
             ]};
         this.default = JSON.stringify(d);
@@ -46,6 +46,48 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
      */
     get(name) {
         return this.weapons.items.find(i => i.name === name);
+    }
+
+    getModdedWeapons(weapon) {
+        let modded = {};
+        modded.name = weapon.name;
+        modded.fireRate = weapon.fireRate + ( weapon.mods.speed || 0);
+        modded.damage = weapon.damage + ( weapon.mods.damage || 0);
+        modded.range = weapon.range + ( weapon.mods.range || 0);
+        modded.velocity = weapon.velocity + ( weapon.mods.velocity || 0);
+        return modded;
+    }
+
+    addRange(weapon, amt) {
+        let gun = this.weapons.items.find( w => w.name === weapon);
+        if(gun) {
+            if(gun.mods.range) gun.mods.range += amt
+            else gun.mods.range = amt;
+        }
+    }
+
+    addDamage(weapon, amt) {
+        let gun = this.weapons.items.find( w => w.name === weapon);
+        if(gun) {
+            if(gun.mods.damage) gun.mods.damage += amt
+            else gun.mods.damage = amt;
+        }
+    }
+
+    addVelocity(weapon, amt) {
+        let gun = this.weapons.items.find( w => w.name === weapon);
+        if(gun) {
+            if(gun.mods.velocity) gun.mods.velocity += amt
+            else gun.mods.velocity = amt;
+        }
+    }
+    
+    addSpeed(weapon, amt) {
+        let gun = this.weapons.items.find( w => w.name === weapon);
+        if(gun) {
+            if(gun.mods.speed) gun.mods.speed -= amt
+            else gun.mods.speed = amt;
+        }
     }
 
     /**

@@ -13,7 +13,15 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      */
     constructor(pluginManager) {
         super(pluginManager);
-        let d = { cash: 50.00, tickets: 0, tokens: 0, items: [] };
+        let d = {
+            cash: 50.00,
+            tickets: 0,
+            tokens: 0,
+            items: [],
+            speed: 75,
+            hp: 100,
+            weapons: []
+        };
         this.default = JSON.stringify(d);
         let json = localStorage.getItem('inventory');
         if(json) this.inv = JSON.parse(json);
@@ -178,6 +186,38 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
     addItem(itm) {
         if(Array.isArray(itm)) this.inv.items = this.inv.items.concat(itm);
         else this.inv.items.push(itm);
+    }
+
+    /**
+     * Gets the player's active weapon or if one isn't set, sets the
+     * first weapon in the inventory as the active weapon.
+     * @return {*} the name of the active weapon or nothing
+     */
+    getActiveWeapon() {
+        if(this.inv.weapon) return this.inv.weapon;
+        let w = this.inv.weapons[0];
+        if(w) this.inv.weapon = w;
+        return w;
+    }
+
+    /**
+     * Sets the player's active weapon to the one specified, if it exists
+     * in the player's inventory. Otherwise the active weapon doesn't change.
+     * @param weapon the name of the weapon to set active.
+     */
+    setActiveWeapon(weapon) {
+        if(this.inv.weapons.find(w => w === weapon)) return;
+        this.inv.weapon = weapon;
+    }
+
+    /**
+     * Adds a new weapon to the player's inventory.
+     * @param weapon an array of weapon names or a weapon name
+     */
+    addWeapon(weapon) {
+        if(Array.isArray(weapon)) weapon.forEach( w => this.addWeapon(w));
+        if(this.inv.weapons.find(w => w === weapon)) return;
+        this.inv.weapons.push(weapon);
     }
 
     /**

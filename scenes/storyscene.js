@@ -99,6 +99,7 @@ class StoryScene extends Phaser.Scene {
             if(this.currentResponse < 0) return;
             let response = this.storyResponses[this.currentResponse];
             this.getAward(response.refund);
+            this.getMod(response.mods);
             this.loadLine(response.next);
         };
         /**
@@ -143,18 +144,45 @@ class StoryScene extends Phaser.Scene {
     /**
      * Gets any awards associated with the current story line.
      */
-    getAward(award){
+    getAward(award) {
         if(!award) return;
         if(award.items) this.inventory.addItem(award.items);
         if(award.cash) this.inventory.addCash(award.cash);
         if(award.tickets) this.inventory.addTickets(award.tickets);
         if(award.tokens) this.inventory.addTokens(award.tokens);
+        if(award.weapon) this.inventory.addWeapon(award.weapon);
+    }
+
+    /**
+     * Adds the weapon or weapons to the player's inventory.
+     * @param weapons the weapons to add, should be string or string array
+     */
+    getWeapon(weapons) {
+        if(!weapons) return;
+        this.inventory.addWeapon(weapons);
+    }
+
+    /**
+     * Adds the mods to the player's currently equipped weapon.
+     * @param mods the mods to add to the weapon.
+     */
+    getMod(mods) {
+        if(!mods || !Array.isArray(mods)) return;
+        let weapon = this.inventory.getActiveWeapon();
+        if(!weapon) return;
+        mods.forEach(m => {
+            if(m.damage) this.weapons.addDamage(weapon, m.damage);
+            if(m.range) this.weapons.addRange(weapon, m.range);
+            if(m.speed) this.weapons.addSpeed(weapon, m.speed);
+            if(m.velocity) this.weapons.addVelocity(weapon, m.velocity);
+        });
+        this.weapons.save();
     }
 
     /**
      * Highlight the selected response.
      */
-    highlight(){
+    highlight() {
         this.graphics.clear();
         if(this.currentResponse < 0) return;
         this.graphics.lineStyle(1, 0xff0000, 1);

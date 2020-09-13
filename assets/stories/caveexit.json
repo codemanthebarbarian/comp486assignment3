@@ -1,0 +1,135 @@
+{
+  "trigger": "caveexit",
+  "title": "Cave",
+  "stages": [
+    {
+      "name": "unfinished",
+      "script": [
+        {
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"I guess it's worse than you thought.\""
+            },
+            {
+              "line": "\"So, I guess we have a bigger problem than I though.\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Yeah, I guess it was a bit more than I expected.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "lines" : [
+            {
+              "line": "\"So you want another shot at it?\""
+            },
+            {
+              "line": "\"Hmmm, maybe you could try again?\""
+            },
+            {
+              "line": "\"You want to give up so soon?\""
+            },
+            {
+              "line": "\"You almost got it cleared out.\""
+            },
+            {
+              "line": "\"Are you really ready to hand in the towel so soon?\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"I think I would like to give it another try.\"",
+              "next": 2
+            },
+            {
+              "response": "\"Maybe some other time, I think I need a break.\"",
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "scene": "cave",
+          "lines": [
+            {
+              "line": "\"That's great, now you know what to expect.\""
+            },
+            {
+              "line": "\"Awesome, this is a big help.\""
+            },
+            {
+              "line": "\"That's great, I'd go down and lend a hand, but I better watch the entrance.\""
+            }
+          ]
+        },
+        {
+          "idx": 3,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"I understand.\""
+            },
+            {
+              "line": "\"If you change your mind, you know where to find me.\""
+            },
+            {
+              "line": "\"Please come back if you change your mind.\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cleared",
+      "script": [
+        {
+          "character": "Construction Foreman",
+          "line": [
+            "\"Wow, that was helpful",
+            "As a token of my appreciation, I'd like to offer you an upgrade for your gun.",
+            "Would you like increased damage, range, or fire rate?\""
+          ],
+          "responses": [
+            {
+              "response": "\"I'd like increased damage.\"",
+              "mods": [ { "damage" : 17 }],
+              "next": 1
+            },
+            {
+              "response": "\"How about increased range.\"",
+              "mods": [ { "range" : 10 }],
+              "next": 2
+            },
+            {
+              "response": "\"A fire rate increase would be sweet.\"",
+              "mods": [ { "speed" : 25 }],
+              "next": 3
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "line": "\"Here you go, this should add to the punch.\""
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "line": "\"Just attach this and you should get a little more range.\""
+        },
+        {
+          "idx": 3,
+          "character": "Construction Foreman",
+          "line": "\"This should speed things up a little.\""
+        }
+      ]
+    }
+  ]
+}

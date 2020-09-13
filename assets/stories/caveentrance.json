@@ -74,6 +74,9 @@
         {
           "idx": 4,
           "character": "Construction Foreman",
+          "award": {
+            "weapon": [ "BB Gun" ]
+          },
           "endState": "EXPLORER",
           "scene": "cave",
           "lines": [
@@ -82,6 +85,68 @@
             },
             {
               "line": "\"You're braver than us.\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EXPLORER",
+      "endstate": "EXPLORER",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"Glad to see your back. There's more creatures to clear out. Think you can help out again?\""
+            },
+            {
+              "line": "\"Hey, nice to see you. Looks like there's more down there to clean out. Interested?\""
+            },
+            {
+              "line": "\"Those things keep coming back, thin you want to help us out again?\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"I can take care of it for you.\"",
+              "next": 2
+            },
+            {
+              "response": "\"Maybe later.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"No problem, I'll be here when you come back.\""
+            },
+            {
+              "line": "\"I get it, it's pretty rough down there.\""
+            },
+            {
+              "line": "\"Guess were going to take an extra long lunch.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "scene": "cave",
+          "lines": [
+            {
+              "line": "\"Awesome, thanks for helping out.\""
+            },
+            {
+              "line": "\"That's great, I don't know where these things are coming from.\""
+            },
+            {
+              "line": "\"Hopefully this time they get the message.\""
             }
           ]
         }

@@ -2,26 +2,50 @@
  * This file hold classes share throughout the game
  */
 
-
+/**
+ * A class representing character statistics used in game calculations.
+ */
 class Stats {
 
-    constructor(hitPoints, speed) {
+    /**
+     * creates a new instance of character stats
+     * @param hitPoints the total hitpoints
+     * @param speed the speed of travel
+     * @param damage the dampage per second if colliding
+     */
+    constructor(hitPoints, speed, damage) {
         this.baseHitPoints = hitPoints;
         this.baseSpeed = speed;
         this.level = 1;
         this.hitPoints = hitPoints;
         this.speed = speed;
+        this.baseDamage = damage;
+        this.damage = damage;
     }
 
+    /**
+     * reset the stats to original values
+     */
     reset() {
         this.hitPoints = this.baseHitPoints;
         this.speed = this.baseSpeed;
+        this.damage = this.baseDamage;
     }
 
 }
 
+/**
+ * A class representing weapon statistics used in game calculations.
+ */
 class Weapon {
 
+    /**
+     * Creates an instance of weapon stats
+     * @param damage
+     * @param fireRate
+     * @param range
+     * @param velocity
+     */
     constructor(damage, fireRate, range, velocity) {
         this.baseDamage = damage;
         this.fireRate = fireRate;
@@ -34,6 +58,9 @@ class Weapon {
         this.velocity = velocity;
     }
 
+    /**
+     * Resets the stats to their original levels
+     */
     reset() {
         this.damage = this.baseDamage;
         this.fireRate = this.fireRate;
@@ -57,6 +84,11 @@ class Player extends Phaser.GameObjects.Sprite {
         this.isWalking = false;
         this.facing = 90;
         this.stats = new Stats(100, 75);
+        //let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 32, 10);
+        //graphics.generateTexture('hitbar', 32, 10);
+        //graphics.destroy();
+        //this.hp = scene.add.image('hitbar', 0, -20).setDepth(6);
+        //this.container = scene.add.container(x, y, [this, this.hp]);
 
         //The global animations have been create, nothing to do
         if(!scene.anims.exists('left')) {
@@ -111,6 +143,21 @@ class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
+    /**
+     * register a hit or damage on the player
+     * @param damage the damage to inflict.
+     * @return {boolean} true if the player's hitpoints have been used up
+     */
+    registerHit(damage) {
+        this.stats.hitPoints -= damage;
+        return this.stats.hitPoints <= 0;
+    }
+
+    /**
+     * Sets the animation to play
+     * @param isWalking true if the player is moving
+     * @param direction the direction of travel
+     */
     setAnimation(isWalking, direction){
         this.isWalking = isWalking;
         if(!isWalking) {
@@ -143,13 +190,22 @@ class Player extends Phaser.GameObjects.Sprite {
  */
 class Bat extends Phaser.GameObjects.Sprite {
 
+    /**
+     * Creates a new instance of a bat enemy. The level will increase speed, strength and damage
+     * delivered by the bat
+     * @param scene the scene to add it to
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param level the bat level
+     */
     constructor(scene, x, y, level) {
         super(scene, x, y);
         this.setTexture('bat');
         this.level = level;
         let speed = 25 + ( 7 * level );
         let hp = 85 + ( 13 * level );
-        this.stats = new Stats(hp, speed);
+        let damage = 10 + (3 * level);
+        this.stats = new Stats(hp, speed, damage);
 
         //if the animations do not exist, create them.
         if(!scene.anims.exists('bat-left')){
@@ -184,6 +240,11 @@ class Bat extends Phaser.GameObjects.Sprite {
         }
     }
 
+    /**
+     * Register a hit (damage to the bat)
+     * @param damage the damage amount
+     * @return {boolean} true if the bat's hp has been used up
+     */
     registerHit(damage) {
         this.stats.hitPoints -= damage;
         if(this.stats.hitPoints > 0) return false;
@@ -212,8 +273,17 @@ class Bat extends Phaser.GameObjects.Sprite {
 
 }
 
-
+/**
+ * The crosshairs class displayed for player aiming.
+ */
 class Crosshair extends Phaser.GameObjects.Image {
+
+    /**
+     * Creates a new instance of crosshairs for aiming.
+     * @param scene
+     * @param center
+     * @param worldBounds
+     */
     constructor (scene, center, worldBounds)
     {
         super(scene, center.x, center.y + 250, 'hud', 'crosshair_white_small.png');
@@ -291,6 +361,15 @@ class Crosshair extends Phaser.GameObjects.Image {
  * Represents an individual bullet fired from a weapon.
  */
 class Bullet extends Phaser.GameObjects.Image {
+
+    /**
+     * Creates a new bullet instance
+     * @param scene
+     * @param x
+     * @param y
+     * @param range the bullet range
+     * @param velocity the bullet velocity
+     */
     constructor(scene, x, y, range, velocity) {
         super(scene, x, y, 'cave_bullet');
         this.setDisplaySize(17, 7);
@@ -300,6 +379,13 @@ class Bullet extends Phaser.GameObjects.Image {
         this.velocity = velocity;
     }
 
+    /**
+     * fires the bullet from the provided location
+     * @param vector2 where to fire from
+     * @param angle the angle of travel
+     * @param range the range (if different from default)
+     * @param velocity if different from default
+     */
     fire(vector2, angle, range, velocity) {
         if(range) this.range = range;
         if(velocity) this.velocity = velocity;
@@ -313,6 +399,9 @@ class Bullet extends Phaser.GameObjects.Image {
         this.setVisible(true);
     }
 
+    /**
+     * recycle the bullet for reuse
+     */
     recycle() {
         this.setActive(false);
         this.setVisible(false);
@@ -320,6 +409,9 @@ class Bullet extends Phaser.GameObjects.Image {
         this.body.onWorldBounds = false;
     }
 
+    /**
+     * what to do when world bounds have been hit
+     */
     onWorldBoundsHandler() {
         this.recycle();
     }

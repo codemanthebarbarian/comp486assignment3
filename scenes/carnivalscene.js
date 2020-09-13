@@ -378,6 +378,7 @@ class CarnivalScene extends Phaser.Scene {
         this.buildStory('portraits', 'portraits', 'portraits', 'portraits');
         this.buildStory(null, 'shootinggalleryend', 'shootinggalleryend', 'shootinggalleryend');
         this.buildStory('cave', 'caveentrance', 'caveentrance', 'caveentrance');
+        this.buildStory(null, 'caveexit', 'caveexit', 'caveexit');
     }
 
     /**
