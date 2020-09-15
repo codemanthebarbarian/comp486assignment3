@@ -89,6 +89,14 @@ class CarnivalScene extends Phaser.Scene {
         let setInput = function(){
 
             /**
+             * Shows the help screen for this scene
+             */
+            let showHelp = function() {
+                this.scene.sleep();
+                this.scene.run('help', { help: "carnival", caller: 'carnival' });
+            };
+
+            /**
              * Shows the players inventory
              */
             let showInventory = function(){
@@ -115,6 +123,7 @@ class CarnivalScene extends Phaser.Scene {
             this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
             this.input.keyboard.on('keydown-I', showInventory, this);
             this.input.keyboard.on('keydown-P', showProperties, this);
+            this.input.keyboard.on('keydown-H', showHelp, this);
         };
         setInput.bind(this)();
 

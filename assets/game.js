@@ -73,22 +73,25 @@ class Weapon {
 /**
  * The player character sprite used in the cave scene.
  */
-class Player extends Phaser.GameObjects.Sprite {
+class Player extends Phaser.GameObjects.Container {
 
     constructor(scene, x, y) {
         super(scene, x, y);
         this.currentAnimation = 'down';
-        this.setTexture('guy');
         this.setSize(20,25,true);
         this.setDataEnabled();
         this.isWalking = false;
         this.facing = 90;
         this.stats = new Stats(100, 75);
-        //let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 32, 10);
-        //graphics.generateTexture('hitbar', 32, 10);
-        //graphics.destroy();
-        //this.hp = scene.add.image('hitbar', 0, -20).setDepth(6);
-        //this.container = scene.add.container(x, y, [this, this.hp]);
+        this.sprite = scene.add.sprite(0,0, 'guy');
+        if(! scene.textures.exists('hitbar')) {
+            let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 32, 6);
+            graphics.generateTexture('hitbar', 32, 6);
+            graphics.destroy();
+        }
+        this.hp = scene.add.image(0, -20, 'hitbar').setDepth(6);
+        this.add(this.sprite);
+        this.add(this.hp);
 
         //The global animations have been create, nothing to do
         if(!scene.anims.exists('left')) {
@@ -143,6 +146,12 @@ class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
+    getCenter(v) {
+        if(!v) return new Phaser.Math.Vector2(this.x, this.y);
+        v.x = this.x;
+        v.y = this.y;
+    }
+
     /**
      * register a hit or damage on the player
      * @param damage the damage to inflict.
@@ -150,6 +159,8 @@ class Player extends Phaser.GameObjects.Sprite {
      */
     registerHit(damage) {
         this.stats.hitPoints -= damage;
+        let width = (this.stats.hitPoints / this.stats.baseHitPoints) * 32;
+        this.hp.setDisplaySize( width, 6);
         return this.stats.hitPoints <= 0;
     }
 
@@ -181,14 +192,14 @@ class Player extends Phaser.GameObjects.Sprite {
         }
         this.isWalking = isWalking;
         this.facing = direction;
-        this.anims.play(this.currentAnimation, true);
+        this.sprite.anims.play(this.currentAnimation, true);
     }
 }
 
 /**
  * A non-player bat sprite. Used in the cave scene.
  */
-class Bat extends Phaser.GameObjects.Sprite {
+class Bat extends Phaser.GameObjects.Container {
 
     /**
      * Creates a new instance of a bat enemy. The level will increase speed, strength and damage
@@ -200,12 +211,21 @@ class Bat extends Phaser.GameObjects.Sprite {
      */
     constructor(scene, x, y, level) {
         super(scene, x, y);
-        this.setTexture('bat');
         this.level = level;
+        this.setSize(20,16,true);
         let speed = 25 + ( 7 * level );
         let hp = 85 + ( 13 * level );
         let damage = 10 + (3 * level);
+        if(! scene.textures.exists('hitbar')) {
+            let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 32, 6);
+            graphics.generateTexture('hitbar', 32, 6);
+            graphics.destroy();
+        }
+        this.hp = scene.add.image(0, -20, 'hitbar').setDepth(6);
         this.stats = new Stats(hp, speed, damage);
+        this.sprite = scene.add.sprite(0,0,'bat').setDepth(5);
+        this.add(this.sprite);
+        this.add(this.hp);
 
         //if the animations do not exist, create them.
         if(!scene.anims.exists('bat-left')){
@@ -240,6 +260,12 @@ class Bat extends Phaser.GameObjects.Sprite {
         }
     }
 
+    getCenter(v) {
+        if(!v) return new Phaser.Math.Vector2(this.x, this.y);
+        v.x = this.x;
+        v.y = this.y;
+    }
+
     /**
      * Register a hit (damage to the bat)
      * @param damage the damage amount
@@ -247,6 +273,8 @@ class Bat extends Phaser.GameObjects.Sprite {
      */
     registerHit(damage) {
         this.stats.hitPoints -= damage;
+        let width = (this.stats.hitPoints / this.stats.baseHitPoints) * 32;
+        this.hp.setDisplaySize( width, 6);
         if(this.stats.hitPoints > 0) return false;
         this.destroy();
         return true;

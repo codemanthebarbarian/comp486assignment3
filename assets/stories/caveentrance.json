@@ -4,7 +4,7 @@
   "stages": [
     {
       "nmae": "default",
-      "endstate": "default",
+      "endState": "default",
       "script": [
         {
           "character": "Construction Foreman",
@@ -92,7 +92,7 @@
     },
     {
       "name": "EXPLORER",
-      "endstate": "EXPLORER",
+      "endState": "EXPLORER",
       "script": [
         {
           "idx": 0,
@@ -115,6 +115,244 @@
             },
             {
               "response": "\"Maybe later.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"No problem, I'll be here when you come back.\""
+            },
+            {
+              "line": "\"I get it, it's pretty rough down there.\""
+            },
+            {
+              "line": "\"Guess were going to take an extra long lunch.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "scene": "cave",
+          "lines": [
+            {
+              "line": "\"Awesome, thanks for helping out.\""
+            },
+            {
+              "line": "\"That's great, I don't know where these things are coming from.\""
+            },
+            {
+              "line": "\"Hopefully this time they get the message.\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SHOTGUN",
+      "endState": "HITMAN",
+      "script": [
+        {
+          "ids": 0,
+          "character": "Construction Foreman",
+          "line": "\"I really glad to see you. It's getting a little crazy down there. You still want to help us out?\"",
+          "responses": [
+            {
+              "response": "\"Sure, I'm kind of enjoying this.\"",
+              "next": 2
+            },
+            {
+              "response": "\"Maybe later.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"No problem, I'll be here when you come back.\""
+            },
+            {
+              "line": "\"I get it, it's pretty rough down there.\""
+            },
+            {
+              "line": "\"Guess were going to take an extra long lunch.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "endState": "HITMAN",
+          "scene": "cave",
+          "award": {
+            "weapon": [ "Shotgun" ]
+          },
+          "line": [
+            "\"That's great. Just to make it easier.",
+            "Here is a real gun. It's a shotgun I've managed to get for you.\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HITMAN",
+      "endState": "HITMAN",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"Glad to see your back. There's more creatures to clear out. Think you can help out again?\""
+            },
+            {
+              "line": "\"Hey, nice to see you. Looks like there's more down there to clean out. Interested?\""
+            },
+            {
+              "line": "\"Those things keep coming back, thin you want to help us out again?\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"For sure, there nothing I can't handle with my shotgun.\"",
+              "next": 2,
+              "setweapon": "Shotgun"
+            },
+            {
+              "response": "\"Yeah, me and my trusty BB Gun will clear things out.\"",
+              "next": 2,
+              "setweapon": "BB Gun"
+            },
+            {
+              "response": "\"Maybe some other time.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"No problem, I'll be here when you come back.\""
+            },
+            {
+              "line": "\"I get it, it's pretty rough down there.\""
+            },
+            {
+              "line": "\"Guess were going to take an extra long lunch.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "scene": "cave",
+          "lines": [
+            {
+              "line": "\"Awesome, thanks for helping out.\""
+            },
+            {
+              "line": "\"That's great, I don't know where these things are coming from.\""
+            },
+            {
+              "line": "\"Hopefully this time they get the message.\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MACHINEGUN",
+      "endState": "MERC",
+      "script": [
+        {
+          "ids": 0,
+          "character": "Construction Foreman",
+          "line": "\"I really glad to see you. It's getting a little crazy down there. You still want to help us out?\"",
+          "responses": [
+            {
+              "response": "\"Sure, I'm kind of enjoying this.\"",
+              "next": 2
+            },
+            {
+              "response": "\"Maybe later.\"",
+              "next": 1
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"No problem, I'll be here when you come back.\""
+            },
+            {
+              "line": "\"I get it, it's pretty rough down there.\""
+            },
+            {
+              "line": "\"Guess were going to take an extra long lunch.\""
+            }
+          ]
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "scene": "cave",
+          "award": {
+            "weapon": [ "Machine Gun" ]
+          },
+          "line": [
+            "\"That's great. It getting really ugly down there.",
+            "But.. here's a secret weapon. I think the machine gun might come in handy.\""
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MERC",
+      "endState": "MERC",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Construction Foreman",
+          "lines": [
+            {
+              "line": "\"Glad to see your back. There's more creatures to clear out. Think you can help out again?\""
+            },
+            {
+              "line": "\"Hey, nice to see you. Looks like there's more down there to clean out. Interested?\""
+            },
+            {
+              "line": "\"Those things keep coming back, thin you want to help us out again?\""
+            }
+          ],
+          "responses": [
+            {
+              "response": "\"Yeah, me and my trusty BB Gun will clear things out.\"",
+              "next": 2,
+              "setweapon": "BB Gun"
+            },
+            {
+              "response": "\"For sure, there nothing I can't handle with my shotgun.\"",
+              "next": 2,
+              "setweapon": "Shotgun"
+            },
+            {
+              "response": "\"Firepower is the key, and this machine gun has all that's needed.\"",
+              "next": 2,
+              "setweapon": "Machine Gun"
+            },
+            {
+              "response": "\"Maybe some other time.\"",
               "next": 1
             }
           ]

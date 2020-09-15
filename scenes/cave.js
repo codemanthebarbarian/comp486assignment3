@@ -59,7 +59,6 @@ class Cave extends Phaser.Scene {
         this.initializeEnemy();
         this.initializeWeapon();
         this.physics.world.on('worldbounds', onWorldBounds);
-        //this.physics.add.overloap(this.enemies, this.visible);
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
         this.exitText = this.add.text(10, 50, "Creatures").setFontSize(40).setColor('#ffff00').setDepth(7).setOrigin(0,0).setVisible(false);
         this.exitText.on('zoneexit', () => this.exitText.setVisible(false), this);
@@ -108,8 +107,9 @@ class Cave extends Phaser.Scene {
         let doCollideDamage = function(){
             if(! this.hasCollideDamage) return;
             let damage = this.hasCollideDamage * ( delta / 1000);
-            this.player.registerHit(damage);
+            let isDone = this.player.registerHit(damage);
             this.hasCollideDamage = 0;
+            if(isDone) this.exit.bind(this)();
         }
 
         /**
@@ -131,16 +131,15 @@ class Cave extends Phaser.Scene {
             this.player.emit('zoneexit');
             this.exitText.emit('zoneexit');
         }
-        let c = this.player.getCenter();
-        this.visible.setPosition(c.x, c.y);
-        this.lastFire += delta;
         this.handleInput(params);
+        let ctr = this.player.getCenter();
+        this.visible.setPosition(ctr.x, ctr.y);
+        this.lastFire += delta;
         calcDirection.bind(this)();
         this.player.setAnimation(params.isWalking, params.direction);
         doCollideDamage.bind(this)();
-        this.aim.update(this.player.getCenter(), this.player.facing, params.aim, updateLine.bind(this)());
+        this.aim.update(ctr, this.player.facing, params.aim, updateLine.bind(this)());
         var inRange = this.physics.overlapCirc(this.visible.x, this.visible.y, this.visible.radius, true, true);
-        var ctr = this.player.getCenter();
         inRange.forEach(body => {
             let go = body.gameObject;
             if(go.name && go.name.includes('bat')) go.update(time, delta, ctr);
@@ -153,7 +152,11 @@ class Cave extends Phaser.Scene {
      */
     exit() {
         let remaining = this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length;
+        if(!remaining) this.quests.setState('caveLevel', ++this.level);
         this.quests.setState('caveexit', remaining ? 'unfinished' : 'cleared');
+        if(this.level === 3) this.quests.setState('caveentrance', 'SHOTGUN');
+        if(this.level === 5) this.quests.setState('caveentrance', 'MACHINEGUN');
+        this.quests.save();
         //this.music.stop();
         this.scene.stop();
         this.scene.run('caveexit');
@@ -183,7 +186,7 @@ class Cave extends Phaser.Scene {
         this.ground = this.map.createStaticLayer('ground', tilesCave, 0, 0);
         this.top = this.map.createStaticLayer('top', tilesCave, 0, 0).setDepth(6);
         this.wallMid = this.map.createStaticLayer('wallMid', tilesCave, 0, 0).setDepth(5);
-        this.wallBottom = this.map.createStaticLayer('wallBottom', tilesCave, 0 ,0).setDepth(5);
+        this.wallBottom = this.map.createStaticLayer('wallBottom', tilesCave, 0 ,0).setDepth(2);
         this.itemsBottom = this.map.createStaticLayer('itemsBottom1', tilesCave, 0, 0).setDepth(4);
         this.mapObjects = this.map.getObjectLayer('objects1');
         this.ground.setCollisionByProperty({ collideable: true });
@@ -196,15 +199,15 @@ class Cave extends Phaser.Scene {
     }
 
     initializeEnemy() {
-        //let spawnPoints = this.mapObjects.objects.filter(o => o.name.includes('spawn'));
+
+
         let initializeBats = function() {
-            //let spawn = this.mapObjects.objects.find((o) => o.name === 'spawn1', this);
-            //let rect = new Phaser.Geom.Rectangle(spawn.x, spawn.y, spawn.width, spawn.height);
+            let mobSize = 5 + (this.level * 3);
             let items = [];
             let spawnPoints = this.mapObjects.objects.filter(o => o.name.includes('spawn'));
             spawnPoints.forEach( spawn => {
                 let rect = new Phaser.Geom.Rectangle(spawn.x, spawn.y, spawn.width, spawn.height);
-                for (let i = 0; i < 10; ++i) {
+                for (let i = 0; i < mobSize; ++i) {
                     let pt = rect.getRandomPoint();
                     items.push(this.add.existing(
                         new Bat(this, pt.x, pt.y, this.level).setName('bat' + i)
@@ -217,9 +220,8 @@ class Cave extends Phaser.Scene {
             });
             this.enemies.addMultiple(items);
             this.enemies.children.each(bat => {
-                bat.body.setSize(20, 16, true);
-                bat.anims.play('bat-down');
-                bat.setDepth(3);
+                bat.setDepth(5);
+                bat.sprite.anims.play('bat-down');
             } );
             this.enemies.runChildUpdate = false;
             this.physics.add.collider(this.enemies, this.top, null, null, this);
@@ -244,7 +246,7 @@ class Cave extends Phaser.Scene {
             let items = [];
             for(let i = 0 ; i < 50 ; ++i){
                 let bullet = new Bullet(this, -50,-50, this.weapon.range, this.weapon.velocity);
-                bullet.setDepth(3);
+                bullet.setDepth(5);
                 let b = this.add.existing(bullet);
                 items.push(b);
             }
@@ -278,11 +280,11 @@ class Cave extends Phaser.Scene {
          * fire a single projectile
          */
         let fireScatter = function() {
-            for(let i = 0 ; i < 7 ; ++i) {
+            for(let i = 0 ; i < 10 ; ++i) {
                 let bullet = this.bullets.get();
                 if (bullet) {
-                    let angle = Phaser.Math.Between(-6, 6) + this.aim.direction;
-                    let range = Phaser.Math.Between(-40, 15) + this.weapon.range;
+                    let angle = Phaser.Math.Between(-10, 10) + this.aim.direction;
+                    let range = Phaser.Math.Between(-50, 15) + this.weapon.range;
                     let velocity = Phaser.Math.Between(-125, 75) + this.weapon.velocity;
                     bullet.fire(this.player.getCenter(), angle, range, velocity);
                     this.lastFire = 0;
@@ -303,14 +305,9 @@ class Cave extends Phaser.Scene {
     }
 
     initialzePlayer() {
-        let graphics = this.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 100, 32);
-        // graphics.generateTexture('hitbar', 100, 10);
-        // graphics.destroy();
-        // this.hp = this.add.image(200, 50, 'hitbar').setDepth(8);
         this.hasCollideDamage = 0; // the number of enemy objects colliding with the player
         let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'player', this);
-        this.player = this.physics.add.existing(this.add.existing(new Player(this, spawnPoint.x, spawnPoint.y))).setDepth(1);
-        //this.player = this.physics.add.existing(new Player(this, spawnPoint.x, spawnPoint.y)).setDepth(1);
+        this.player = this.physics.add.existing(this.add.existing(new Player(this, spawnPoint.x, spawnPoint.y))).setDepth(3);
         this.player.body.setCollideWorldBounds(true);
         this.aim = this.add.existing(new Crosshair(this, this.player.getCenter(), this.physics.world.bounds)).setDepth(8);
         this.player.on('zoneexit', () => this.player.setData('zoneoverlap', false), this);

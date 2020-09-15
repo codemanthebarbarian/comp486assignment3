@@ -101,6 +101,7 @@ class StoryScene extends Phaser.Scene {
             this.getAward(response.refund);
             this.getMod(response.mods);
             this.loadLine(response.next);
+            this.setWeapon(response.setweapon);
         };
         /**
          * Called when the pointer is down (item selected).
@@ -150,16 +151,19 @@ class StoryScene extends Phaser.Scene {
         if(award.cash) this.inventory.addCash(award.cash);
         if(award.tickets) this.inventory.addTickets(award.tickets);
         if(award.tokens) this.inventory.addTokens(award.tokens);
-        if(award.weapon) this.inventory.addWeapon(award.weapon);
+        if(award.weapon) {
+            this.inventory.addWeapon(award.weapon);
+            this.inventory.setActiveWeapon(award.weapon[0]);
+        }
     }
 
     /**
      * Adds the weapon or weapons to the player's inventory.
      * @param weapons the weapons to add, should be string or string array
      */
-    getWeapon(weapons) {
-        if(!weapons) return;
-        this.inventory.addWeapon(weapons);
+    setWeapon(weapon) {
+        if(!weapon) return;
+        this.inventory.setActiveWeapon(weapon);
     }
 
     /**

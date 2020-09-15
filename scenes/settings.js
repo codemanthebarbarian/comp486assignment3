@@ -191,7 +191,7 @@ class SettingsScene extends Phaser.Scene {
 
             let showHelp = function() {
                 this.scene.sleep();
-                this.scene.run('help', { help: "main" });
+                this.scene.run('help', { help: "main", caller: 'settings' });
             };
 
             /**

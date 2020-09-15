@@ -1,0 +1,77 @@
+{
+  "name": "main",
+  "title": "Carnival",
+  "contents": [
+    {
+      "type": "text",
+      "item": [
+        "Hotkeys:",
+        "Press 'H' to access the help. (This screen)",
+        "Press 'P' to access game settings.",
+        "Press 'I' to access the player inventory.",
+        "",
+        "Player Movement:",
+        "Press 'A' or the left arrow to move left.",
+        "Press 'D' or the right arrow to move right.",
+        "Press 'W' or the up arrow to move up.",
+        "Press 'S' or the down arrow to move down.",
+        "Use combinations to move in diagonal directions.",
+        "",
+        "Mouse Movement:",
+        "Click in the direction away form the player to move in that direction.",
+        ""
+      ]
+    },
+    {
+      "type": "image",
+      "item": "carnival.jpg"
+    },
+    {
+      "type": "text",
+      "item": [
+        "",
+        "With the mouse, click above the player to move up (1).",
+        "Click below to move down (5).",
+        "Click left to move left (7).",
+        "Click right to move right (3)",
+        "Click diagonal to move diagonal direction (2, 4, 6, or 8).",
+        ""
+      ]
+    },
+    {
+      "type": "image",
+      "item": "carnivalAction.jpg"
+    },
+    {
+      "type": "text",
+      "item": [
+        "",
+        "To interact with a park element, just move close to it.",
+        "Click below to move down (5).",
+        "Click left to move left (7).",
+        "Click right to move right (3)",
+        "Click diagonal to move diagonal direction (2, 4, 6, or 8).",
+        ""
+      ]
+    },
+    {
+      "type": "image",
+      "item": "story.jpg"
+    },
+    {
+      "type": "text",
+      "item": [
+        "",
+        "To interact with a story:",
+        "Press 'S' or the down arrow to select the next response.",
+        "Press 'W' or the up arrow to select the previous response.",
+        "Press  the enter key to submit your response.",
+        "",
+        "A story will exit when there are no more responses. Just press the enter key to return to the previous screen.",
+        "",
+        "Alternately, use the mouse to click on a response to submit it.",
+        ""
+      ]
+    }
+  ]
+}

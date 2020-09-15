@@ -15,6 +15,9 @@ class Help extends Phaser.Scene {
             this.load.json('help', './assets/help/' + data.help + '.json');
         }
         this.load.image('help/carnival.jpg', './assets/help/carnival.jpg');
+        this.load.image('help/carnivalAction.jpg', './assets/help/carnivalAction.jpg');
+        this.load.image('help/story.jpg', './assets/help/story.jpg');
+        this.load.image('help/bumpercars.jpg', './assets/help/bumpercars.jpg');
     }
 
     create(){
@@ -69,7 +72,7 @@ class Help extends Phaser.Scene {
 
         let exit = function(){
             this.scene.stop();
-            this.scene.wake('settings');
+            this.scene.wake(this.scene.settings.data.caller);
         };
 
         let scrollUp = function() {

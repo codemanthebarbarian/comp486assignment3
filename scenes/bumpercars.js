@@ -113,6 +113,14 @@ class BumperCars extends Phaser.Scene {
         this.thrust = false;
 
         /**
+         * Shows the help screen for this scene
+         */
+        let showHelp = function() {
+            this.scene.sleep();
+            this.scene.run('help', { help: "bumpercars", caller: 'bumpercars' });
+        };
+
+        /**
          * The function which is called to exit the scene.
          */
         let exit = function(){
@@ -142,6 +150,7 @@ class BumperCars extends Phaser.Scene {
 
         this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT'); // we dont want to scroll the screen so capture keys
         this.input.keyboard.on('keydown-ESC', exit, this);
+        this.input.keyboard.on('keydown-H', showHelp, this);
         this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);

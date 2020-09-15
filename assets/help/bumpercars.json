@@ -1,0 +1,37 @@
+{
+  "name": "main",
+  "title": "Bumper Cars",
+  "contents": [
+    {
+      "type": "text",
+      "item": [
+        "Hotkeys:",
+        "Press 'H' to access the help. (This screen)",
+        "",
+        "Hitting other cars will score a hit. There will be a minute of play time and the ride will end.",
+        "",
+        "Player Movement:",
+        "Press 'A' or the left arrow to move left.",
+        "Press 'D' or the right arrow to move right.",
+        "Press 'W' or the up arrow to move forward.",
+        "",
+        "Mouse Movement:",
+        "The car will turn toward the mouse pointer.",
+        "Right click to move forward.",
+        ""
+      ]
+    },
+    {
+      "type": "image",
+      "item": "bumpercars.jpg"
+    },
+    {
+      "type": "text",
+      "item": [
+        "",
+        "At the end of the ride, you will earn tickets based on the number of hits.",
+        ""
+      ]
+    }
+  ]
+}

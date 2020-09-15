@@ -206,7 +206,7 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      * @param weapon the name of the weapon to set active.
      */
     setActiveWeapon(weapon) {
-        if(this.inv.weapons.find(w => w === weapon)) return;
+        if(!this.inv.weapons.find(w => w === weapon)) return;
         this.inv.weapon = weapon;
     }
 
@@ -215,7 +215,10 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
      * @param weapon an array of weapon names or a weapon name
      */
     addWeapon(weapon) {
-        if(Array.isArray(weapon)) weapon.forEach( w => this.addWeapon(w));
+        if(Array.isArray(weapon)) {
+            weapon.forEach( w => this.addWeapon(w));
+            return;
+        }
         if(this.inv.weapons.find(w => w === weapon)) return;
         this.inv.weapons.push(weapon);
     }

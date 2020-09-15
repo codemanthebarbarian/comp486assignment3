@@ -19,7 +19,7 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
                 {
                     name: "Shotgun",
                     fireRate: 1000,
-                    damage: 30,
+                    damage: 50,
                     range: 225,
                     velocity: 900,
                     mods: {}
