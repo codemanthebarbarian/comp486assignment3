@@ -391,6 +391,16 @@ class Cave extends Phaser.Scene {
         this.flip = false;
 
         /**
+         * Shows the help screen for this scene
+         */
+        let showHelp = function() {
+            this.scene.sleep();
+            this.scene.run('help', { help: "cave", caller: 'cave' });
+        };
+
+        this.input.keyboard.on('keydown-H', showHelp, this);
+
+        /**
          * Use the right handed keyboard layout. This will use the arrow keys for
          * target firing and WASD for movement.
          */

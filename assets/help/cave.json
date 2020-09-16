@@ -1,0 +1,54 @@
+{
+  "name": "main",
+  "title": "Cave",
+  "contents": [
+    {
+      "type": "text",
+      "item": [
+        "Hotkeys:",
+        "Press 'H' to access the help. (This screen)",
+        "",
+        "Travel the cave and kill they creatures.",
+        "",
+        "Player Movement: (right handed - left handed see below)",
+        "Press 'A' to move left.",
+        "Press 'D' to move right.",
+        "Press 'W' to move up.",
+        "Press 'S' to move down.",
+        "Press left arrow to move crosshairs clockwise.",
+        "Press right arrow to move crosshairs counter clockwise",
+        "Press up arrow to fire weapon.",
+        "",
+        "Mouse Movement:",
+        "The crosshairs will follow the mouse.",
+        "Right click to fire the gun.",
+        ""
+      ]
+    },
+    {
+      "type": "image",
+      "item": "cave.jpg"
+    },
+    {
+      "type": "text",
+      "item": [
+        "",
+        "Clear the map to get mods and upgrades.",
+        "",
+        "Player Movement: (left handed)",
+        "Press left arrow to move left.",
+        "Press right arrow to move right.",
+        "Press up arrow to move up.",
+        "Press dow arrow to move down.",
+        "Press 'A' to move crosshairs clockwise.",
+        "Press 'D' to move crosshairs counter clockwise",
+        "Press 'W' to fire weapon.",
+        "",
+        "Mouse Movement:",
+        "The crosshairs will follow the mouse.",
+        "Right click to fire the gun.",
+        ""
+      ]
+    }
+  ]
+}

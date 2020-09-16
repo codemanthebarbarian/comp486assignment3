@@ -19,6 +19,7 @@ class Help extends Phaser.Scene {
         this.load.image('help/story.jpg', './assets/help/story.jpg');
         this.load.image('help/bumpercars.jpg', './assets/help/bumpercars.jpg');
         this.load.image('help/shootinggallery.jpg', './assets/help/shootinggallery.jpg');
+        this.load.image('help/cave.jpg', './assets/help/cave.jpg');
     }
 
     create(){
@@ -88,6 +89,11 @@ class Help extends Phaser.Scene {
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.input.keyboard.on('keydown-DOWN', scrollDown, this);
         this.input.keyboard.on('keydown-UP', scrollUp, this);
+        this.input.keyboard.on('keydown-H', exit, this);
+        this.input.keyboard.on('keydown-S', scrollDown, this);
+        this.input.keyboard.on('keydown-w', scrollUp, this);
+        arrowUp.on('pointerdown', scrollUp, this);
+        arrowDown.on('pointerdown', scrollDown, this);
 
 
         zone.on('pointermove', function (pointer) {
