@@ -18,6 +18,7 @@ class Help extends Phaser.Scene {
         this.load.image('help/carnivalAction.jpg', './assets/help/carnivalAction.jpg');
         this.load.image('help/story.jpg', './assets/help/story.jpg');
         this.load.image('help/bumpercars.jpg', './assets/help/bumpercars.jpg');
+        this.load.image('help/shootinggallery.jpg', './assets/help/shootinggallery.jpg');
     }
 
     create(){

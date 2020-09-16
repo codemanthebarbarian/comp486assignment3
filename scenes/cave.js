@@ -89,6 +89,25 @@ class Cave extends Phaser.Scene {
             aim: 0        // aim direction
         }
 
+        /**
+         * move the player sprite.
+         */
+        let movePlayer = function(aimDir) {
+            let speed = this.player.stats.speed;
+            if(params.direction !== aimDir){
+                //Not moving and aiming in same direction so adjust speed
+                let diff = Math.abs(Math.min(Game.diffAngle(params.direction, aimDir),
+                                    Game.diffAngle(aimDir, params.direction)));
+                if(diff === 180) speed *= .2;    // walking backwards
+                else if (diff > 90) speed *= .3; // walking diagonal back
+                else if (diff > 45) speed *= .6; // walking sideways
+                else speed *= .8;                // walking diagonal forward
+            }
+            this.player.body.setVelocityX(speed * params.dirX);
+            this.player.body.setVelocityY(speed * params.dirY);
+            this.player.body.velocity.normalize().scale(speed);
+        };
+
         let calcDirection = function() {
             if(!params.dirX && !params.dirY) return params.direction = this.player.facing;
             if(params.dirY){
@@ -102,6 +121,15 @@ class Cave extends Phaser.Scene {
                 // we are facing left or right
                 params.direction = params.dirX > 0 ? 0 : -180;
             }
+        };
+
+        let normalizeDirection = function(dir) {
+            let d = Math.abs(dir);
+            let result = 0;
+            if(d > 157.5) result = 180;
+            else if(d > 67.5) result = 90;
+            if(dir < 0) result *= -1;
+            return result;
         };
 
         let doCollideDamage = function(){
@@ -132,13 +160,17 @@ class Cave extends Phaser.Scene {
             this.exitText.emit('zoneexit');
         }
         this.handleInput(params);
+        //movePlayer.bind(this)();
         let ctr = this.player.getCenter();
         this.visible.setPosition(ctr.x, ctr.y);
         this.lastFire += delta;
         calcDirection.bind(this)();
-        this.player.setAnimation(params.isWalking, params.direction);
-        doCollideDamage.bind(this)();
         this.aim.update(ctr, this.player.facing, params.aim, updateLine.bind(this)());
+        let aimDir = normalizeDirection(this.aim.direction);
+        movePlayer.bind(this)(aimDir);
+        this.player.setAnimation(params.isWalking, aimDir);  // params.direction);
+        doCollideDamage.bind(this)();
+        //this.aim.update(ctr, this.player.facing, params.aim, updateLine.bind(this)());
         var inRange = this.physics.overlapCirc(this.visible.x, this.visible.y, this.visible.radius, true, true);
         inRange.forEach(body => {
             let go = body.gameObject;
@@ -353,37 +385,34 @@ class Cave extends Phaser.Scene {
             this.pointer.y = pointer.worldY;
         }, this);
         this.fire = false;
+        this.flip = false;
 
         /**
          * Use the right handed keyboard layout. This will use the arrow keys for
          * target firing and WASD for movement.
          */
         let righty = function(params) {
-            let speed = this.player.stats.speed;
+
             this.fire = this.input.activePointer.isDown || this.cursors.up.isDown;
             if(this.cursors.left.isDown) params.aim = -1;
             if(this.cursors.right.isDown) params.aim = 1;
+            if(this.cursors.down.isDown) this.flip = true;
 
             if (this.W.isDown) {
                 params.dirY = -1;
                 params.isWalking = 1;
-                this.player.body.setVelocityY(-speed);
             } else if (this.S.isDown) {
                 params.dirY = 1;
                 params.isWalking = 1;
-                this.player.body.setVelocityY(speed);
             } else this.player.body.setVelocityY(0);
 
             if (this.A.isDown) {
                 params.isWalking = 1;
                 params.dirX = -1;
-                this.player.body.setVelocityX(-speed);
             } else if (this.D.isDown) {
                 params.isWalking = 1;
                 params.dirX = 1;
-                this.player.body.setVelocityX(speed);
             } else this.player.body.setVelocityX(0);
-            this.player.body.velocity.normalize().scale(speed);
         };
 
         /**
@@ -391,31 +420,27 @@ class Cave extends Phaser.Scene {
          * target firing and WASD for movement.
          */
         let lefty = function(params) {
-            let speed = this.player.stats.speed;
+
             this.fire = this.input.activePointer.isDown || this.W.isDown;
             if(this.A.isDown) params.aim = -1;
             if(this.D.isDown) params.aim = 1;
+            if(this.S.isDown) this.flip = true;
 
             if (this.cursors.up.isDown) {
                 params.dirY = -1;
                 params.isWalking = 1;
-                this.player.body.setVelocityY(-speed);
             } else if (this.cursors.down.isDown) {
                 params.dirY = 1;
                 params.isWalking = 1;
-                this.player.body.setVelocityY(speed);
             } else this.player.body.setVelocityY(0);
 
             if (this.cursors.left.isDown) {
                 params.isWalking = 1;
                 params.dirX = -1;
-                this.player.body.setVelocityX(-speed);
             } else if (this.cursors.right.isDown) {
                 params.isWalking = 1;
                 params.dirX = 1;
-                this.player.body.setVelocityX(speed);
             } else this.player.body.setVelocityX(0);
-            this.player.body.velocity.normalize().scale(speed);
         };
 
         this.handleInput = this.settings.isRightHanded() ? righty : lefty;

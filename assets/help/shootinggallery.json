@@ -1,0 +1,39 @@
+{
+  "name": "main",
+  "title": "Bumper Cars",
+  "contents": [
+    {
+      "type": "text",
+      "item": [
+        "Hotkeys:",
+        "Press 'H' to access the help. (This screen)",
+        "",
+        "Hitting a target will score a hit. The game will end after the 25 shots are used up.",
+        "",
+        "Player Movement:",
+        "Press 'A' or the left arrow to move the corsshairs left.",
+        "Press 'D' or the right arrow to move the crosshairs right.",
+        "Press 'W' or the up arrow to move the crosshairs up.",
+        "Press 'S' or the down arrow to move the crosshairs down.",
+        "",
+        "Mouse Movement:",
+        "The crosshairs will follow the mouse.",
+        "Right click to fire the gun.",
+        ""
+      ]
+    },
+    {
+      "type": "image",
+      "item": "shootinggallery.jpg"
+    },
+    {
+      "type": "text",
+      "item": [
+        "",
+        "You will get 2 points for the ducks in the back row. 1 point for other targets.",
+        "Based on how well you did, you could win some prizes.",
+        ""
+      ]
+    }
+  ]
+}

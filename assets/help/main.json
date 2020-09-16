@@ -13,7 +13,21 @@
                 "Reset Game will erase all game progress and inventory items setting them back to default values.",
                 "The settings scree is also available from the main game (carnival screen) by pressing the P key.",
                 "",
-                "To move around the carnival, the arrow keys can be used to move in different directions. Just press and hold the arrow key to move in that direction. The mouse can also be used to move. Just place the mouse cursor in away from the player in the direction you wish to move and press the mouse button move. If the mouse is in the area of where the 1 is on the screen, the player would move up. 2 is diagonal and up, 3 is right, 4 is right and down, 5 is down, 6 is left and down, 7 is left and 8 would be up and left. If a touch screen is used, tapping on the areas similar to where the mouse would be used to move will move the player in the desired direction.",
+                "Carnival Screen",
+                "Hotkeys:",
+                "Press 'H' to access the help. (This screen)",
+                "Press 'P' to access game settings.",
+                "Press 'I' to access the player inventory.",
+                "",
+                "Player Movement:",
+                "Press 'A' or the left arrow to move left.",
+                "Press 'D' or the right arrow to move right.",
+                "Press 'W' or the up arrow to move up.",
+                "Press 'S' or the down arrow to move down.",
+                "Use combinations to move in diagonal directions.",
+                "",
+                "Mouse Movement:",
+                "Click in the direction away form the player to move in that direction.",
                 ""
             ]
         },
@@ -25,7 +39,116 @@
             "type": "text",
             "item": [
                 "",
-                "Some Text",
+                "With the mouse, click above the player to move up (1).",
+                "Click below to move down (5).",
+                "Click left to move left (7).",
+                "Click right to move right (3)",
+                "Click diagonal to move diagonal direction (2, 4, 6, or 8).",
+                ""
+            ]
+        },
+        {
+            "type": "image",
+            "item": "carnivalAction.jpg"
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "To interact with a park element, just move close to it.",
+                "Click below to move down (5).",
+                "Click left to move left (7).",
+                "Click right to move right (3)",
+                "Click diagonal to move diagonal direction (2, 4, 6, or 8).",
+                ""
+            ]
+        },
+        {
+            "type": "image",
+            "item": "story.jpg"
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "To interact with a story:",
+                "Press 'S' or the down arrow to select the next response.",
+                "Press 'W' or the up arrow to select the previous response.",
+                "Press  the enter key to submit your response.",
+                "",
+                "A story will exit when there are no more responses. Just press the enter key to return to the previous screen.",
+                "",
+                "Alternately, use the mouse to click on a response to submit it.",
+                ""
+            ]
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "Bumper Cars Ride",
+                "",
+                "Hotkeys:",
+                "Press 'H' to access the help. (This screen)",
+                "",
+                "Hitting other cars will score a hit. There will be a minute of play time and the ride will end.",
+                "",
+                "Player Movement:",
+                "Press 'A' or the left arrow to move left.",
+                "Press 'D' or the right arrow to move right.",
+                "Press 'W' or the up arrow to move forward.",
+                "",
+                "Mouse Movement:",
+                "The car will turn toward the mouse pointer.",
+                "Right click to move forward.",
+                ""
+            ]
+        },
+        {
+            "type": "image",
+            "item": "bumpercars.jpg"
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "At the end of the ride, you will earn tickets based on the number of hits.",
+                ""
+            ]
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "Shooting Gallery Game",
+                "",
+                "Hotkeys:",
+                "Press 'H' to access the help. (This screen)",
+                "",
+                "Hitting a target will score a hit. The game will end after the 25 shots are used up.",
+                "",
+                "Player Movement:",
+                "Press 'A' or the left arrow to move the corsshairs left.",
+                "Press 'D' or the right arrow to move the crosshairs right.",
+                "Press 'W' or the up arrow to move the crosshairs up.",
+                "Press 'S' or the down arrow to move the crosshairs down.",
+                "",
+                "Mouse Movement:",
+                "The crosshairs will follow the mouse.",
+                "Right click to fire the gun.",
+                ""
+            ]
+        },
+        {
+            "type": "image",
+            "item": "shootinggallery.jpg"
+        },
+        {
+            "type": "text",
+            "item": [
+                "",
+                "You will get 2 points for the ducks in the back row. 1 point for other targets.",
+                "Based on how well you did, you could win some prizes.",
                 ""
             ]
         }

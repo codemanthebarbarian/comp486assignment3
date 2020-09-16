@@ -71,6 +71,14 @@ class ShootingGallery extends Phaser.Scene {
 
         let speed = 5; //The speed which the crosshairs will move
 
+        /**
+         * Shows the help screen for this scene
+         */
+        let showHelp = function() {
+            this.scene.sleep();
+            this.scene.run('help', { help: "shootinggallery", caller: 'shootinggallery' });
+        };
+
         let exit = function() {
             this.music.stop();
             this.scene.stop();
@@ -107,6 +115,7 @@ class ShootingGallery extends Phaser.Scene {
             this.input.keyboard.on('keyup-DOWN', stopY, this);
             this.input.keyboard.on('keyup-S', stopY, this);
             this.input.keyboard.on('keydown-SPACE', this.shoot, this);
+            this.input.keyboard.on('keydown-H', showHelp, this);
         };
 
         /**

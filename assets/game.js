@@ -34,6 +34,21 @@ class Stats {
 
 }
 
+const Game = {
+    diffAngle: function(a, b) {
+        let diff = Game.to360(a) - Game.to360(b);
+        if (diff < -180) diff += 360;
+        if (diff > 180) diff -= 360;
+        return diff;
+    },
+    to360: function(angle) {
+        if(angle < 0) {
+            return 360 + angle;
+        }
+        return angle;
+    }
+}
+
 /**
  * A class representing weapon statistics used in game calculations.
  */
@@ -171,11 +186,11 @@ class Player extends Phaser.GameObjects.Container {
      */
     setAnimation(isWalking, direction){
         this.isWalking = isWalking;
-        if(!isWalking) {
-            //not walking, so we've stopped just face previous direction
-            //or keep facing in same direction
-            this.currentAnimation = this.currentAnimation.replace('walk-', '');
-        } else if (direction !== this.facing) {
+        // if(!isWalking) {
+        //     //not walking, so we've stopped just face previous direction
+        //     //or keep facing in same direction
+        //     this.currentAnimation = this.currentAnimation.replace('walk-', '');
+        // } else if (direction !== this.facing) {
             // there has been a change in direction
             let absDir = Math.abs(direction);
             if (absDir % 90) {
@@ -189,7 +204,9 @@ class Player extends Phaser.GameObjects.Container {
                 else if (direction < 0) this.currentAnimation = 'walk-up';
                 else this.currentAnimation = 'walk-down';
             }
-        }
+        // }
+
+        if(!isWalking) this.currentAnimation = this.currentAnimation.replace('walk-', '');
         this.isWalking = isWalking;
         this.facing = direction;
         this.sprite.anims.play(this.currentAnimation, true);
@@ -344,35 +361,35 @@ class Crosshair extends Phaser.GameObjects.Image {
             else if(this.direction < -180) this.direction += 360;
 
             //get our acceptable range
-            let swath = 80; // max degrees left of right of players facing direction
-            let max = playerFacing + swath;
-            let min = playerFacing - swath;
+            // let swath = 80; // max degrees left of right of players facing direction
+            // let max = playerFacing + swath;
+            // let min = playerFacing - swath;
+            //
+            // // normalize the min and max
+            // if(min >= 180) min += -360;
+            // if(min < -180) min += 360;
+            // if(max >= 180) max += -360;
+            // if(max < -180) max += 360;
 
-            // normalize the min and max
-            if(min >= 180) min += -360;
-            if(min < -180) min += 360;
-            if(max >= 180) max += -360;
-            if(max < -180) max += 360;
 
-
-            if (min > max) {
-                if(this.direction >= min) return;
-                if(this.direction <= max) return;
-                if(this.direction < 0) this.direction = max; //closer to the max
-                else this.direction = min;
-            } else {
-                if(this.direction < min) this.direction = min;
-                if(this.direction > max) this.direction = max;
-            }
+            // if (min > max) {
+            //     if(this.direction >= min) return;
+            //     if(this.direction <= max) return;
+            //     if(this.direction < 0) this.direction = max; //closer to the max
+            //     else this.direction = min;
+            // } else {
+            //     if(this.direction < min) this.direction = min;
+            //     if(this.direction > max) this.direction = max;
+            // }
         };
 
         if(line) {
             this.direction = Phaser.Math.RadToDeg(Phaser.Geom.Line.Angle(line));
-            constrain.bind(this)();
+           constrain.bind(this)();
         } else if(direction){
-            if(reverse) direction *= -1; //flip if reversed
+            //if(reverse) direction *= -1; //flip if reversed
             this.direction += direction > 0 ? 1.7 : -1.7;
-            constrain.bind(this)();
+           constrain.bind(this)();
         }
 
         this.limit.setPosition(vectorPlayer.x, vectorPlayer.y);
