@@ -63,7 +63,7 @@ class Weapon {
      */
     constructor(damage, fireRate, range, velocity) {
         this.baseDamage = damage;
-        this.fireRate = fireRate;
+        this.baseFireRate = fireRate;
         this.baseRange = range;
         this.baseVelocity = velocity;
         this.level = 1;
@@ -78,7 +78,7 @@ class Weapon {
      */
     reset() {
         this.damage = this.baseDamage;
-        this.fireRate = this.fireRate;
+        this.fireRate = this.baseFireRate;
         this.range = this.baseRange;
         this.velocity = this.baseVelocity;
     }
@@ -90,18 +90,19 @@ class Weapon {
  */
 class Player extends Phaser.GameObjects.Container {
 
-    constructor(scene, x, y) {
+    constructor(scene, x, y, health, speed) {
         super(scene, x, y);
         this.currentAnimation = 'down';
         this.setSize(20,25,true);
         this.setDataEnabled();
         this.isWalking = false;
         this.facing = 90;
-        this.stats = new Stats(100, 75);
+        this.stats = new Stats(health, speed);
         this.sprite = scene.add.sprite(0,0, 'guy');
+        this.barWidth = health / 3;
         if(! scene.textures.exists('hitbar')) {
-            let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, 32, 6);
-            graphics.generateTexture('hitbar', 32, 6);
+            let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, this.barWidth, 6);
+            graphics.generateTexture('hitbar', this.barWidth, 6);
             graphics.destroy();
         }
         this.hp = scene.add.image(0, -20, 'hitbar').setDepth(6);
@@ -174,7 +175,7 @@ class Player extends Phaser.GameObjects.Container {
      */
     registerHit(damage) {
         this.stats.hitPoints -= damage;
-        let width = (this.stats.hitPoints / this.stats.baseHitPoints) * 32;
+        let width = (this.stats.hitPoints / this.stats.baseHitPoints) * this.barWidth;
         this.hp.setDisplaySize( width, 6);
         return this.stats.hitPoints <= 0;
     }
@@ -186,6 +187,7 @@ class Player extends Phaser.GameObjects.Container {
      */
     setAnimation(isWalking, direction){
         this.isWalking = isWalking;
+        //This commented code if from prior to walking backward..
         // if(!isWalking) {
         //     //not walking, so we've stopped just face previous direction
         //     //or keep facing in same direction

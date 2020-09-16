@@ -87,7 +87,7 @@
       ]
     },
     {
-      "name": "cleared",
+      "name": "clearedeven",
       "script": [
         {
           "character": "Construction Foreman",
@@ -128,6 +128,46 @@
           "idx": 3,
           "character": "Construction Foreman",
           "line": "\"This should speed things up a little.\""
+        }
+      ]
+    },
+    {
+      "name": "clearedodd",
+      "script": [
+        {
+          "idx": 0,
+          "character": "Construction Foreman",
+          "line": [
+            "\"Thanks for your help.",
+            "For nextime, I can offer you a little boost.",
+            "I can help you move around faster, or give you a little more protection.\""
+          ],
+          "responses": [
+            {
+              "response": "\"I think speed should help.\"",
+              "next": 1,
+              "boost": {
+                "speed": 5
+              }
+            },
+            {
+              "response": "\"I think protection should help.\"",
+              "next": 2,
+              "boost": {
+                "hitpoints": 5
+              }
+            }
+          ]
+        },
+        {
+          "idx": 1,
+          "character": "Construction Foreman",
+          "line": "\"Here you go, this speed you up a little.\""
+        },
+        {
+          "idx": 2,
+          "character": "Construction Foreman",
+          "line": "\"This should help you take a few more hits.\""
         }
       ]
     }

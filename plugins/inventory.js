@@ -224,6 +224,38 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
     }
 
     /**
+     * Increases the player's speed by the amount provided
+     * @param speed
+     */
+    addSpeed(speed) {
+        this.inv.speed += speed;
+    }
+
+    /**
+     * Gets the player's speed
+     * @return {number|{min: number, max: number}}
+     */
+    getSpeed() {
+        return this.inv.speed;
+    }
+
+    /**
+     * Increases the player's hit points by the provided amount
+     * @param hp
+     */
+    addHitPoints(hp){
+        this.inv.hp += hp;
+    }
+
+    /**
+     * Gets the player's hit points
+     * @return {number}
+     */
+    getHitPoints() {
+        return this.inv.hp;
+    }
+
+    /**
      * Resets the player's inventory to the defaults.
      */
     reset(){

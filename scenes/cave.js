@@ -185,7 +185,8 @@ class Cave extends Phaser.Scene {
     exit() {
         let remaining = this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length;
         if(!remaining) this.quests.setState('caveLevel', ++this.level);
-        this.quests.setState('caveexit', remaining ? 'unfinished' : 'cleared');
+        let cleared = this.level % 2 === 0 ? 'clearedeven' : 'clearedodd';
+        this.quests.setState('caveexit', remaining ? 'unfinished' : cleared);
         if(this.level === 3) this.quests.setState('caveentrance', 'SHOTGUN');
         if(this.level === 5) this.quests.setState('caveentrance', 'MACHINEGUN');
         this.quests.save();
@@ -339,7 +340,9 @@ class Cave extends Phaser.Scene {
     initialzePlayer() {
         this.hasCollideDamage = 0; // the number of enemy objects colliding with the player
         let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'player', this);
-        this.player = this.physics.add.existing(this.add.existing(new Player(this, spawnPoint.x, spawnPoint.y))).setDepth(3);
+        this.player = this.physics.add.existing(this.add.existing(
+            new Player(this, spawnPoint.x, spawnPoint.y, this.inventory.getHitPoints(), this.inventory.getSpeed()))
+        ).setDepth(3);
         this.player.body.setCollideWorldBounds(true);
         this.aim = this.add.existing(new Crosshair(this, this.player.getCenter(), this.physics.world.bounds)).setDepth(8);
         this.player.on('zoneexit', () => this.player.setData('zoneoverlap', false), this);
@@ -394,8 +397,8 @@ class Cave extends Phaser.Scene {
         let righty = function(params) {
 
             this.fire = this.input.activePointer.isDown || this.cursors.up.isDown;
-            if(this.cursors.left.isDown) params.aim = -1;
-            if(this.cursors.right.isDown) params.aim = 1;
+            if(this.cursors.left.isDown) params.aim = 1;
+            if(this.cursors.right.isDown) params.aim = -1;
             if(this.cursors.down.isDown) this.flip = true;
 
             if (this.W.isDown) {
@@ -422,8 +425,8 @@ class Cave extends Phaser.Scene {
         let lefty = function(params) {
 
             this.fire = this.input.activePointer.isDown || this.W.isDown;
-            if(this.A.isDown) params.aim = -1;
-            if(this.D.isDown) params.aim = 1;
+            if(this.A.isDown) params.aim = 1;
+            if(this.D.isDown) params.aim = -1;
             if(this.S.isDown) this.flip = true;
 
             if (this.cursors.up.isDown) {

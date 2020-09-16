@@ -102,6 +102,7 @@ class StoryScene extends Phaser.Scene {
             this.getMod(response.mods);
             this.loadLine(response.next);
             this.setWeapon(response.setweapon);
+            this.addBoost(response.boost);
         };
         /**
          * Called when the pointer is down (item selected).
@@ -155,6 +156,7 @@ class StoryScene extends Phaser.Scene {
             this.inventory.addWeapon(award.weapon);
             this.inventory.setActiveWeapon(award.weapon[0]);
         }
+        this.inventory.save();
     }
 
     /**
@@ -164,6 +166,16 @@ class StoryScene extends Phaser.Scene {
     setWeapon(weapon) {
         if(!weapon) return;
         this.inventory.setActiveWeapon(weapon);
+    }
+
+    /**
+     * Adds the boost to the player's stats.
+     * @param boost
+     */
+    addBoost(boost) {
+        if(!boost) return;
+        if(boost.hitpoints) this.inventory.addHitPoints(boost.hitpoints);
+        if(boost.speed) this.inventory.addSpeed(boost.speed);
     }
 
     /**
