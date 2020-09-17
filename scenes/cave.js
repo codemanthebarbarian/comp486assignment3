@@ -1,5 +1,6 @@
 /**
  * Represents a cave level in the game
+ * NEW FOR ASSIGNMENT 3
  */
 class Cave extends Phaser.Scene {
     /**
@@ -77,6 +78,7 @@ class Cave extends Phaser.Scene {
 
         /**
          * Tries to fire the weapon.
+         * Only fire if reloaded (weapon fire rate)
          */
         let tryFire = function () {
             if (this.lastFire < this.weapon.fireRate) return;
@@ -114,6 +116,9 @@ class Cave extends Phaser.Scene {
             this.player.body.velocity.normalize().scale(speed);
         };
 
+        /**
+         * Calculate the direction the player is moving
+         */
         let calcDirection = function() {
             if(!params.dirX && !params.dirY) return params.direction = this.player.facing;
             if(params.dirY){
@@ -129,6 +134,10 @@ class Cave extends Phaser.Scene {
             }
         };
 
+        /**
+         * Normalize the direction to an 45 degree increment
+         * @param {*} dir 
+         */
         let normalizeDirection = function(dir) {
             let d = Math.abs(dir);
             let result = 0;
@@ -138,8 +147,12 @@ class Cave extends Phaser.Scene {
             return result;
         };
 
+        /**
+         * Register damage to the player from enemy touching
+         */
         let doCollideDamage = function(){
             if(! this.hasCollideDamage) return;
+            // calc damage based on framerate
             let damage = this.hasCollideDamage * ( delta / 1000);
             let isDone = this.player.registerHit(damage);
             this.hasCollideDamage = 0;
@@ -174,9 +187,11 @@ class Cave extends Phaser.Scene {
         this.aim.update(ctr, this.player.facing, params.aim, updateLine.bind(this)());
         let aimDir = normalizeDirection(this.aim.direction);
         movePlayer.bind(this)(aimDir);
+        // set the player animation based on aim direction
         this.player.setAnimation(params.isWalking, aimDir);  // params.direction);
         doCollideDamage.bind(this)();
         //this.aim.update(ctr, this.player.facing, params.aim, updateLine.bind(this)());
+        //make inrange enemies attack
         var inRange = this.physics.overlapCirc(this.visible.x, this.visible.y, this.visible.radius, true, true);
         inRange.forEach(body => {
             let go = body.gameObject;
@@ -189,8 +204,10 @@ class Cave extends Phaser.Scene {
      * The function which is called to exit the scene.
      */
     exit() {
+        // only increase if we've cleared the enemies
         let remaining = this.enemies.children.entries.filter( e => e.stats.hitPoints > 0).length;
         if(!remaining) this.quests.setState('caveLevel', ++this.level);
+        // set the end state for mods and upgrades, but only if level is cleared
         let cleared = this.level % 2 === 0 ? 'clearedeven' : 'clearedodd';
         this.quests.setState('caveexit', remaining ? 'unfinished' : cleared);
         if(this.level === 3) this.quests.setState('caveentrance', 'SHOTGUN');
@@ -202,6 +219,11 @@ class Cave extends Phaser.Scene {
         //this.scene.wake('caveexit', { exit: 'cave' });
     };
 
+    /**
+     * Actions to perform is enemy is hit
+     * @param {*} bullet 
+     * @param {*} enemy 
+     */
     onHitEnemy(bullet, enemy) {
         if(!bullet.active || !enemy.active) return;
         let isKilled = enemy.registerHit(this.weapon.damage);
@@ -209,6 +231,7 @@ class Cave extends Phaser.Scene {
             ++this.kills;
             this.score.setText('Kills: ' + this.kills);
         }
+        // blood splatter
         this.emitter.setAngle(bullet.body.gameObject.angle);
         this.particles.emitParticleAt(enemy.x, enemy.y);
         bullet.recycle();
@@ -219,6 +242,9 @@ class Cave extends Phaser.Scene {
         this.hasCollideDamage += damage;
     }
 
+    /**
+     * build the map
+     */
     initializeMap() {
         this.map = this.make.tilemap({ key: 'cavemap' });
         let tilesCave = this.map.addTilesetImage('cavern_ruins', 'caveset');
@@ -237,12 +263,17 @@ class Cave extends Phaser.Scene {
         this.physics.world.setBounds(0, 0,  this.map.widthInPixels, this.map.heightInPixels);
     }
 
+    /**
+     * build the enemies in the map
+     */
     initializeEnemy() {
 
 
         let initializeBats = function() {
+            // mob size based on level
             let mobSize = 5 + (this.level * 3);
             let items = [];
+            //Get the spawn points for the map and put random enemies
             let spawnPoints = this.mapObjects.objects.filter(o => o.name.includes('spawn'));
             spawnPoints.forEach( spawn => {
                 let rect = new Phaser.Geom.Rectangle(spawn.x, spawn.y, spawn.width, spawn.height);
@@ -253,6 +284,7 @@ class Cave extends Phaser.Scene {
                     ));
                 }
             }, this);
+            // register the enemies in the arcade physics
             this.enemies = this.physics.add.group({
                 allowRotation: false,
                 collideWorldBounds: true
@@ -262,7 +294,7 @@ class Cave extends Phaser.Scene {
                 bat.setDepth(5);
                 bat.sprite.anims.play('bat-down');
             } );
-            this.enemies.runChildUpdate = false;
+            this.enemies.runChildUpdate = false; // dont automatically run update method in enemies
             this.physics.add.collider(this.enemies, this.top, null, null, this);
             this.physics.add.collider(this.enemies, this.wallMid, null, null, this);
             this.physics.add.collider(this.enemies, this.wallBottom, null, null, this);
@@ -271,16 +303,22 @@ class Cave extends Phaser.Scene {
         initializeBats.bind(this)();
 
         this.physics.add.collider(this.enemies);
+        // register collision damage with player
         this.physics.add.collider(this.player, this.enemies, (bodyA, bodyB) => {
             let damage = bodyB.stats.damage;
             this.onPlayerCollide(damage);
         }, null, this);
     }
 
+    /**
+     * Setup the player's weapon.
+     */
     initializeWeapon() {
-
+        
+        // get the players active weapon
         this.weapon = this.weapons.getModdedWeapons(this.weapons.get(this.inventory.getActiveWeapon()));
 
+        // create a cache of bullets 
         let initializeBullets = function() {
             let items = [];
             for(let i = 0 ; i < 50 ; ++i){
@@ -298,6 +336,7 @@ class Cave extends Phaser.Scene {
             this.bullets.runChildUpdate = true;
         };
 
+        // destroy bullets if outside map
         let onMapCollideHandler = function(bullet, bodyB){
             let bulletGameObject = bullet.gameObject;
             if(bullet.recycle) bullet.recycle()
@@ -305,7 +344,7 @@ class Cave extends Phaser.Scene {
         }
 
         /**
-         * fire a single projectile
+         * fire a single projectile (single shot algorithm)
          */
         let fireSingle = function() {
             let bullet = this.bullets.get();
@@ -317,7 +356,7 @@ class Cave extends Phaser.Scene {
         };
 
         /**
-         * fire a single projectile
+         * fire a multiple projectile (shotgun)
          */
         let fireScatter = function() {
             if(this.shot) this.shot.play();
@@ -333,6 +372,7 @@ class Cave extends Phaser.Scene {
             }
         };
 
+        // setup specific weapon shooting an sounds
         if(this.weapon.name === 'Shotgun'){
             this.doFire = fireScatter;
             this.shot = this.sound.add('shotgun', { loop: false });
@@ -344,6 +384,7 @@ class Cave extends Phaser.Scene {
             this.doFire = fireSingle;
         }
 
+        // set bullet collision with map elements
         initializeBullets.bind(this)();
         this.physics.add.collider(this.bullets, this.wallBottom, onMapCollideHandler, null, this);
         this.physics.add.collider(this.bullets, this.top, onMapCollideHandler, null, this);
@@ -351,12 +392,17 @@ class Cave extends Phaser.Scene {
         this.physics.add.collider(this.bullets, this.itemsBottom, onMapCollideHandler, null, this);
         this.physics.add.collider(this.bullets, this.enemies, this.onHitEnemy, null, this);
 
+        // initialize reload
         this.lastFire = 0;
     }
 
+    /**
+     * setup the player
+     */
     initialzePlayer() {
         this.hasCollideDamage = 0; // the number of enemy objects colliding with the player
         let spawnPoint = this.mapObjects.objects.find((o) => o.name === 'player', this);
+        // Get player stats from the inventory
         this.player = this.physics.add.existing(this.add.existing(
             new Player(this, spawnPoint.x, spawnPoint.y, this.inventory.getHitPoints(), this.inventory.getSpeed()))
         ).setDepth(3);
@@ -387,6 +433,9 @@ class Cave extends Phaser.Scene {
         }, null, this);
     }
 
+    /**
+     * initialize the player's input (left or right handed)
+     */
     initializeInput() {
         //grab tin input keys
         this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT, SPACE');
@@ -446,8 +495,8 @@ class Cave extends Phaser.Scene {
         };
 
         /**
-         * Use the right handed keyboard layout. This will use the arrow keys for
-         * target firing and WASD for movement.
+         * Use the left handed keyboard layout. This will use the AWD keys for
+         * target firing and arrow keys for movement.
          */
         let lefty = function(params) {
 
@@ -473,6 +522,7 @@ class Cave extends Phaser.Scene {
             } else this.player.body.setVelocityX(0);
         };
 
+        // set input method from settings
         this.handleInput = this.settings.isRightHanded() ? righty : lefty;
     }
 }

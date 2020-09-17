@@ -57,6 +57,8 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
         return this.vals.debug;
     }
 
+    // NEW FOR ASSIGNMENT 3
+
     /**
      * Is the player set for right handed.
      * @return {boolean} true if righty otherwise lefty
@@ -72,6 +74,8 @@ class SettingsRepo extends Phaser.Plugins.BasePlugin {
     toggleHanded() {
         return this.vals.rightHanded = !this.vals.rightHanded;
     }
+
+    // end NEW FOR ASSIGNMENT 3
 
     /**
      * Toggle the game to and from debug mode.

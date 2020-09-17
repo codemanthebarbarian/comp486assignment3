@@ -1,5 +1,7 @@
 /**
  * A scene to display help text.
+ * 
+ * NEW FOR ASSIGNMENT 3
  */
 class Help extends Phaser.Scene {
 
@@ -7,6 +9,9 @@ class Help extends Phaser.Scene {
         super('help');
     }
 
+    /**
+     * load the assets used in the help files
+     */
     preload() {
         let data = this.scene.settings.data;
         let help = this.cache.json.get('help');
@@ -22,6 +27,9 @@ class Help extends Phaser.Scene {
         this.load.image('help/cave.jpg', './assets/help/cave.jpg');
     }
 
+    /**
+     * initialize the help
+     */
     create(){
 
         let help = this.cache.json.get('help');
@@ -30,6 +38,7 @@ class Help extends Phaser.Scene {
         graphics.fillRect(100, 100, 760, 440);
         let mask = new Phaser.Display.Masks.GeometryMask(this, graphics);
 
+        //Set the scrolling area for the help file
         let buildContainer = function() {
 
             let y = 0;
@@ -54,6 +63,7 @@ class Help extends Phaser.Scene {
             }, this)
         }
 
+        // load scroll arrows
         let arrowUp = this.add.image(885, 125, 'icons', 'arrowUp.png').setTint(0x00ff00).setInteractive();
         let arrowDown = this.add.image(885, 515, 'icons', 'arrowDown.png').setTint(0x00ff00).setInteractive();
 
@@ -62,6 +72,7 @@ class Help extends Phaser.Scene {
         //     //.setOrigin(0);
         buildContainer.bind(this)();
 
+        // calculate the scrolling bounds
         let bounds = container.getBounds();
         let yMin = 100 - (bounds.height - 440);
         if (yMin > 100) yMin = 100;
@@ -77,6 +88,7 @@ class Help extends Phaser.Scene {
             this.scene.wake(this.scene.settings.data.caller);
         };
 
+        // help scrolling functions
         let scrollUp = function() {
             container.y = Phaser.Math.Clamp((container.y += 25), yMin, yMax);
         };
@@ -85,6 +97,7 @@ class Help extends Phaser.Scene {
             container.y = Phaser.Math.Clamp((container.y -= 25), yMin, yMax);
         };
 
+        // User input
         this.input.keyboard.addCapture('UP,DOWN');
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.input.keyboard.on('keydown-DOWN', scrollDown, this);
@@ -95,7 +108,7 @@ class Help extends Phaser.Scene {
         arrowUp.on('pointerdown', scrollUp, this);
         arrowDown.on('pointerdown', scrollDown, this);
 
-
+        // drag scrolling
         zone.on('pointermove', function (pointer) {
 
             if (pointer.isDown)

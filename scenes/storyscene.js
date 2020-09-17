@@ -101,8 +101,8 @@ class StoryScene extends Phaser.Scene {
             this.getAward(response.refund);
             this.getMod(response.mods);
             this.loadLine(response.next);
-            this.setWeapon(response.setweapon);
-            this.addBoost(response.boost);
+            this.setWeapon(response.setweapon); // NEW FOR ASSIGNMENT 3
+            this.addBoost(response.boost);      // NEW FOR ASSIGNMENT 3
         };
         /**
          * Called when the pointer is down (item selected).
@@ -134,6 +134,7 @@ class StoryScene extends Phaser.Scene {
             this.highlight();
         };
         //bind the keyboard controls
+        // NEW FOR ASSIGNMENT 3 added WASD keys
         this.input.keyboard.on('keydown-ESC', exit, this);
         this.input.keyboard.on('keydown-DOWN', selectNext, this);
         this.input.keyboard.on('keydown-S', selectNext, this);
@@ -152,7 +153,7 @@ class StoryScene extends Phaser.Scene {
         if(award.cash) this.inventory.addCash(award.cash);
         if(award.tickets) this.inventory.addTickets(award.tickets);
         if(award.tokens) this.inventory.addTokens(award.tokens);
-        if(award.weapon) {
+        if(award.weapon) { // NEW FOR ASSIGNMENT 3
             this.inventory.addWeapon(award.weapon);
             this.inventory.setActiveWeapon(award.weapon[0]);
         }
@@ -162,6 +163,7 @@ class StoryScene extends Phaser.Scene {
     /**
      * Adds the weapon or weapons to the player's inventory.
      * @param weapons the weapons to add, should be string or string array
+     * NEW FOR ASSIGNMENT 3
      */
     setWeapon(weapon) {
         if(!weapon) return;
@@ -171,6 +173,7 @@ class StoryScene extends Phaser.Scene {
     /**
      * Adds the boost to the player's stats.
      * @param boost
+     * NEW FOR ASSIGNMENT 3
      */
     addBoost(boost) {
         if(!boost) return;
@@ -181,6 +184,7 @@ class StoryScene extends Phaser.Scene {
     /**
      * Adds the mods to the player's currently equipped weapon.
      * @param mods the mods to add to the weapon.
+     * NEW FOR ASSIGNMENT 3
      */
     getMod(mods) {
         if(!mods || !Array.isArray(mods)) return;

@@ -44,6 +44,7 @@ class SettingsScene extends Phaser.Scene {
             .setName('musicOff').setTint(0xFFEF00).setInteractive();
         let gameStateFmt = 'Game State: %1';
         let toggleBackgroundMusicTxt = 'Background Music:  %1';
+        //NEW FOR ASSIGNMENT 3
         let handedFmt = 'Handedness: %1';
         let graphics = this.add.graphics();
         graphics.lineStyle(1, 0xff0000, 1);
@@ -80,6 +81,7 @@ class SettingsScene extends Phaser.Scene {
             }
         };
 
+        //NEW FOR ASSIGNMENT 3
         let handedTxt = this.add.text(null, null,
             Phaser.Utils.String.Format(handedFmt,
                 [this.settings.isRightHanded() ? "Right" : "Left" ]),
@@ -90,6 +92,7 @@ class SettingsScene extends Phaser.Scene {
 
         /**
          * Toggles between right and left handed.
+         * NEW FOR ASSIGNMENT 3
          */
         let toggleHandedness = function() {
             handedTxt.setText(Phaser.Utils.String.Format(handedFmt,

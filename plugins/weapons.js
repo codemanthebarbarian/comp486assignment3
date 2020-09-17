@@ -1,5 +1,7 @@
 /**
  * A class representing the player's weapons
+ * 
+ * NEW FOR ASSIGNMENT 3
  */
 class WeaponsRepo extends Phaser.Plugins.BasePlugin {
 
@@ -48,6 +50,10 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
         return this.weapons.items.find(i => i.name === name);
     }
 
+    /**
+     * Gets the weapon with available mods installed.
+     * @param {*} weapon the weapon to mod
+     */
     getModdedWeapons(weapon) {
         let modded = {};
         modded.name = weapon.name;
@@ -58,6 +64,11 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
         return modded;
     }
 
+    /**
+     * Adds range (mod) available to the weapon
+     * @param {*} weapon the weapon name to mod
+     * @param {*} amt the amount of range to add in pixels
+     */
     addRange(weapon, amt) {
         let gun = this.weapons.items.find( w => w.name === weapon);
         if(gun) {
@@ -66,6 +77,11 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
         }
     }
 
+    /**
+     * Adds damage (mod) to the weapon.
+     * @param {*} weapon the weapon name to add the mod to
+     * @param {*} amt the amount of damage to add
+     */
     addDamage(weapon, amt) {
         let gun = this.weapons.items.find( w => w.name === weapon);
         if(gun) {
@@ -74,6 +90,11 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
         }
     }
 
+    /**
+     * Adds velocity (mod) to the weapon.
+     * @param {*} weapon the weapon name to mod
+     * @param {*} amt the amount of velocity to add (speed of projectile)
+     */
     addVelocity(weapon, amt) {
         let gun = this.weapons.items.find( w => w.name === weapon);
         if(gun) {
@@ -82,6 +103,11 @@ class WeaponsRepo extends Phaser.Plugins.BasePlugin {
         }
     }
     
+    /**
+     * Adds speed (reload mod) to the weapon
+     * @param {*} weapon the name of the weapon to mod
+     * @param {*} amt the time in milliseconds to decrease reload time
+     */
     addSpeed(weapon, amt) {
         let gun = this.weapons.items.find( w => w.name === weapon);
         if(gun) {

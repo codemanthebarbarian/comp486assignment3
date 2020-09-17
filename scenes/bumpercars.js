@@ -55,6 +55,7 @@ class BumperCars extends Phaser.Scene {
         // create a front bumper to detect hits.
         let bodies = Phaser.Physics.Matter.Matter.Bodies;
         let bodyMain = bodies.rectangle(33, 19, 65, 39);
+        // NEW FOR ASSIGNMENT 3
         let bodyFront = bodies.rectangle(63, 20, 3, 37, { isSensor: true, label: 'bumper' });
         let playerBody = Phaser.Physics.Matter.Matter.Body.create({
             parts: [bodyMain, bodyFront]
@@ -114,6 +115,7 @@ class BumperCars extends Phaser.Scene {
 
         /**
          * Shows the help screen for this scene
+         * NEW FOR ASSIGNMENT 3
          */
         let showHelp = function() {
             this.scene.sleep();
@@ -150,7 +152,7 @@ class BumperCars extends Phaser.Scene {
 
         this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT'); // we dont want to scroll the screen so capture keys
         this.input.keyboard.on('keydown-ESC', exit, this);
-        this.input.keyboard.on('keydown-H', showHelp, this);
+        this.input.keyboard.on('keydown-H', showHelp, this); //NEW FOR ASSIGNMENT 3
         this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
@@ -194,7 +196,7 @@ class BumperCars extends Phaser.Scene {
             if (pair.bodyA.gameObject !== this.player) return;
             this.hitSound.play();
             this.cameras.main.shake(250, .025);
-            if(pair.bodyA.isSensor) {
+            if(pair.bodyA.isSensor) { //NEW FOR ASSIGNMENT 3
                 // only record a hit if it's on the bumper
                 ++this.hits;
                 this.score.text = 'Hits: ' + this.hits;

@@ -73,6 +73,7 @@ class ShootingGallery extends Phaser.Scene {
 
         /**
          * Shows the help screen for this scene
+         * NEW FOR ASSIGNMENT 3
          */
         let showHelp = function() {
             this.scene.sleep();
@@ -95,7 +96,8 @@ class ShootingGallery extends Phaser.Scene {
         /**
          * Initializes the keyboard input for the player.
          */
-        let initializeKeyboard = function() {
+        let initializeKeyboard = function() { 
+            //NEW FOR ASSIGNMENT 3 added WASD keys
             this.input.keyboard.addCapture('UP, DOWN, LEFT, RIGHT, SPACE');
             this.input.keyboard.on('keydown-ESC', exit, this);
             this.input.keyboard.on('keydown-RIGHT', moveRight, this);
@@ -149,6 +151,7 @@ class ShootingGallery extends Phaser.Scene {
      */
     shoot(){
 
+        // NEW FOR ASSIGNMENT 3 - make duck disappear when hit
         let processMid = function(object1, object2) {
             if(object1.label !== 'shot_blue_small') {
                 this.ducksMid.splice(this.ducksMid.map(o => o.body.gameObject.name).indexOf(object1.gameObject.name), 1);
@@ -162,6 +165,7 @@ class ShootingGallery extends Phaser.Scene {
             return true;
         };
 
+        // NEW FOR ASSIGNMENT 3 - make duck disappear when hit
         let processBack = function(object1, object2) {
             if(object1.label !== 'shot_blue_small') {
                 this.ducksBack.splice(this.ducksBack.map(o => o.body.gameObject.name).indexOf(object2.gameObject.name), 1);
@@ -184,7 +188,7 @@ class ShootingGallery extends Phaser.Scene {
             else if(this.hits < 10) this.quests.setState(quest, 'default');
             else if(this.hits < 15) this.quests.setState(quest, 'Shooter');
             else if(this.hits < 20) this.quests.setState(quest, 'Deadeye');
-            else if(this.hits < 30) this.quests.setState(quest, 'Marksman');
+            else if(this.hits < 30) this.quests.setState(quest, 'Marksman'); // NEW FOR ASSIGNMENT 3 reward level based on points
             else this.quests.setState(quest, 'Sharpshooter');
             --this.shots;
             this.time.delayedCall(1500, () => {
@@ -221,6 +225,7 @@ class ShootingGallery extends Phaser.Scene {
         } else if(this.matter.overlap(shot, this.shieldBack)){
             shot.setDepth(2);
         } else if(this.matter.overlap(shot, this.ducksBack, null, processBack, this)){
+            // NEW FOR ASSIGNMENT 3 - tough shot up points
             this.hits += 2;
             this.hit.play();
         }
@@ -247,7 +252,7 @@ class ShootingGallery extends Phaser.Scene {
         //The images are too large, 
         //so we need to resize the hit masks them if we haven't already
         //Phaser doesn't do this so we need to use the utility method
-        this.resizeShape(this.objectShapes.duck_target_yellow, 0.3);
+        this.resizeShape(this.objectShapes.duck_target_yellow, 0.3); // NEW FOR ASSIGNMENT 3 make smaller
         for (let i = 0 ; i < 10 ; ++i) {
             let follower = this.add.follower(path, 96, 150, 'objects', 'duck_target_yellow.png' ).setName(i).setScale(0.3).setDepth(1);
             //We want things non colliding as we are handling hits ourself (otherwise things get pushed around which is not what we want)

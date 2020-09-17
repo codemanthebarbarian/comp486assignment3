@@ -1,5 +1,6 @@
 /*
  * This file hold classes share throughout the game
+ * NEW FOR ASSIGNMENT 3
  */
 
 /**
@@ -100,6 +101,8 @@ class Player extends Phaser.GameObjects.Container {
         this.stats = new Stats(health, speed);
         this.sprite = scene.add.sprite(0,0, 'guy');
         this.barWidth = health / 3;
+
+        // create a health bar 
         if(! scene.textures.exists('hitbar')) {
             let graphics = scene.make.graphics().fillStyle(0xffff00).fillRect(0, 0, this.barWidth, 6);
             graphics.generateTexture('hitbar', this.barWidth, 6);
@@ -187,7 +190,7 @@ class Player extends Phaser.GameObjects.Container {
      */
     setAnimation(isWalking, direction){
         this.isWalking = isWalking;
-        //This commented code if from prior to walking backward..
+        //This commented code from prior to walking backward..
         // if(!isWalking) {
         //     //not walking, so we've stopped just face previous direction
         //     //or keep facing in same direction
@@ -279,6 +282,7 @@ class Bat extends Phaser.GameObjects.Container {
         }
     }
 
+    // this is container, so we need to make a getCenter (was available in sprite)
     getCenter(v) {
         if(!v) return new Phaser.Math.Vector2(this.x, this.y);
         v.x = this.x;
@@ -362,6 +366,7 @@ class Crosshair extends Phaser.GameObjects.Image {
             if(this.direction >= 180) this.direction += -360;
             else if(this.direction < -180) this.direction += 360;
 
+            // this code use to limit crosshairs based on players facing direction... didn't play well
             //get our acceptable range
             // let swath = 80; // max degrees left of right of players facing direction
             // let max = playerFacing + swath;

@@ -18,9 +18,9 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
             tickets: 0,
             tokens: 0,
             items: [],
-            speed: 75,
-            hp: 100,
-            weapons: []
+            speed: 75,   // NEW FOR ASSIGNMENT 3
+            hp: 100,     // NEW FOR ASSIGNMENT 3
+            weapons: []  // NEW FOR ASSIGNMENT 3
         };
         this.default = JSON.stringify(d);
         let json = localStorage.getItem('inventory');
@@ -188,6 +188,8 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
         else this.inv.items.push(itm);
     }
 
+    // NEW FOR ASSIGNMENT 3
+
     /**
      * Gets the player's active weapon or if one isn't set, sets the
      * first weapon in the inventory as the active weapon.
@@ -254,6 +256,8 @@ class InventoryRepo extends Phaser.Plugins.BasePlugin {
     getHitPoints() {
         return this.inv.hp;
     }
+
+    // end NEW FOR ASSIGNMENT 3
 
     /**
      * Resets the player's inventory to the defaults.

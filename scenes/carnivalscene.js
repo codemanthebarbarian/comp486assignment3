@@ -90,6 +90,7 @@ class CarnivalScene extends Phaser.Scene {
 
             /**
              * Shows the help screen for this scene
+             * NEW FOR ASSIGNMENT 3
              */
             let showHelp = function() {
                 this.scene.sleep();
@@ -117,13 +118,14 @@ class CarnivalScene extends Phaser.Scene {
             this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
             this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
             this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+            // NEW FOR ASSIGNMENT 3
             this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
             this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
             this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
             this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
             this.input.keyboard.on('keydown-I', showInventory, this);
             this.input.keyboard.on('keydown-P', showProperties, this);
-            this.input.keyboard.on('keydown-H', showHelp, this);
+            this.input.keyboard.on('keydown-H', showHelp, this); // NEW FOR ASSIGNMENT 3
         };
         setInput.bind(this)();
 
@@ -386,6 +388,7 @@ class CarnivalScene extends Phaser.Scene {
         this.buildStory('toilet', 'toilet', 'toilet', 'toilet');
         this.buildStory('portraits', 'portraits', 'portraits', 'portraits');
         this.buildStory(null, 'shootinggalleryend', 'shootinggalleryend', 'shootinggalleryend');
+        //NEW FOR ASSIGNMENT 3
         this.buildStory('cave', 'caveentrance', 'caveentrance', 'caveentrance');
         this.buildStory(null, 'caveexit', 'caveexit', 'caveexit');
     }
