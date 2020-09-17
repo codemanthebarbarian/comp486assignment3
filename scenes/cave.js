@@ -13,6 +13,10 @@ class Cave extends Phaser.Scene {
      * loads the cave assets.
      */
     preload() {
+        this.load.audio('caveback', './assets/cave/caveBackground.mp3');
+        this.load.audio('shotgun', './assets/cave/lmg_fire01.mp3', { instances: 3 });
+        this.load.audio('Pistol.wav', './assets/cave/Pistol.wav', { instances: 5 });
+        this.load.audio('Magnum.wav', './assets/cave/Magnum.wav', { instances: 15 });
         this.load.spritesheet('bat', './assets/cave/32x32-bat-sprite.png', { frameWidth: 32, frameHeight: 32 } );
         this.load.image('cave_bullet', './assets/cave/icon_bullet_gold_short.png');
         this.load.atlasXML('hud', './assets/shootinggallery/spritesheet_hud.png',
@@ -26,6 +30,8 @@ class Cave extends Phaser.Scene {
      * Create the instance of the cave level
      */
     create() {
+        this.music = this.sound.add('caveback', { loop: true, volume: .5 });
+        if(this.settings.isBackgroundMusicEnabled()) this.music.play();
         this.level = this.quests.getState('caveLevel');
         if(! this.level) {
             this.level = 1;
@@ -190,7 +196,7 @@ class Cave extends Phaser.Scene {
         if(this.level === 3) this.quests.setState('caveentrance', 'SHOTGUN');
         if(this.level === 5) this.quests.setState('caveentrance', 'MACHINEGUN');
         this.quests.save();
-        //this.music.stop();
+        this.music.stop();
         this.scene.stop();
         this.scene.run('caveexit');
         //this.scene.wake('caveexit', { exit: 'cave' });
@@ -304,6 +310,7 @@ class Cave extends Phaser.Scene {
         let fireSingle = function() {
             let bullet = this.bullets.get();
             if(bullet){
+                if(this.shot) this.shot.play(null, { duration: .5});
                 bullet.fire(this.player.getCenter(), this.aim.direction);
                 this.lastFire = 0;
             }
@@ -313,6 +320,7 @@ class Cave extends Phaser.Scene {
          * fire a single projectile
          */
         let fireScatter = function() {
+            if(this.shot) this.shot.play();
             for(let i = 0 ; i < 10 ; ++i) {
                 let bullet = this.bullets.get();
                 if (bullet) {
@@ -325,7 +333,16 @@ class Cave extends Phaser.Scene {
             }
         };
 
-        this.doFire = this.weapon.name === 'Shotgun' ? fireScatter : fireSingle;
+        if(this.weapon.name === 'Shotgun'){
+            this.doFire = fireScatter;
+            this.shot = this.sound.add('shotgun', { loop: false });
+        } else if(this.weapon.name === 'BB Gun') {
+            this.shot = this.sound.add('Pistol.wav', { loop: false });
+            this.doFire = fireSingle;
+        } else {
+            this.shot = this.sound.add('Magnum.wav', { loop: false });
+            this.doFire = fireSingle;
+        }
 
         initializeBullets.bind(this)();
         this.physics.add.collider(this.bullets, this.wallBottom, onMapCollideHandler, null, this);
