@@ -187,6 +187,7 @@ class SettingsScene extends Phaser.Scene {
              * carnival scene by default.
              */
             let exit = function(){
+                this.settings.save();
                 this.scene.stop();
                 if(this.caller) this.scene.wake(this.caller);
                 else this.scene.wake('carnival');
